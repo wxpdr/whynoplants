@@ -7,17 +7,16 @@ public class SecurityService {
 
     private final PasswordEncoder passwordEncoder;
 
-    // Construtor da classe
     public SecurityService() {
-        this.passwordEncoder = new BCryptPasswordEncoder(); // Inicializando o encoder para criptografia
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // Método para criptografar a senha
+    // Criptografa a senha
     public String encryptPassword(String password) {
         return passwordEncoder.encode(password);
     }
 
-    // Método para verificar a senha
+    // Verifica se a senha digitada confere com o hash armazenado
     public boolean checkPassword(String rawPassword, String encryptedPassword) {
         return passwordEncoder.matches(rawPassword, encryptedPassword);
     }

@@ -2,75 +2,75 @@ package projeto.ecommerce.controller;
 
 import projeto.ecommerce.model.Usuario;
 import projeto.ecommerce.repository.UsuarioRepository;
-import projeto.ecommerce.service.SecurityService;  // Adicionando a dependência do serviço de segurança
+import projeto.ecommerce.service.SecurityService;
 
 import java.util.Scanner;
 
 public class LoginController {
 
-    private UsuarioRepository usuarioRepository;
-    private SecurityService securityService;  // Instância para criptografia de senha
+    private final UsuarioRepository usuarioRepository;
+    private final SecurityService securityService;
 
-    public LoginController(UsuarioRepository usuarioRepository) {
+    public LoginController(UsuarioRepository usuarioRepository, SecurityService securityService) {
         this.usuarioRepository = usuarioRepository;
-        this.securityService = new SecurityService();  // Inicializando o serviço de segurança
+        this.securityService = securityService;
     }
 
     public void showLogin() {
-        Scanner scanner = new Scanner(System.in); // Instanciando o scanner para a leitura de entradas no terminal
+        Scanner scanner = new Scanner(System.in);
 
-        try {
-            System.out.println("Por favor, digite seu email:");
-            String email = scanner.nextLine();
-            System.out.println("Digite sua senha:");
-            String senha = scanner.nextLine();
+        System.out.println("Por favor, digite seu email:");
+        String email = scanner.nextLine();
 
-            Usuario usuario = usuarioRepository.findByEmail(email);
+        System.out.println("Digite sua senha:");
+        String senha = scanner.nextLine();
 
-            if (usuario != null && securityService.checkPassword(senha, usuario.getSenha()) && usuario.isAtivo()) { 
-                // Usando o método checkPassword para comparar a senha fornecida com a senha criptografada
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario != null) {
+            boolean confere = securityService.checkPassword(senha, usuario.getSenha());
+            System.out.println("[DEBUG] Senha digitada: " + senha);
+            System.out.println("[DEBUG] Hash armazenado: " + usuario.getSenha());
+            System.out.println("[DEBUG] Senha confere? " + confere);
+
+            if (confere && usuario.isAtivo()) {
                 System.out.println("Login bem-sucedido!");
                 showDashboard(usuario);
             } else {
                 System.out.println("Email ou senha incorretos, ou usuário inativo.");
             }
-        } finally {
-            // scanner.close();  // Não fechamos aqui para evitar fechamento de System.in
+        } else {
+            System.out.println("Usuário não encontrado.");
         }
     }
 
-    public void showDashboard(Usuario usuario) {
+    private void showDashboard(Usuario usuario) {
         Scanner scanner = new Scanner(System.in);
 
-        try {
-            System.out.println("\nBem-vindo ao sistema, " + usuario.getEmail() + "!");
-            System.out.println("Selecione uma opção:");
-            System.out.println("1. Listar Usuários");
-            System.out.println("2. Sair");
+        System.out.println("\nBem-vindo ao sistema, " + usuario.getEmail() + "!");
+        System.out.println("Selecione uma opção:");
+        System.out.println("1. Listar Usuários");
+        System.out.println("2. Sair");
 
-            int escolha = scanner.nextInt();
+        int escolha = scanner.nextInt();
 
-            switch (escolha) {
-                case 1:
-                    listarUsuarios();
-                    break;
-                case 2:
-                    System.out.println("Saindo...");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-            }
-        } finally {
-            // scanner.close();  // Não fechamos o scanner aqui também para evitar fechar System.in
+        switch (escolha) {
+            case 1:
+                listarUsuarios();
+                break;
+            case 2:
+                System.out.println("Saindo...");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Opção inválida.");
         }
     }
 
-    public void listarUsuarios() {
-        // Vamos listar os usuários do banco (somente exemplo básico)
+    private void listarUsuarios() {
         System.out.println("\nLista de Usuários:");
-        for (Usuario usuario : usuarioRepository.findAll()) {
-            System.out.println("ID: " + usuario.getId() + ", Email: " + usuario.getEmail() + ", Status: " + (usuario.isAtivo() ? "Ativo" : "Inativo"));
+        for (Usuario u : usuarioRepository.findAll()) {
+            System.out.println("Email: " + u.getEmail() + ", Status: " + (u.isAtivo() ? "Ativo" : "Inativo"));
         }
     }
 }
