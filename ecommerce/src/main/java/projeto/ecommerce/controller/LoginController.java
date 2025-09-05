@@ -2,15 +2,18 @@ package projeto.ecommerce.controller;
 
 import projeto.ecommerce.model.Usuario;
 import projeto.ecommerce.repository.UsuarioRepository;
+import projeto.ecommerce.service.SecurityService;  // Adicionando a dependência do serviço de segurança
 
 import java.util.Scanner;
 
 public class LoginController {
 
     private UsuarioRepository usuarioRepository;
+    private SecurityService securityService;  // Instância para criptografia de senha
 
     public LoginController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.securityService = new SecurityService();  // Inicializando o serviço de segurança
     }
 
     public void showLogin() {
@@ -24,7 +27,8 @@ public class LoginController {
 
             Usuario usuario = usuarioRepository.findByEmail(email);
 
-            if (usuario != null && usuario.getSenha().equals(senha) && usuario.isAtivo()) {
+            if (usuario != null && securityService.checkPassword(senha, usuario.getSenha()) && usuario.isAtivo()) { 
+                // Usando o método checkPassword para comparar a senha fornecida com a senha criptografada
                 System.out.println("Login bem-sucedido!");
                 showDashboard(usuario);
             } else {

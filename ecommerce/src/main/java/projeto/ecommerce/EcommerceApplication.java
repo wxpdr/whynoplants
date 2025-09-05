@@ -12,7 +12,7 @@ public class EcommerceApplication {
 
         // Adicionando alguns usuários para testar
         usuarioRepository.cadastrarUsuario(new Usuario("teste@teste.com", "1234", true, "Administrador"));
-        usuarioRepository.cadastrarUsuario(new Usuario("admin@admin.com", "admin123", true, "Administrador"));
+        usuarioRepository.cadastrarUsuario(new Usuario("admin@admin.com", "admin@admin.com", true, "Administrador"));
 
         // Inicia o controller de login
         LoginController loginController = new LoginController(usuarioRepository);
