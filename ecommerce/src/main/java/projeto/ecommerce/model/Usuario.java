@@ -1,12 +1,19 @@
 package projeto.ecommerce.model;
 
+import java.sql.Timestamp;
+
 public class Usuario {
 
+    private int id;
     private String email;
-    private String senha;  // Armazena o hash
+    private String senha;
     private boolean ativo;
     private String perfil;
+    private String nome;
+    private String cpf;
+    private Timestamp dataCriacao;
 
+    // Construtor
     public Usuario(String email, String senha, boolean ativo, String perfil) {
         this.email = email;
         this.senha = senha;
@@ -14,8 +21,21 @@ public class Usuario {
         this.perfil = perfil;
     }
 
+    // Getters e setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {
@@ -30,7 +50,39 @@ public class Usuario {
         return ativo;
     }
 
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
     public String getPerfil() {
         return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public Timestamp getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(Timestamp dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }

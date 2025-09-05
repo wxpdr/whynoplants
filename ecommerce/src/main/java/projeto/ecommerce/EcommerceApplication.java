@@ -8,18 +8,22 @@ import projeto.ecommerce.service.SecurityService;
 public class EcommerceApplication {
 
     public static void main(String[] args) {
+        // Inicializa os repositórios e serviços
         UsuarioRepository usuarioRepository = new UsuarioRepository();
         SecurityService securityService = new SecurityService();
 
-        // Cadastrando usuários com senha simples, criptografando uma vez
-        Usuario usuario1 = new Usuario("teste@teste.com", securityService.encryptPassword("1234"), true, "Administrador");
-        usuarioRepository.cadastrarUsuario(usuario1);
+        // Cadastra o usuário administrador com a senha "123456", que será criptografada
+        Usuario usuario1 = new Usuario("admin@admin.com", securityService.encryptPassword("123456"), true, "Administrador");
+        usuario1.setNome("Administrador"); // Defina um nome para o usuário
+        usuario1.setCpf("40961808829"); // Defina um CPF para o usuário
+        usuarioRepository.cadastrarUsuario(usuario1); // Usuário admin cadastrado
 
-        Usuario usuario2 = new Usuario("admin@admin.com", securityService.encryptPassword("123456"), true, "Administrador");
-        usuarioRepository.cadastrarUsuario(usuario2);
+        System.out.println("Usuário administrador cadastrado com sucesso!");
 
-        // Inicializa o loginController
+        // Inicializa o LoginController
         LoginController loginController = new LoginController(usuarioRepository, securityService);
-        loginController.showLogin();
+        
+        // Chama a função para fazer login
+        loginController.showLogin();  // Aqui você vai fazer login com a senha simples "123456"
     }
 }
