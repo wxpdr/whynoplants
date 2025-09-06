@@ -55,7 +55,8 @@ public class LoginController {
             System.out.println("Selecione uma opção:");
             System.out.println("1. Cadastrar Novo Usuário");
             System.out.println("2. Listar Usuários");
-            System.out.println("3. Sair");
+            System.out.println("3. Editar Usuário");
+            System.out.println("4. Sair");
 
             int escolha = scanner.nextInt();
             scanner.nextLine();  // Limpar o buffer do scanner
@@ -68,6 +69,9 @@ public class LoginController {
                     listarUsuarios();
                     break;
                 case 3:
+                    editarUsuario();  // Nova opção para editar o usuário
+                    break;
+                case 4:
                     System.out.println("Saindo...");
                     sair = true;
                     break;
@@ -84,6 +88,50 @@ public class LoginController {
             System.out.println("Email: " + u.getEmail() + ", Status: " + (u.isAtivo() ? "Ativo" : "Inativo"));
         }
     }
+
+    // Método para editar um usuário
+    private void editarUsuario() {
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Digite o email do usuário que deseja editar:");
+    String email = scanner.nextLine();
+
+    Usuario usuario = usuarioRepository.findByEmail(email);
+
+    if (usuario != null) {
+        System.out.println("Usuário encontrado: " + usuario.getEmail());
+        System.out.println("Digite o novo nome (deixe em branco para manter o atual):");
+        String nome = scanner.nextLine();
+        if (!nome.isEmpty()) {
+            usuario.setNome(nome);
+        }
+
+        System.out.println("Digite o novo CPF (deixe em branco para manter o atual):");
+        String cpf = scanner.nextLine();
+        if (!cpf.isEmpty()) {
+            usuario.setCpf(cpf);
+        }
+
+        System.out.println("Digite o novo grupo (deixe em branco para manter o atual):");
+        String grupo = scanner.nextLine();
+        if (!grupo.isEmpty()) {
+            usuario.setPerfil(grupo);
+        }
+
+        System.out.println("Digite o novo status (ativo/inativo, deixe em branco para manter o atual):");
+        String status = scanner.nextLine();
+        if (!status.isEmpty()) {
+            // Atualizando o status com 1 para 'ativo' e 0 para 'inativo'
+            usuario.setAtivo(status.equalsIgnoreCase("ativo"));
+        }
+
+        usuarioRepository.atualizarUsuario(usuario);  // Atualiza o usuário no banco
+        System.out.println("Usuário atualizado com sucesso!");
+    } else {
+        System.out.println("Usuário não encontrado.");
+    }
+}
+
 
     // Método para cadastrar um novo usuário
     private void cadastrarUsuario() {

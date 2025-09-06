@@ -15,9 +15,9 @@ public class UsuarioRepository {
         try {
             // Estabelece a conexão com o banco de dados
             this.connection = DriverManager.getConnection(
-                "jdbc:mysql://wnplants.mysql.dbaas.com.br:3306/wnplants", 
-                "wnplants", 
-                "ProjetoInte04@"
+                "jdbc:mysql://localhost:3306/wnplants", 
+                "root", 
+                "130500"
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class UsuarioRepository {
                 Usuario usuario = new Usuario(
                     resultSet.getString("email"),
                     resultSet.getString("senha"),
-                    resultSet.getBoolean("status"),
+                    "ativo".equals(resultSet.getString("status")),
                     resultSet.getString("grupo")
                 );
                 usuario.setId(resultSet.getInt("id_usuario"));
@@ -81,7 +81,7 @@ public class UsuarioRepository {
                 usuario = new Usuario(
                     resultSet.getString("email"),
                     resultSet.getString("senha"),
-                    resultSet.getBoolean("status"),
+                    "ativo".equals(resultSet.getString("status")),
                     resultSet.getString("grupo")
                 );
                 usuario.setId(resultSet.getInt("id_usuario"));
@@ -93,5 +93,21 @@ public class UsuarioRepository {
             e.printStackTrace();
         }
         return usuario;
+    }
+
+    // Método para atualizar um usuário no banco
+    public void atualizarUsuario(Usuario usuario) {
+        try {
+            String sql = "UPDATE usuarios SET nome = ?, cpf = ?, grupo = ?, status = ? WHERE email = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, usuario.getNome());
+            statement.setString(2, usuario.getCpf());
+            statement.setString(3, usuario.getPerfil());
+            statement.setBoolean(4, usuario.isAtivo());
+            statement.setString(5, usuario.getEmail());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
