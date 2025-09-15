@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -18,51 +19,55 @@ public class Usuario {
     @Column(name = "id_usuario")
     private Long id;
 
+    @NotBlank
+    @Size(max = 120)
+    @Column(nullable = false)
+    private String nome;
+
+    @NotBlank
+    @Size(min = 11, max = 11)
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos numéricos")
+    @Column(length = 11, unique = true, nullable = false)
+    private String cpf;
+
     @Email
     @NotBlank
-    @Column(nullable = false, unique = true, length = 160)
+    @Size(max = 160)
+    @Column(unique = true, nullable = false, length = 160)
     private String email;
 
     @NotBlank
-    @Size(min = 6)
+    @Size(max = 100)
+    @JsonProperty(access = Access.WRITE_ONLY)
     @Column(nullable = false, length = 100)
-    @JsonProperty(access = Access.WRITE_ONLY) // aceita no input, não devolve no output
-    private String senha; // hash BCrypt
+    private String senha;
 
     @Column(name = "status", nullable = false)
-    private boolean ativo = true; // default true para alinhar com DEFAULT 1 do banco
-
-    @Column(name = "grupo", nullable = false, length = 20)
-    private String perfil; // "Administrador" / "Estoquista"
+    private boolean ativo = true;
 
     @NotBlank
-    @Column(nullable = false, length = 120)
-    private String nome;
+    @Size(max = 20)
+    @Column(name = "grupo", nullable = false, length = 20)
+    private String perfil;
 
-    @Column(nullable = false, unique = true, length = 11)
-    @Size(min = 11, max = 11, message = "CPF deve ter 11 dígitos")
-    @Pattern(regexp = "\\d{11}", message = "CPF deve conter apenas números")
-    private String cpf;
-
-    @Column(name = "data_criacao", updatable = false, insertable = false)
+    @Column(name = "data_criacao", nullable = false, updatable = false,
+            columnDefinition = "timestamp default current_timestamp")
     private Timestamp dataCriacao;
 
-    public Usuario() {}
-
-    public Usuario(String email, String senha, boolean ativo, String perfil) {
-        this.email = email;
-        this.senha = senha;
-        this.ativo = ativo;
-        this.perfil = perfil;
+    @PrePersist
+    void prePersist() {
+        if (dataCriacao == null) {
+            dataCriacao = new Timestamp(System.currentTimeMillis());
+        }
+        if (email != null) email = email.toLowerCase();
     }
 
-    // getters/setters
     public Long getId() { return id; } public void setId(Long id) { this.id = id; }
-    public String getEmail() { return email; } public void setEmail(String email) { this.email = email; }
+    public String getNome() { return nome; } public void setNome(String nome) { this.nome = nome; }
+    public String getCpf() { return cpf; } public void setCpf(String cpf) { this.cpf = cpf; }
+    public String getEmail() { return email; } public void setEmail(String email) { this.email = email == null ? null : email.toLowerCase(); }
     public String getSenha() { return senha; } public void setSenha(String senha) { this.senha = senha; }
     public boolean isAtivo() { return ativo; } public void setAtivo(boolean ativo) { this.ativo = ativo; }
     public String getPerfil() { return perfil; } public void setPerfil(String perfil) { this.perfil = perfil; }
-    public String getNome() { return nome; } public void setNome(String nome) { this.nome = nome; }
-    public String getCpf() { return cpf; } public void setCpf(String cpf) { this.cpf = cpf; }
-    public Timestamp getDataCriacao() { return dataCriacao; } public void setDataCriacao(Timestamp d) { this.dataCriacao = d; }
+    public Timestamp getDataCriacao() { return dataCriacao; } public void setDataCriacao(Timestamp dataCriacao) { this.dataCriacao = dataCriacao; }
 }

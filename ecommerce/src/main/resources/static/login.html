@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Login de Usuário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Login de Usuário</h1>
+
+    <label>E-mail</label>
+    <input id="email" type="email" placeholder="email@dominio.com.br" autofocus />
+
+    <label>Senha</label>
+    <input id="senha" type="password" placeholder="••••••••" />
+
+    <div class="actions">
+      <button id="ok" class="btn primary">Entrar</button>
+      <a href="#" class="btn ghost" id="cancel">Cancelar</a>
+    </div>
+
+    <p id="msg" class="msg"></p>
+  </div>
+
+  <script>window.API = "http://localhost:8080";</script>
+  <script src="js/login.js"></script>
+</body>
+</html>

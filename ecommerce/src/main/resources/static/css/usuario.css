@@ -1,0 +1,16 @@
+body{font-family:system-ui,Arial;background:#0f0f0f;color:#f5f5f5;margin:0}
+.card{max-width:980px;margin:6vh auto;background:#171717;padding:20px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.header{display:flex;justify-content:space-between;align-items:center}
+.toolbar{display:flex;gap:8px;margin:10px 0}
+input,select{padding:8px;border-radius:10px;border:1px solid #333;background:#101010;color:#fff}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:10px;border-bottom:1px solid #2a2a2a;text-align:left}
+.btn{border:0;border-radius:10px;padding:8px 12px;cursor:pointer;background:#2b2b2b;color:#fff}
+.btn.primary{background:#00c853;color:#08140b}
+.btn.ghost{background:transparent;border:1px solid #333}
+.badge{padding:2px 8px;border-radius:999px;font-size:.8rem}
+.badge.on{background:#003b1f;color:#00e676}
+.badge.off{background:#3b0000;color:#ff6b6b}
+dialog{background:#171717;color:#fff;border:1px solid #333;border-radius:14px;padding:18px}
+.actions{display:flex;gap:8px;margin-top:10px}
+.msg{min-height:20px;margin-top:6px}

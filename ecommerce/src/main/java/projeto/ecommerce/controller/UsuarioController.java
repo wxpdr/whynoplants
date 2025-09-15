@@ -2,12 +2,14 @@ package projeto.ecommerce.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.ecommerce.dto.UsuarioCreateDTO;
 import projeto.ecommerce.dto.UsuarioUpdateDTO;
 import projeto.ecommerce.model.Usuario;
 import projeto.ecommerce.service.UsuarioService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,23 +19,36 @@ public class UsuarioController {
 
     private final UsuarioService service;
 
-    @GetMapping
-    public List<Usuario> listar(@RequestParam(required = false) String nome){
-        return service.listar(nome);
+    @PostMapping
+    public ResponseEntity<Usuario> criar(@Valid @RequestBody UsuarioCreateDTO dto) {
+        Usuario u = service.criar(dto);
+        return ResponseEntity.created(URI.create("/api/usuarios/" + u.getId())).body(u);
     }
 
-    @PostMapping
-    public Usuario criar(@RequestBody @Valid UsuarioCreateDTO dto){
-        return service.criar(dto);
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listar(@RequestParam(name = "nome", required = false) String nome) {
+        return ResponseEntity.ok(service.listar(nome));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscar(id));
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody @Valid UsuarioUpdateDTO dto){
-        return service.atualizar(id, dto);
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id,
+                                             @Valid @RequestBody UsuarioUpdateDTO dto) {
+        return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
     @PatchMapping("/{id}/toggle")
-    public Usuario alternar(@PathVariable Long id){
-        return service.alternarStatus(id);
+    public ResponseEntity<Usuario> alternarStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(service.alternarStatus(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
