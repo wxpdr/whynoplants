@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import projeto.ecommerce.dto.ChangePasswordDTO;
 import projeto.ecommerce.dto.UsuarioCreateDTO;
 import projeto.ecommerce.dto.UsuarioUpdateDTO;
 import projeto.ecommerce.model.Usuario;
@@ -51,4 +53,11 @@ public class UsuarioController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/senha")
+    public ResponseEntity<Void> alterarSenha(@PathVariable Long id, @Valid @RequestBody ChangePasswordDTO dto){
+        service.alterarSenha(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
 }

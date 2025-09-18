@@ -22,12 +22,17 @@ public class AuthController {
         Usuario u = usuarios.buscarPorEmail(req.email());
         if (u == null) return ResponseEntity.status(401).body("Credenciais inválidas");
         if (!u.isAtivo()) return ResponseEntity.status(403).body("Usuário desativado");
-        if (!security.checkPassword(req.senha(), u.getSenha())) {
-            return ResponseEntity.status(401).body("Credenciais inválidas");
-        }
+        if (!security.checkPassword(req.senha(), u.getSenha())) return ResponseEntity.status(401).body("Credenciais inválidas");
+
         session.setAttribute("USER_ID", u.getId());
         session.setAttribute("USER_PERFIL", u.getPerfil());
-        return ResponseEntity.ok(u.getId());
+        session.setAttribute("USER_NOME", u.getNome());
+
+        java.util.Map<String, Object> payload = new java.util.HashMap<>();
+        payload.put("id", u.getId());
+        payload.put("perfil", u.getPerfil()); // "Administrador" | "Estoquista"
+        payload.put("nome", u.getNome());
+        return ResponseEntity.ok(payload);
     }
 
     @GetMapping("/me")

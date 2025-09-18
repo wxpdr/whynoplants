@@ -3,6 +3,14 @@ const gridBody = $("#grid tbody");
 const dlg = $("#dlg");
 let editId = null;
 
+(async ()=>{
+  // Guard simples: se não tiver sessão, volta pro login
+  try{
+    const r = await fetch(`${API}/me`, { credentials:"include" });
+    if(!r.ok){ location.href="login.html"; return; }
+  }catch{ location.href="login.html"; return; }
+})();
+
 async function listar(nome=""){
   const url = nome ? `${API}/api/usuarios?nome=${encodeURIComponent(nome)}` : `${API}/api/usuarios`;
   const res = await fetch(url, { credentials:"include" });
@@ -19,6 +27,7 @@ function render(lista){
       <td>${u.nome}</td>
       <td>${u.email||""}</td>
       <td><span class="badge ${u.ativo?'on':'off'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+      <td>${u.perfil || "-"}</td>
       <td><button class="btn" data-edit="${u.id}">Alterar</button></td>
       <td><button class="btn" data-toggle="${u.id}">${u.ativo?'Inativar':'Ativar'}</button> <button class="btn ghost" data-del="${u.id}">Excluir</button></td>
     `;
@@ -29,6 +38,7 @@ function render(lista){
     btn.addEventListener("click", async ()=>{
       const id = btn.getAttribute("data-edit");
       const res = await fetch(`${API}/api/usuarios/${id}`, { credentials:"include" });
+      if(!res.ok){ alert(await res.text()); return; }
       const u = await res.json();
       editId = u.id;
       $("#dlgTitle").textContent = `Editar usuário #${u.id}`;
@@ -38,6 +48,7 @@ function render(lista){
       $("#u-email").value = u.email || "";
       $("#u-perfil").value = u.perfil || "Administrador";
       $("#u-nova").value = "";
+      $("#u-confirma").value = "";
       $("#msg").textContent = "";
       dlg.showModal();
     });
@@ -46,6 +57,7 @@ function render(lista){
   gridBody.querySelectorAll("[data-toggle]").forEach(btn=>{
     btn.addEventListener("click", async ()=>{
       const id = btn.getAttribute("data-toggle");
+      if(!confirm("Confirmar alteração de status?")) return;
       const res = await fetch(`${API}/api/usuarios/${id}/toggle`, { method:"PATCH", credentials:"include" });
       if(!res.ok){ alert(await res.text()); return; }
       listar($("#busca").value.trim());
@@ -72,6 +84,7 @@ $("#btnNovo").addEventListener("click", ()=>{
   $("#u-email").value= "";
   $("#u-perfil").value = "Administrador";
   $("#u-nova").value = "";
+  $("#u-confirma").value = "";
   $("#msg").textContent = "";
   dlg.showModal();
 });
@@ -89,7 +102,9 @@ $("#okDlg").addEventListener("click", async (e)=>{
 
     if(editId==null){
       const senha = $("#u-nova").value;
+      const confirma = $("#u-confirma").value;
       if(!senha){ $("#msg").textContent = "Informe uma senha para criar"; return; }
+      if(senha !== confirma){ $("#msg").textContent = "As senhas não conferem"; return; }
       const res = await fetch(`${API}/api/usuarios`, {
         method:"POST",
         headers:{ "Content-Type":"application/json" },
@@ -98,7 +113,7 @@ $("#okDlg").addEventListener("click", async (e)=>{
       });
       if(!res.ok){ $("#msg").textContent = await res.text(); return; }
     }else{
-      const novaSenha = $("#u-nova").value;
+      const novaSenha = $("#u-nova").value; // opcional no update
       const res = await fetch(`${API}/api/usuarios/${editId}`, {
         method:"PUT",
         headers:{ "Content-Type":"application/json" },
@@ -116,5 +131,10 @@ $("#cancelDlg").addEventListener("click", e=>{ e.preventDefault(); dlg.close(); 
 
 $("#btnBuscar").addEventListener("click", ()=> listar($("#busca").value.trim()));
 $("#busca").addEventListener("keydown",(e)=>{ if(e.key==="Enter") $("#btnBuscar").click(); });
+
+document.getElementById("logout")?.addEventListener("click", async ()=>{
+  try{ await fetch(`${API}/logout`, { method:"POST", credentials:"include" }); }catch{}
+  location.href="login.html";
+});
 
 listar();

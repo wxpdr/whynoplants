@@ -2,24 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Principal (Admin)</title>
+  <title>Estoque</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
   <div class="card">
     <div class="topbar">
-      <h1>Área Administrativa</h1>
+      <h1>Área de Estoque</h1>
       <div class="spacer"></div>
       <span id="welcome"></span>
       <button id="logout" class="btn ghost">Sair</button>
     </div>
+
     <ul class="menu">
       <li><a class="link" href="produto.html">Listar Produto</a></li>
-      <li><a class="link" href="usuario.html">Listar Usuário</a></li>
       <li><a class="link" href="pedidos.html">Listar Pedidos</a></li>
+      <!-- intencionalmente sem "Listar Usuário" para Estoquista -->
     </ul>
-
   </div>
 
   <script>window.API="http://localhost:8080";</script>

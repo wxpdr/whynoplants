@@ -10,7 +10,9 @@
   <div class="card">
     <div class="header">
       <h1>Lista de Usuários</h1>
+      <div class="spacer"></div>
       <button id="btnNovo" class="btn primary">+ Novo</button>
+      <button id="logout" class="btn ghost">Sair</button>
     </div>
 
     <div class="toolbar">
@@ -24,6 +26,7 @@
           <th>Nome</th>
           <th>E-mail</th>
           <th>Status</th>
+          <th>Perfil</th>
           <th>Ações</th>
           <th></th>
         </tr>
@@ -45,10 +48,11 @@
         <select id="u-perfil">
           <option>Administrador</option>
           <option>Estoquista</option>
-          <option>Atendente</option>
         </select>
-        <label>Nova senha (opcional)</label>
+        <label>Nova senha</label>
         <input id="u-nova" type="password" />
+        <label>Confirmar senha (apenas no cadastro)</label>
+        <input id="u-confirma" type="password" />
         <div class="actions">
           <button class="btn primary" id="okDlg">OK</button>
           <button class="btn ghost" id="cancelDlg">Cancelar</button>

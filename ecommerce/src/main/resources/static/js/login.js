@@ -13,12 +13,24 @@ $("#ok").addEventListener("click", async ()=> {
       credentials:"include",
       body: JSON.stringify({ email, senha })
     });
-    if(res.ok){ location.href = "principal.html"; }
-    else{
+    if(res.ok){
+      const data = await res.json(); // {id, perfil, nome}
+      if(data.perfil === "Administrador"){
+        location.href = "principal.html";
+      } else if(data.perfil === "Estoquista"){
+        location.href = "principal-estoque.html";
+      } else {
+        $("#msg").textContent = "Perfil não reconhecido";
+      }
+    } else {
       const txt = await res.text();
       $("#msg").textContent = txt || "Falha no login";
     }
   }catch(e){ $("#msg").textContent = "Erro de rede"; }
 });
 
-$("#cancel").addEventListener("click", e=>{ e.preventDefault(); $("#email").value=""; $("#senha").value=""; });
+$("#cancel").addEventListener("click", e=>{
+  e.preventDefault();
+  $("#email").value="";
+  $("#senha").value="";
+});
