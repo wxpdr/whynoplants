@@ -47,4 +47,16 @@ public class AuthController {
         session.invalidate();
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/whoami")
+    public ResponseEntity<?> whoami(HttpSession session){
+        Object id = session.getAttribute("USER_ID");
+        if(id == null) return ResponseEntity.status(401).build();
+        var out = new java.util.HashMap<String,Object>();
+        out.put("id", id);
+        out.put("perfil", session.getAttribute("USER_PERFIL"));
+        out.put("nome", session.getAttribute("USER_NOME"));
+        return ResponseEntity.ok(out);
+    }
+
 }

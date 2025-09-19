@@ -5,6 +5,7 @@
   <title>Pedidos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/principal.css" />
+  
 </head>
 <body>
   <div class="card">
@@ -16,5 +17,11 @@
     <p>(Placeholder) Aqui você lista/filtra pedidos. Integre depois com sua API de pedidos.</p>
   </div>
   <script>window.API="http://localhost:8080";</script>
+  <script src="js/auth.js"></script>
+  <script>
+    Auth.preventBfcache();
+    Auth.ensureLoggedIn(); // expulsa quem não estiver logado
+  </script>
+
 </body>
 </html>

@@ -7,6 +7,15 @@
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
+  <body>
+  <header>
+    <h1>Painel do Estoquista</h1>
+    <nav>
+      <button onclick="Auth.redirectHomeByPerfil()">Início</button>
+      <button onclick="location.href='login.html'">Sair</button>
+    </nav>
+  </header>
+  
   <div class="card">
     <div class="topbar">
       <h1>Área de Estoque</h1>
@@ -24,5 +33,12 @@
 
   <script>window.API="http://localhost:8080";</script>
   <script src="js/principal.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    Auth.preventBfcache();
+    Auth.ensureLoggedIn(); // expulsa quem não estiver logado
+  </script>
+
+
 </body>
 </html>

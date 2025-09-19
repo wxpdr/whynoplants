@@ -64,5 +64,11 @@
 
   <script>window.API="http://localhost:8080";</script>
   <script src="js/usuario.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    Auth.preventBfcache();
+    Auth.ensureAdmin(); // expulsa quem não for Admin
+  </script>
+
 </body>
 </html>
