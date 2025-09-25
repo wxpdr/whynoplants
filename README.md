@@ -112,5 +112,3 @@ Contribuições são bem-vindas! Se você tiver sugestões ou melhorias, por fav
 Para mais informações, entre em contato com os desenvolvedores do projeto:
 
 - **Wendy Pedrosa** – [LinkedIn](https://www.linkedin.com/in/wendypedrosa)
-- **Nayra Rocha** – [LinkedIn](https://www.linkedin.com/in/nayra-rocha)
-- **Pedro de Albuquerque** – [LinkedIn](https://www.linkedin.com/in/pedro-de-albuquerque)
