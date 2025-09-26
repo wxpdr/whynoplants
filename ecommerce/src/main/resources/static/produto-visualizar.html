@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Visualizar Produto (Preview)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/produto-visualizar.css"/>
+  <meta http-equiv="Cache-Control" content="no-store"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <button class="btn ghost" id="btnVoltar">← Voltar</button>
+      <h1>Preview do produto</h1>
+      <div style="width:96px"></div>
+    </header>
+
+    <main class="product">
+      <section class="gallery">
+        <div class="stage">
+          <button class="nav prev" id="btnPrev" aria-label="Imagem anterior">‹</button>
+          <img id="imgStage" alt="Imagem do produto">
+          <button class="nav next" id="btnNext" aria-label="Próxima imagem">›</button>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+      </section>
+
+      <section class="info">
+        <h2 id="nome">Produto</h2>
+        <div class="rating" id="rating" title="Avaliação"></div>
+
+        <div class="price-stock">
+          <div class="price">
+            <span class="label">Preço</span>
+            <div class="value">R$ <span id="valor">0,00</span></div>
+          </div>
+          <div class="stock">
+            <span class="label">Em estoque</span>
+            <div class="value"><span id="quantidade">0</span> un.</div>
+          </div>
+          <div class="status">
+            <span class="label">Status</span>
+            <div class="value" id="status">—</div>
+          </div>
+        </div>
+
+        <div class="code muted">Código: <span id="codigo">—</span></div>
+
+        <div class="desc">
+          <h3>Descrição</h3>
+          <p id="descricao" class="muted">—</p>
+        </div>
+
+        <div class="actions">
+          <button class="btn buy" id="btnComprar" disabled title="Desabilitado neste preview">Comprar</button>
+          <div class="muted sm">* Este botão fica desabilitado aqui (apenas visualização).</div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <script src="js/produto-visualizar.js"></script>
+</body>
+</html>

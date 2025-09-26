@@ -47,3 +47,22 @@ window.Auth = (() => {
 
   return { whoami, ensureLoggedIn, ensureAdmin, ensureRole, preventBfcache, redirectHomeByPerfil };
 })();
+
+async function redirectHomeByPerfil() {
+  try{
+    const r = await fetch("/api/whoami", { credentials:"include" });
+    if (!r.ok) return;
+    const me = await r.json();
+    if (!me || !me.perfil) return;
+
+    // Se estiver na home errada, redireciona
+    if (location.pathname.endsWith("/principal.html") && me.perfil === "Estoquista") {
+      location.href = "principal-estoque.html";
+    }
+    if (location.pathname.endsWith("/principal-estoque.html") && me.perfil === "Administrador") {
+      location.href = "principal.html";
+    }
+  }catch(_){}
+}
+
+redirectHomeByPerfil();
