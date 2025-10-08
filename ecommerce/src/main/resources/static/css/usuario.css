@@ -1,17 +1,209 @@
-body{font-family:system-ui,Arial;background:#0f0f0f;color:#f5f5f5;margin:0}
-.card{max-width:1100px;margin:6vh auto;background:#171717;padding:20px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.header{display:flex;gap:10px;align-items:center}
-.spacer{flex:1}
-.toolbar{display:flex;gap:8px;margin:10px 0}
-input,select{padding:8px;border-radius:10px;border:1px solid #333;background:#101010;color:#fff}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{padding:10px;border-bottom:1px solid #2a2a2a;text-align:left}
-.btn{border:0;border-radius:10px;padding:8px 12px;cursor:pointer;background:#2b2b2b;color:#fff}
-.btn.primary{background:#00c853;color:#08140b}
-.btn.ghost{background:transparent;border:1px solid #333}
-.badge{padding:2px 8px;border-radius:999px;font-size:.8rem}
-.badge.on{background:#003b1f;color:#00e676}
-.badge.off{background:#3b0000;color:#ff6b6b}
-dialog{background:#171717;color:#fff;border:1px solid #333;border-radius:14px;padding:18px}
-.actions{display:flex;gap:8px;margin-top:10px}
-.msg{min-height:20px;margin-top:6px}
+/* static/css/usuario.css - LISTAGEM DE USUÁRIOS (ADMIN) */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* ========================================================= */
+:root{
+  --primary: #059669; /* Verde Principal */
+  --bg: #F9FAFB; /* Fundo Geral */
+  --fg: #1F2937; /* Texto Principal */
+  --card-bg: #FFFFFF; /* Fundo de Cartão/Dialog */
+  --border: #E5E7EB; /* Bordas e divisores */
+  --muted: #6B7280; /* Texto secundário */
+  
+  /* Cores para Badge de Status */
+  --on-bg: #DCFCE7;
+  --on-fg: #059669;
+  --off-bg: #FEF2F2;
+  --off-fg: #B91C1C;
+}
+
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GERAL                                */
+/* ========================================================= */
+body{
+  font-family:system-ui,Arial;
+  background:var(--bg);
+  color:var(--fg);
+  margin:0
+}
+
+.card{
+  max-width:1100px;
+  margin:4vh auto; /* Margem vertical para centralizar suavemente */
+  background:var(--card-bg);
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+}
+
+/* ========================================================= */
+/* 3. HEADER E TOOLBAR                                       */
+/* ========================================================= */
+.header{
+    display:flex;
+    gap:10px;
+    align-items:center
+}
+
+.spacer{
+    flex:1
+}
+
+.toolbar{
+    display:flex;
+    gap:8px;
+    margin:10px 0
+}
+
+/* ========================================================= */
+/* 4. INPUTS E SELECTS (LISTAGEM)                            */
+/* ========================================================= */
+input,select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--card-bg);
+  color:var(--fg)
+}
+
+/* ========================================================= */
+/* 5. TABELA                                                 */
+/* ========================================================= */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    text-align:left
+}
+
+/* ========================================================= */
+/* 6. BOTÕES (COM EFEITO DE PRESS)                           */
+/* ========================================================= */
+.btn{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  cursor:pointer;
+  background:var(--card-bg);
+  color:var(--fg);
+  transition:all .15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+.btn.primary{
+  background:var(--primary);
+  color:#fff;
+  border-color:var(--primary);
+  box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
+}
+
+.btn.primary:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+.btn.ghost{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--fg);
+  box-shadow: none;
+}
+
+.btn.ghost:active {
+    background: #E5E7EB;
+    transform: translateY(1px);
+}
+
+/* ========================================================= */
+/* 7. BADGES DE STATUS                                       */
+/* ========================================================= */
+.badge{
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:.8rem
+}
+
+.badge.on{
+    background:var(--on-bg);
+    color:var(--on-fg)
+}
+
+.badge.off{
+    background:var(--off-bg);
+    color:var(--off-fg)
+}
+
+/* ========================================================= */
+/* 8. DIALOG (MODAL) - REVISÃO DE LAYOUT                      */
+/* ========================================================= */
+dialog{
+  background:var(--card-bg);
+  color:var(--fg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px 24px 24px; /* Aumentado padding para dar mais ar */
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  max-width: 800px; /* Limita a largura do modal */
+}
+
+/* Título dentro do Modal */
+#dlgTitle{
+    margin: 0 0 20px;
+    font-size: 1.4rem;
+}
+
+/* Estrutura de Formulário em Grid */
+.form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+    gap: 24px; /* Espaçamento entre as colunas */
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajusta as margens dos labels dentro do modal para padronização */
+dialog label{
+    margin-top: 12px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* Ajusta as margens dos inputs e selects dentro do modal */
+dialog input, dialog select{
+    margin-bottom: 12px;
+    /* Garante que os inputs no modal ocupem 100% da coluna */
+    width: 100%; 
+}
+
+/* Espaçador para alinhamento vertical dos campos de senha */
+.spacer-senha{
+    flex-grow: 1; /* Ocupa o espaço restante */
+}
+
+
+.actions{
+    display:flex;
+    gap:8px;
+    justify-content: flex-end; /* Alinha botões à direita (padrão Admin) */
+    margin-top:20px; /* Espaçamento do form grid */
+}
+
+.msg{
+    min-height:20px;
+    margin-top:6px;
+}

@@ -1,5 +1,6 @@
 package projeto.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,11 +41,11 @@ public class Produto {
     @Column(nullable=false, name="criado_em")
     private LocalDateTime criadoEm;
 
-    // ====== NOVOS CAMPOS ======
+    // ====== CAMPOS ADICIONAIS ======
     @Column(length = 2000)
     private String descricao;
 
-    // 1.0 .. 5.0 (passo 0.5) – validação adicional no service/controller
+    // 1.0 .. 5.0 (passo 0.5)
     @Column(precision = 2, scale = 1)
     private BigDecimal avaliacao;
 
@@ -52,8 +53,10 @@ public class Produto {
     @Builder.Default
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("ordem ASC, id ASC")
+    @JsonIgnore                                   // << não serialize as imagens dentro do produto
+    @ToString.Exclude @EqualsAndHashCode.Exclude  // evita toString/equals recursivos
     private List<ProdutoImagem> imagens = new ArrayList<>();
-    // ==========================
+    // =================================
 
     @PrePersist
     public void prePersist() {

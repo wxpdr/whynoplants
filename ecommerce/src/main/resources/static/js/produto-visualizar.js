@@ -118,9 +118,17 @@ function navegar(delta){
 }
 
 function urlArquivo(path){
-  // no banco salvamos "uploads/produtos/<id>/<arquivo>"
-  // para servir estático, basta prefixar com "/" (Spring está servindo /uploads/**)
   if (!path) return "https://via.placeholder.com/800x600?text=Sem+imagem";
-  if (path.startsWith("http")) return path;
-  return "/" + path.replace(/^\/+/, "");
+  // se vier URL absoluta, apenas retorne
+  if (/^https?:\/\//i.test(path)) return path;
+
+  // 🔧 normaliza caminho vindo do banco (Windows -> web)
+  let p = String(path).trim()
+    .replace(/\\/g, "/")        // ← troca todas as backslashes por slash
+    .replace(/^\/+/, "");       // remove barras extras no começo
+
+  return "/" + p;               // => /uploads/...
 }
+
+
+

@@ -38,21 +38,35 @@
       <form method="dialog" id="formDlg">
         <h3 id="dlgTitle">Novo usuário</h3>
         <input type="hidden" id="u-id" />
-        <label>Nome</label>
-        <input id="u-nome" required />
-        <label>CPF (11 dígitos)</label>
-        <input id="u-cpf" maxlength="11" pattern="\\d{11}" required />
-        <label>E-mail</label>
-        <input id="u-email" type="email" required />
-        <label>Perfil</label>
-        <select id="u-perfil">
-          <option>Administrador</option>
-          <option>Estoquista</option>
-        </select>
-        <label>Nova senha</label>
-        <input id="u-nova" type="password" />
-        <label>Confirmar senha (apenas no cadastro)</label>
-        <input id="u-confirma" type="password" />
+        
+        <div class="form-grid">
+            <div class="column">
+                <label>Nome</label>
+                <input id="u-nome" required />
+                
+                <label>CPF (11 dígitos)</label>
+                <input id="u-cpf" maxlength="11" pattern="\d{11}" required />
+                
+                <label>E-mail</label>
+                <input id="u-email" type="email" required />
+                
+                <label>Perfil</label>
+                <select id="u-perfil">
+                  <option>Administrador</option>
+                  <option>Estoquista</option>
+                </select>
+            </div>
+
+            <div class="column">
+                <label>Nova senha</label>
+                <input id="u-nova" type="password" />
+                
+                <label>Confirmar senha (apenas no cadastro)</label>
+                <input id="u-confirma" type="password" />
+                
+                <div class="spacer-senha"></div>
+            </div>
+        </div>
         <div class="actions">
           <button class="btn primary" id="okDlg">OK</button>
           <button class="btn ghost" id="cancelDlg">Cancelar</button>

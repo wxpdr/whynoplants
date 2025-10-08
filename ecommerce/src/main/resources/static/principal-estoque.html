@@ -7,15 +7,16 @@
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
-  <body>
-  <header>
-    <h1>Painel do Estoquista</h1>
-    <nav>
-      <button onclick="Auth.redirectHomeByPerfil()">Início</button>
-      <button onclick="location.href='login.html'">Sair</button>
-    </nav>
-  </header>
   
+  <header class="header-bar">
+    <div class="header-content">
+        <h1>WNPlants</h1>
+        <nav>
+            <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
+            <button class="btn ghost" id="logout-btn">Sair</button>
+        </nav>
+    </div>
+  </header>
   <div class="card">
     <div class="topbar">
       <h1>Área de Estoque</h1>
@@ -27,7 +28,6 @@
     <ul class="menu">
       <li><a class="link" href="estoque-produto.html">Listar Produto</a></li>
       <li><a class="link" href="pedidos.html">Listar Pedidos</a></li>
-      <!-- intencionalmente sem "Listar Usuário" para Estoquista -->
     </ul>
   </div>
 
@@ -37,8 +37,14 @@
   <script>
     Auth.preventBfcache();
     Auth.ensureLoggedIn(); // expulsa quem não estiver logado
+    
+    // Adiciona o evento de logout ao novo botão do header
+    document.getElementById("logout-btn")?.addEventListener("click", async (e)=>{
+        e.preventDefault();
+        try{ await fetch(`${API}/logout`, { method:"POST", credentials:"include" }); }catch{}
+        location.href="login.html";
+    });
   </script>
-
 
 </body>
 </html>

@@ -10,21 +10,31 @@
   <link rel="stylesheet" href="css/login.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>Login de Usuário</h1>
+  
+  <div class="split-container">
+    <div class="card login-side">
+      <h1>Login de Usuário</h1>
 
-    <label>E-mail</label>
-    <input id="email" type="email" placeholder="email@dominio.com.br" autofocus />
+      <label>E-mail</label>
+      <input id="email" type="email" placeholder="email@dominio.com.br" autofocus />
 
-    <label>Senha</label>
-    <input id="senha" type="password" placeholder="••••••••" />
+      <label>Senha</label>
+      <input id="senha" type="password" placeholder="••••••••" />
 
-    <div class="actions">
-      <button id="ok" class="btn primary">Entrar</button>
-      <a href="#" class="btn ghost" id="cancel">Cancelar</a>
+      <div class="actions">
+        <button id="ok" class="btn primary">Entrar</button>
+        <button id="cancel" class="btn ghost">Limpar</button> 
+      </div>
+
+      <p id="msg" class="msg"></p>
     </div>
 
-    <p id="msg" class="msg"></p>
+    <div class="card welcome-side">
+      <h2>Whynoplants.com</h2>
+      <p>
+        Acesso exclusivo para colaboradores. Gerencie produtos e pedidos com eficiência.
+      </p>
+      </div>
   </div>
 
   <script>window.API = "http://localhost:8080";</script>

@@ -1,50 +1,267 @@
+/* static/css/produto.css - LISTAGEM E MODAL (ADMIN/ESTOQUE) */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* ========================================================= */
 :root{
-  --bg:#fff;
-  --fg:#111;
-  --muted:#6b7280;
-  --primary:#2b7cff;
-  --border:#e5e7eb;
-  --on:#e6ffed;
-  --off:#ffecec;
+  --primary: #059669; /* Verde Principal (Esmeralda) para botões e destaque */
+  --bg:#F9FAFB; /* Fundo Clean (Quase Branco) */
+  --fg:#1F2937; /* Texto Escuro (Alto Contraste) */
+  --muted:#6b7280; /* Texto secundário/indicadores */
+  --border:#E5E7EB; /* Linhas, bordas e divisores */
+  
+  /* Cores para Badge de Status */
+  --on-bg: #DCFCE7; /* Fundo Ativo (Verde Claro) */
+  --on-fg: #059669; /* Texto Ativo */
+  --off-bg:#FEF2F2; /* Fundo Inativo (Vermelho Claro Suave) */
+  --off-fg:#B91C1C; /* Texto Inativo */
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
-.container{max-width:1100px;margin:24px auto;padding:0 12px}
 
-.header{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px}
-.header h1{font-size:1.6rem;margin:0}
-.nav{display:flex;gap:8px}
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GLOBAL                               */
+/* ========================================================= */
+*{
+    box-sizing:border-box
+}
 
-.toolbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin:12px 0}
-.search{display:flex;gap:8px;align-items:center}
-.filters{display:flex;gap:12px;align-items:center}
-.switch span{margin-left:6px;color:var(--muted);font-size:.95rem}
+html,body{
+    margin:0;
+    padding:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial
+}
 
-.btn{border:1px solid var(--border);padding:8px 12px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;background:#fff}
-.btn.ghost{background:transparent}
-.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.container{
+    max-width:1100px;
+    margin:24px auto;
+    padding:0 12px
+}
 
-input[type="search"]{padding:8px 10px;border:1px solid var(--border);border-radius:8px;min-width:280px}
+/* ========================================================= */
+/* 3. HEADER E TOOLBAR                                       */
+/* ========================================================= */
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:8px 0 12px
+}
 
-.table{width:100%;border-collapse:collapse;margin-top:8px}
-.table th,.table td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
-.table th{font-weight:600}
-.col-acoes{width:240px}
+.header h1{
+    font-size:1.6rem;
+    margin:0
+}
 
-.badge{padding:3px 8px;border-radius:12px;font-size:.85rem;border:1px solid var(--border)}
-.badge.on{background:var(--on)}
-.badge.off{background:var(--off)}
+.nav{
+    display:flex;
+    gap:8px
+}
 
-.row-actions{display:flex;gap:8px;flex-wrap:wrap}
-.row-actions .btn{padding:6px 10px}
+.toolbar{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    margin:12px 0
+}
 
-.pagination{display:flex;gap:8px;align-items:center;justify-content:center;margin:14px 0}
-.pagination .info{color:var(--muted)}
+.search{
+    display:flex;
+    gap:8px;
+    align-items:center
+}
 
-/* NOVO: modal de confirmação */
-.modal[hidden]{display:none !important}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
-.modal-card{background:#fff;width:min(520px,92%);border-radius:12px;padding:14px}
-.modal-header{padding:6px 4px 10px;border-bottom:1px solid var(--border)}
-.modal-body{padding:12px 4px}
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);padding-top:10px}
+.filters{
+    display:flex;
+    gap:12px;
+    align-items:center
+}
+
+.switch span{
+    margin-left:6px;
+    color:var(--muted);
+    font-size:.95rem
+}
+
+/* ========================================================= */
+/* 4. BOTÕES E INPUTS (HOVER MAIS EVIDENTE NO GHOST)         */
+/* ========================================================= */
+.btn{
+    border:1px solid var(--border);
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    background:white;
+    color:var(--fg);
+    transition:all .15s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+.btn.ghost{
+    background:transparent;
+    box-shadow: none; 
+    color: var(--fg);
+}
+
+.btn.ghost:hover {
+    background: var(--on-bg); /* NOVO: Fundo verde claro */
+    border-color: var(--primary); /* NOVO: Borda verde suave */
+    color: var(--primary); /* NOVO: Texto verde */
+}
+
+.btn.ghost:active {
+    background: #E5E7EB;
+    transform: translateY(1px);
+}
+
+.btn.primary{
+    background:var(--primary);
+    border-color:var(--primary);
+    color:#fff;
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
+}
+
+.btn.primary:hover{
+    background:#047857;
+    border-color:#047857
+}
+
+.btn.primary:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+input[type="search"]{
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    min-width:280px
+}
+
+/* ========================================================= */
+/* 5. TABELA E AÇÕES                                         */
+/* ========================================================= */
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px
+}
+
+/* Hover na linha da tabela */
+.table tbody tr:hover {
+    background-color: #F3F4F6;
+    cursor: default;
+    transition: background-color 0.3s ease;
+}
+
+.table th,.table td{
+    border-bottom:1px solid var(--border);
+    padding:12px 10px;
+    text-align:left
+}
+
+.table th{
+    font-weight:600
+}
+
+.col-acoes{
+    width:140px; 
+}
+
+/* Badges de Status */
+.badge{
+    padding:3px 8px;
+    border-radius:12px;
+    font-size:.85rem;
+    border:1px solid var(--border)
+}
+
+.badge.on{
+    background:var(--on-bg);
+    color:var(--on-fg);
+    border-color:var(--on-fg)
+}
+
+.badge.off{
+    background:var(--off-bg);
+    color:var(--off-fg);
+    border-color:var(--off-fg)
+}
+
+.row-actions{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex-wrap:nowrap;
+}
+
+.row-actions .btn{
+    padding:6px 10px;
+    font-size: 0.85rem;
+    text-align: center;
+    width: 100px;
+}
+
+/* ========================================================= */
+/* 6. PAGINAÇÃO                                              */
+/* ========================================================= */
+.pagination{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+    margin:14px 0
+}
+
+.pagination .info{
+    color:var(--muted)
+}
+
+/* ========================================================= */
+/* 7. MODAL DE CONFIRMAÇÃO                                   */
+/* ========================================================= */
+.modal[hidden]{
+    display:none !important
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:50
+}
+
+.modal-card{
+    background:white;
+    width:min(520px,92%);
+    border-radius:12px;
+    padding:14px
+}
+
+.modal-header{
+    padding:6px 4px 10px;
+    border-bottom:1px solid var(--border)
+}
+
+.modal-body{
+    padding:12px 4px
+}
+
+.modal-footer{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    border-top:1px solid var(--border);
+    padding-top:10px
+}

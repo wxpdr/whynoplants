@@ -7,12 +7,14 @@
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
-  <header>
-    <h1>Painel Administrativo</h1>
-    <nav>
-      <button onclick="Auth.redirectHomeByPerfil()">Início</button>
-      <button onclick="location.href='login.html'">Sair</button>
-    </nav>
+    <header class="header-bar">
+    <div class="header-content">
+        <h1>WNPlants</h1>
+        <nav>
+            <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
+            <button class="btn ghost" id="logout-btn">Sair</button>
+        </nav>
+    </div>
   </header>
   
   <div class="card">
@@ -25,7 +27,6 @@
     <ul class="menu">
       <li><a class="link" href="produto.html">Listar Produto</a></li>
       <li><a class="link" href="usuario.html">Listar Usuário</a></li>
-      <li><a class="link" href="pedidos.html">Listar Pedidos</a></li>
     </ul>
 
   </div>
