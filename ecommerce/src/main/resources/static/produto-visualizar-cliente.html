@@ -8,23 +8,29 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="loja.html">WN<span>Plants</span></a>
+    <a class="brand" href="index.html">WN<span>Plants</span></a>
     <nav class="actions">
-      <a href="login.html" aria-label="Entrar/Criar conta">👤</a>
-      <a href="#" aria-label="Carrinho">🛒</a>
+      <a href="login.html" aria-label="Entrar/Criar conta">Minha Conta</a>
+      <a href="#" aria-label="Carrinho">🛒 <span id="cartCount" class="badge"></span></a>
     </nav>
   </header>
 
   <main class="container">
     <section class="gallery">
+      <button class="nav prev" aria-label="Imagem anterior">‹</button>
       <img id="imgPrincipal" alt="Imagem do produto" loading="lazy"/>
+      <button class="nav next" aria-label="Próxima imagem">›</button>
       <div id="thumbs" class="thumbs"></div>
     </section>
 
     <section class="info">
-      <!-- Título sem placeholder -->
       <h1 id="titulo"></h1>
-      <div id="preco" class="price">—</div>
+
+      <div class="meta">
+        <div id="preco" class="price">—</div>
+        <div id="avaliacao" class="rating" aria-label="Avaliação do produto"></div>
+      </div>
+
       <p id="descricao" class="desc"></p>
 
       <div class="purchase">
@@ -33,10 +39,10 @@
           <input id="qtd" type="number" min="1" value="1"/>
         </label>
         <button id="btnComprar" class="btn">Adicionar ao carrinho</button>
-        <small class="hint">* Placeholder — funções serão implementadas depois.</small>
+        <small class="hint">* Carrinho local (acumula seus itens).</small>
       </div>
 
-      <a class="back" href="loja.html">← Voltar para a loja</a>
+      <a class="back" href="index.html">← Voltar para a loja</a>
     </section>
   </main>
 
