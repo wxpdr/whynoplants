@@ -34,10 +34,13 @@
       <p id="descricao" class="desc"></p>
 
       <div class="purchase">
-        <label>
-          Quantidade
-          <input id="qtd" type="number" min="1" value="1"/>
-        </label>
+        <label class="qty-label">Quantidade</label>
+        <div class="qty" role="group" aria-label="Selecionar quantidade">
+          <button type="button" class="qty-btn" id="menos" aria-label="Diminuir quantidade">−</button>
+          <span id="qtdView" class="qty-value" aria-live="polite">1</span>
+          <button type="button" class="qty-btn" id="mais" aria-label="Aumentar quantidade">+</button>
+          <input id="qtd" type="hidden" value="1">
+        </div>  
         <button id="btnComprar" class="btn">Adicionar ao carrinho</button>
         <small class="hint">* Carrinho local (acumula seus itens).</small>
       </div>

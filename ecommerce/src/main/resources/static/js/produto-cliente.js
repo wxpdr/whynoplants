@@ -1,7 +1,11 @@
-// Página pública de produto (cliente): carrossel + carrinho (localStorage)
+// Página pública de produto (cliente): carrossel + contador + carrinho (localStorage)
 
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+/* ---------- Configs ---------- */
+const AUTOPLAY = true;      // autoplay ligado
+const INTERVALO_MS = 2000;   // intervalo do autoplay (ms)
 
 /* ---------- Utilidades ---------- */
 function getId(){
@@ -38,12 +42,8 @@ async function carregarDetalheProduto(id){
 
 /* ---------- Carrinho (localStorage) ---------- */
 const CART_KEY = 'wnplants_cart';
-function readCart(){
-  try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }catch{ return []; }
-}
-function writeCart(list){
-  try{ localStorage.setItem(CART_KEY, JSON.stringify(list)); }catch{}
-}
+function readCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }catch{ return []; } }
+function writeCart(list){ try{ localStorage.setItem(CART_KEY, JSON.stringify(list)); }catch{} }
 function addToCart(item){ // {id,nome,valor,imagem,quantidade}
   const cart = readCart();
   const idx = cart.findIndex(x => String(x.id) === String(item.id));
@@ -59,20 +59,23 @@ function updateCartCount(){
   el.textContent = total > 0 ? total : '';
 }
 
-/* ---------- Carrossel simples ---------- */
-let imagens = [];      // array de URLs normalizadas
+/* ---------- Carrossel ---------- */
+let imagens = [];      // URLs normalizadas
 let currentIdx = 0;
-
 function showAt(idx){
   if (!imagens.length) return;
   currentIdx = (idx + imagens.length) % imagens.length;
   const src = imagens[currentIdx];
   const big = $('#imgPrincipal');
-  big.src = src;
-  $$('.thumbs img').forEach((t,i)=>{
-    if (i===currentIdx) t.classList.add('active');
-    else t.classList.remove('active');
-  });
+  if (big) big.src = src;
+
+  $$('.thumbs img').forEach((t,i)=> t.classList.toggle('active', i===currentIdx));
+
+  // controla setas quando só há 1 imagem
+  const prev = $('.nav.prev'), next = $('.nav.next');
+  const single = imagens.length <= 1;
+  if (prev) prev.disabled = single;
+  if (next) next.disabled = single;
 }
 
 /* ---------- Fluxo principal ---------- */
@@ -98,7 +101,7 @@ async function carregar(){
   $("#descricao").textContent = prod.descricao ?? "";
   $("#avaliacao").textContent = renderStars(prod.avaliacao);
 
-  // Imagens
+  // Imagens (principal > ordem > id)
   const imgs = (prod.imagens ?? []).sort((a,b)=>{
     const pa = a.principal?1:0, pb=b.principal?1:0;
     if(pa!==pb) return pb-pa;
@@ -108,27 +111,82 @@ async function carregar(){
   });
 
   imagens = imgs.map(x => normalizarUrlUpload(x.arquivo)).filter(Boolean);
-  if (!imagens.length){
-    imagens = ["https://via.placeholder.com/800x600?text=Sem+imagem"];
-  }
+  if (!imagens.length) imagens = ["https://via.placeholder.com/800x600?text=Sem+imagem"];
 
   // Render principal + thumbs
-  showAt(0);
   const thumbs = $("#thumbs");
   thumbs.innerHTML = "";
   imagens.forEach((src, idx)=>{
     const im = document.createElement("img");
-    im.src = src;
-    im.alt = prod.nome ?? "Miniatura";
-    if(idx===0) im.classList.add("active");
+    im.src = src; im.alt = prod.nome ?? "Miniatura";
+    im.classList.toggle('active', idx===0);
     im.addEventListener("click", ()=> showAt(idx));
     thumbs.appendChild(im);
   });
 
-  // Setas
+  // Setas e teclado
   const prev = $('.nav.prev'), next = $('.nav.next');
   if (prev) prev.addEventListener('click', ()=> showAt(currentIdx-1));
   if (next) next.addEventListener('click', ()=> showAt(currentIdx+1));
+  document.addEventListener('keydown', (e)=>{
+    if (imagens.length <= 1) return;
+    if (e.key === 'ArrowLeft')  showAt(currentIdx-1);
+    if (e.key === 'ArrowRight') showAt(currentIdx+1);
+  });
+
+  // Primeiro frame do carrossel
+  showAt(0);
+
+  // ----- contador de quantidade (- / +) -----
+  function setQty(v){
+    v = Math.max(1, Math.floor(Number(v) || 1));
+    const hidden = $('#qtd'), view = $('#qtdView');
+    if (hidden) hidden.value = v;
+    if (view) view.textContent = v;
+  }
+  // inicializa com valor atual do hidden (ou 1)
+  setQty($('#qtd')?.value || 1);
+  $('#menos')?.addEventListener('click', ()=> setQty(Number($('#qtd')?.value || 1) - 1));
+  $('#mais') ?.addEventListener('click', ()=> setQty(Number($('#qtd')?.value || 1) + 1));
+  document.querySelector('.purchase')?.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); setQty(Number($('#qtd')?.value || 1) - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); setQty(Number($('#qtd')?.value || 1) + 1); }
+  });
+
+  // --- Autoplay (pausa no hover/aba oculta e reinicia após interação) ---
+  let timer = null;
+  let paused = false;
+
+  function startAuto(){
+    if (!AUTOPLAY || imagens.length <= 1) return;
+    if (paused) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stopAuto();
+    timer = setInterval(()=> showAt(currentIdx + 1), INTERVALO_MS);
+  }
+  function stopAuto(){
+    if (timer){ clearInterval(timer); timer = null; }
+  }
+
+  // Pausar quando o mouse estiver sobre a galeria
+  const gal = document.querySelector('.gallery');
+  gal?.addEventListener('mouseenter', ()=>{ paused = true;  stopAuto(); });
+  gal?.addEventListener('mouseleave', ()=>{ paused = false; startAuto(); });
+
+  // Pausar quando a aba ficar oculta e retomar ao voltar
+  document.addEventListener('visibilitychange', ()=>{
+    if (document.hidden) stopAuto();
+    else startAuto();
+  });
+
+  // Reiniciar o timer após navegação manual (setas ou thumbs)
+  const restartAfterManual = ()=> { stopAuto(); startAuto(); };
+  prev?.addEventListener('click', restartAfterManual);
+  next?.addEventListener('click', restartAfterManual);
+  thumbs?.addEventListener('click', restartAfterManual);
+
+  // Inicia o autoplay
+  startAuto();
 
   // Botão: adicionar ao carrinho
   const btn = $("#btnComprar");
@@ -148,31 +206,3 @@ async function carregar(){
 }
 
 document.addEventListener("DOMContentLoaded", carregar);
-
-
-// --- Autoplay opcional (desligado por padrão) ---
-const AUTOPLAY = true;        // mude para true se quiser
-const INTERVALO_MS = 2000;     // 6s entre trocas
-let timer = null;
-let userInteragiu = false;
-
-function startAuto(){
-  if (!AUTOPLAY || imagens.length <= 1) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  stopAuto();
-  timer = setInterval(()=> { if(!userInteragiu) showAt(currentIdx+1); }, INTERVALO_MS);
-}
-function stopAuto(){ if (timer){ clearInterval(timer); timer = null; } }
-
-// pausa ao interagir
-['click','keydown','wheel','touchstart'].forEach(evt=>{
-  document.addEventListener(evt, ()=>{ userInteragiu = true; stopAuto(); }, { once:true });
-});
-const gal = document.querySelector('.gallery');
-if (gal){
-  gal.addEventListener('mouseenter', stopAuto);
-  gal.addEventListener('mouseleave', ()=>{ if(!userInteragiu) startAuto(); });
-}
-
-// inicia (se habilitado)
-startAuto();

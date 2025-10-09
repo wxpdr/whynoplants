@@ -46,3 +46,15 @@ h1{margin:0;font-size:22px}
 .hint{color:#6a6a6a}
 .back{margin-top:8px;display:inline-block;color:#0f6a2b;text-decoration:none}
 .back:hover{text-decoration:underline}
+
+
+.qty { display:inline-flex; align-items:center; gap:10px; }
+.qty-label { display:block; margin-bottom:6px; font-weight:600; }
+.qty-btn {
+  width:36px; height:36px; border-radius:10px;
+  border:1px solid #e6e6e6; background:#fff; cursor:pointer;
+  font-size:18px; line-height:1;
+}
+.qty-btn:hover { filter:brightness(0.98); }
+.qty-btn:active { transform:scale(0.98); }
+.qty-value { min-width:28px; text-align:center; font-weight:700; }
