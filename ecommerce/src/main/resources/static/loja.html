@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>WNPlants — Loja</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/loja.css"/>
+  <meta http-equiv="Cache-Control" content="no-store"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo" aria-label="Logo da loja">
+      <a href="loja.html" class="brand">WN<span>Plants</span></a>
+    </div>
+
+    <nav class="top-actions" aria-label="Ações do usuário">
+      <a href="login.html" class="link-identificacao" aria-label="Entrar ou criar conta">👤 <span>Entrar / Criar conta</span></a>
+      <a href="#" class="icon-btn" aria-label="Carrinho (não funcional)">
+        🛒
+      </a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1 class="visually-hidden">Lista de Produtos</h1>
+
+    <section class="grid-toolbar" aria-label="Ferramentas de listagem">
+      <div class="note">* Produtos ordenados dos mais novos para os mais antigos.</div>
+    </section>
+
+    <section id="produtosGrid" class="produtos-grid" aria-live="polite">
+      <!-- Cards renderizados via JS -->
+    </section>
+  </main>
+
+  <template id="tplCard">
+    <article class="card">
+      <a class="img-wrap" tabindex="0">
+        <img alt="Imagem do produto" loading="lazy"/>
+      </a>
+      <div class="card-body">
+        <h3 class="titulo"></h3>
+        <div class="preco"></div>
+        <button class="btn detalhes">Ver detalhes</button>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const API = (window.API_BASE ?? (location.origin + "/api"));
+  </script>
+  <script src="js/loja.js"></script>
+</body>
+</html>

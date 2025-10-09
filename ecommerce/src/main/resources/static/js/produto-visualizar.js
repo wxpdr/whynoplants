@@ -36,21 +36,22 @@ let index = 0;
     return;
   }
 
-  // carrega imagens (seu projeto já tem endpoint de imagens)
+  // carrega imagens a partir do detalhe (endpoint que existe no back)
   try{
-    const r2 = await fetch(`${API}/produtos/${id}/imagens`, { credentials:"include" });
+    const r2 = await fetch(`${API}/produtos/${id}/detalhe`, { credentials:"include" });
     if (r2.ok){
-      imagens = await r2.json();
-      imagens.sort((a,b)=>{
-        // principal primeiro; depois ordem; depois id
-        const pa = a.principal ? 1 : 0;
-        const pb = b.principal ? 1 : 0;
+      const det = await r2.json();
+      imagens = det.imagens ?? [];
+      imagens.sort((a,b)=>{ // principal > ordem > id
+        const pa = a.principal ? 1 : 0, pb = b.principal ? 1 : 0;
         if (pa !== pb) return pb - pa;
-        if ((a.ordem ?? 0) !== (b.ordem ?? 0)) return (a.ordem ?? 0) - (b.ordem ?? 0);
+        const oa = a.ordem ?? 0, ob = b.ordem ?? 0;
+        if (oa !== ob) return oa - ob;
         return (a.id ?? 0) - (b.id ?? 0);
       });
     }
-  }catch(_){}
+  }catch{}
+
 
   // fallback: se não tiver imagens, coloca placeholder
   if (!imagens || imagens.length === 0){

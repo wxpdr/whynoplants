@@ -1,76 +1,146 @@
 /* static/css/produto-visualizar.css - VISUALIZAÇÃO DE PRODUTO */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
 /* ========================================================= */
 :root{
-  --bg:#F9FAFB; /* Fundo Geral */
-  --fg:#1F2937; /* Texto Principal */
-  --muted:#6b7280; /* Texto secundário */
-  --primary:#059669; /* Verde Principal (Botão Comprar, Destaque) */
-  --border:#e5e7eb;
+  --bg:#FFFFFF; /* Fundo Geral */
+  --fg:#212121; /* Texto Principal */
+  --muted:#6b7280;
+  --primary:#5F865F; /* Verde Principal (Botão Comprar, Destaque) */
+  --border:#E5E7EB;
+  --card-bg: #FFFFFF;
 }
-
-/* ... (omitting unchanged sections for brevity) ... */
 
 /* ========================================================= */
-/* 3. HEADER E BOTÕES (COM EFEITO DE PRESS)                  */
+/* 1.1. MODO ESCURO (DARK MODE)                              */
 /* ========================================================= */
-.header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:12px
+.dark-mode{
+    --bg:#1D2B2E;
+    --fg:#ECEFF1;
+    --muted:#9CA3AF;
+    --primary:#74B274;
+    --border:#4A6568;
+    --card-bg: #2B3E42;
 }
 
-.header h1{
-    margin:0;
-    font-size:1.2rem;
-    color:var(--muted)
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GERAL                                */
+/* ========================================================= */
+*{box-sizing:border-box}
+html,body{
+    margin:0;padding:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+.container{max-width:1100px;margin:20px auto;padding:0 12px}
+
+/* ========================================================= */
+/* 3. HEADER E BOTÕES (Efeito de Press)                      */
+/* ========================================================= */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.header h1{margin:0;font-size:1.2rem;color:var(--muted)}
 
 .btn{
-    border:1px solid var(--border);
-    padding:8px 12px;
-    border-radius:8px;
-    background:white;
-    cursor:pointer;
-    transition:all .15s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border:1px solid var(--border);padding:8px 12px;border-radius:8px;
+    background:var(--card-bg);color:var(--fg);cursor:pointer;
+    transition:all .15s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-
+.dark-mode .btn {
+    background: var(--card-bg);
+    color: var(--fg);
+    border-color: var(--border);
+}
 .btn:active {
     box-shadow: none;
     transform: translateY(1px);
 }
 
-.btn.ghost{
-    background:transparent;
-    box-shadow: none;
-}
-
-.btn.ghost:active {
-    background: #E5E7EB;
-    transform: translateY(1px);
-}
+.btn.ghost{background:transparent; box-shadow: none;}
+.dark-mode .btn.ghost { background:transparent; border-color: var(--border); }
+.btn.ghost:active { background: #E5E7EB; transform: translateY(1px); }
+.dark-mode .btn.ghost:active { background: #374151; }
 
 .btn.buy{
-    background:var(--primary);
-    border-color:var(--primary);
-    color:#fff;
-    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
+    background:var(--primary);border-color:var(--primary);color:#fff;
+    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);
 }
-
-.btn.buy:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
+.btn.buy:active { box-shadow: none; transform: translateY(1px); }
 
 .btn.buy[disabled]{
-    opacity:.6;
-    cursor:not-allowed;
+    opacity:.6;cursor:not-allowed;
     box-shadow: none;
-    transform: none; /* Desabilita o efeito de pressão quando desativado */
+    transform: none;
 }
 
-/* ... (omitting unchanged sections for brevity) ... */
+/* ========================================================= */
+/* 4. LAYOUT DO PRODUTO (GALERIA E INFORMAÇÕES)              */
+/* ========================================================= */
+.product{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}
+@media (max-width: 900px){ .product{grid-template-columns:1fr} }
+
+/* ========================================================= */
+/* 5. GALERIA DE IMAGENS                                     */
+/* ========================================================= */
+.gallery .stage{
+    position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;min-height:380px;
+    background:#f8fafc;
+    transition: all 0.3s;
+}
+.dark-mode .gallery .stage {
+    background: #1F2937;
+}
+
+.gallery .stage img{max-width:100%;max-height:520px;object-fit:contain}
+.gallery .nav{
+    position:absolute;top:50%;transform:translateY(-50%);border:none;
+    background:rgba(0,0,0,.5);color:#fff;font-size:26px;line-height:1;
+    height:42px;width:42px;border-radius:50%;cursor:pointer
+}
+.gallery .nav.prev{left:8px}
+.gallery .nav.next{right:8px}
+
+.thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:6px}
+.thumbs .item{
+    height:68px;width:68px;border:2px solid transparent;border-radius:10px;
+    overflow:hidden;flex:0 0 auto;cursor:pointer;
+    background:var(--card-bg);
+    transition: all 0.3s;
+}
+
+.dark-mode .thumbs .item {
+    background: #1F2937;
+}
+
+.thumbs .item img{height:100%;width:100%;object-fit:cover;display:block}
+.thumbs .item.active{border-color:var(--primary)} /* Destaque em Verde */
+
+/* ========================================================= */
+/* 6. INFORMAÇÕES DO PRODUTO                                 */
+/* ========================================================= */
+.info h2{margin:.2rem 0 6px}
+.muted{color:var(--muted)}
+.muted.sm{font-size:.9rem}
+
+.price-stock{display:grid;grid-template-columns: repeat(3, 1fr);gap:12px;margin:10px 0 6px}
+.price-stock .label{font-size:.85rem;color:var(--muted)}
+.price-stock .value{font-size:1.1rem;font-weight:600}
+
+.code{margin:8px 0 12px}
+
+.desc h3{margin:.4rem 0}
+.desc p{white-space:pre-wrap}
+
+/* ========================================================= */
+/* 7. AVALIAÇÃO (ESTRELAS)                                   */
+/* ========================================================= */
+.rating{display:flex;gap:2px;margin:6px 0 12px}
+.star{font-size:20px;color:#fbbf24}       /* Mantido Amarelo para Avaliação */
+.star.off{color:#e5e7eb}
+.dark-mode .star.off{color:var(--border)} /* Ajusta a cor no Dark Mode */
+
+.actions{display:flex;flex-direction:column;gap:6px;margin-top:12px}

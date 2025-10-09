@@ -1,0 +1,28 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#0b0f14}
+
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#0E1B10;color:#fff;position:sticky;top:0}
+.brand{font-weight:800;text-decoration:none;color:#fff}
+.brand span{color:#72c986}
+.actions a{color:#fff;text-decoration:none;margin-left:12px}
+
+.container{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;max-width:1100px;margin:24px auto;padding:0 20px}
+@media (max-width:900px){.container{grid-template-columns:1fr}}
+
+.gallery{display:grid;gap:12px}
+#imgPrincipal{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid #e6e6e6;background:#f2f4f3}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px}
+.thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;border:1px solid #e6e6e6;cursor:pointer;opacity:.9}
+.thumbs img.active{outline:2px solid #0f6a2b;opacity:1}
+
+.info{display:grid;gap:12px}
+h1{margin:0;font-size:22px}
+.price{font-weight:800;font-size:20px;color:#0f6a2b}
+.desc{line-height:1.5}
+
+.purchase{display:grid;gap:8px}
+.btn{background:#0f6a2b;color:#fff;border:0;border-radius:10px;padding:10px 12px;cursor:pointer}
+.btn:hover{filter:brightness(1.05)}
+.hint{color:#6a6a6a}
+.back{margin-top:8px;display:inline-block;color:#0f6a2b;text-decoration:none}
+.back:hover{text-decoration:underline}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>WNPlants — Produto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/produto-cliente.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="loja.html">WN<span>Plants</span></a>
+    <nav class="actions">
+      <a href="login.html" aria-label="Entrar/Criar conta">👤</a>
+      <a href="#" aria-label="Carrinho">🛒</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="gallery">
+      <img id="imgPrincipal" alt="Imagem do produto" loading="lazy"/>
+      <div id="thumbs" class="thumbs"></div>
+    </section>
+
+    <section class="info">
+      <!-- Título sem placeholder -->
+      <h1 id="titulo"></h1>
+      <div id="preco" class="price">—</div>
+      <p id="descricao" class="desc"></p>
+
+      <div class="purchase">
+        <label>
+          Quantidade
+          <input id="qtd" type="number" min="1" value="1"/>
+        </label>
+        <button id="btnComprar" class="btn">Adicionar ao carrinho</button>
+        <small class="hint">* Placeholder — funções serão implementadas depois.</small>
+      </div>
+
+      <a class="back" href="loja.html">← Voltar para a loja</a>
+    </section>
+  </main>
+
+  <script>window.API = (window.API_BASE ?? (location.origin + "/api"));</script>
+  <script src="js/produto-cliente.js" defer></script>
+</body>
+</html>

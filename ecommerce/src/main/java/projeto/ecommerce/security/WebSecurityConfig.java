@@ -19,6 +19,8 @@ public class WebSecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 
                 // páginas soltas (sem usar /**/*.html)
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/loja.html", "/produto-visualizar.html", "/produto-visualizar-cliente.html", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/", "/index.html", "/login.html", "/principal.html", "/usuarios.html").permitAll()
 
                 // endpoints públicos para iniciar (cadastro + login)

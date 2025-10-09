@@ -7,3 +7,5 @@ public record ProdutoListDTO(
         Long id, String codigo, String nome,
         Integer quantidade, BigDecimal valor, Boolean ativo
 ) {}
+
+

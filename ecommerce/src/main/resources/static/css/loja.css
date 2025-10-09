@@ -1,0 +1,205 @@
+/* ===== Loja pública (Sprint 3) - ESTILIZAÇÃO FINAL ORGÂNICA/CLEAN ===== */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS DE COR (VERDE ORGÂNICO E CLEAN)              */
+/* ========================================================= */
+:root {
+  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
+  --fg: #212121;      /* Texto Principal */
+  --bg: #FFFFFF;     /* Fundo Geral */
+  --card-bg: #FFFFFF;
+  --border: #E5E7EB;  /* Borda sutil */
+  --shop-header-bg: #2B3E42; /* Teal Escuro/Sofisticado para o Header */
+  --accent-green: #74B274; /* Para acentuação (logo) */
+}
+
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GLOBAL                               */
+/* ========================================================= */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--fg); 
+  background: var(--bg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+/* ========================================================= */
+/* 3. HEADER - site-header (Barra de Marca Definida)         */
+/* ========================================================= */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 24px; /* Aumentado padding para mais espaço */
+  background: var(--shop-header-bg); 
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+}
+.logo .brand {
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 22px; /* Título maior */
+  letter-spacing: .4px;
+  color: #fff;
+}
+.logo .brand span { color: var(--accent-green); } /* Verde de acentuação */
+
+.top-actions { display: flex; align-items: center; gap: 16px; } 
+.top-actions a { color: #fff; text-decoration: none; font-size: 15px; transition: opacity .2s; }
+.top-actions a:hover { opacity: 0.8; }
+
+.top-actions .icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 999px; background: rgba(255,255,255,.1);
+  transition: background .2s, transform .2s;
+}
+.top-actions .icon-btn:hover { 
+  background: rgba(255,255,255,.2); 
+  transform: scale(1.05);
+}
+
+.content { 
+    padding: 30px 22px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.grid-toolbar { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    margin-bottom: 20px; 
+}
+.grid-toolbar .note { color: #888; font-size: 14px; } 
+
+/* ========================================================= */
+/* 4. GRID E CARDS - produtos-grid                           */
+/* ========================================================= */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Cards um pouco maiores */
+  gap: 20px; 
+}
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--card-bg);
+  border: 1px solid var(--border); 
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,.08); 
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  transform: translateY(-4px); /* Efeito de flutuação */
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+.img-wrap {
+  display: block;
+  background: #f0f2f1;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.img-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.3s ease;
+}
+.card:hover .img-wrap img {
+    transform: scale(1.03); /* Zoom sutil na imagem */
+}
+
+.card-body {
+  display: grid; gap: 8px; 
+  padding: 16px; 
+}
+.titulo { 
+    margin: 0; 
+    font-size: 17px; 
+    font-weight: 700; 
+    color: var(--fg); 
+    min-height: 40px; 
+}
+.preco { 
+    font-weight: 800; 
+    font-size: 18px; 
+    color: var(--primary); /* Preço em verde */
+    margin-top: 4px;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--primary); 
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 8px;
+  transition: all .15s ease; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
+}
+.btn:hover { 
+    background: #517451; 
+    filter: none;
+}
+.btn:active {
+    transform: translateY(1px); /* Efeito de pressão */
+    box-shadow: none;
+}
+.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ========================================================= */
+/* 5. SKELETON (Estilos para o Carregamento)                 */
+/* ========================================================= */
+.card.skeleton {
+    cursor: default;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    transform: none;
+}
+.card.skeleton:hover {
+    transform: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+.card.skeleton .img-wrap {
+    background: #E5E7EB;
+}
+.card.skeleton .card-body {
+    background: #F9FAFB;
+}
+.sk-line {
+    background: #E5E7EB;
+    height: 14px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+.sk-btn {
+    background: #E5E7EB;
+    height: 38px;
+    border-radius: 10px;
+    margin-top: 8px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
