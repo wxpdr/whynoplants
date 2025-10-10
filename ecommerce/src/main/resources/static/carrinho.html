@@ -8,19 +8,37 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/">WN<span>Plants</span></a>
+    <a class="brand" href="index.html">WN<span>Plants</span></a>
     <nav class="actions">
-      <a href="login.html">👤</a>
+      <a href="login.html">Minha Conta</a>
       <a href="carrinho.html">🛒 <span id="cartCount" class="badge"></span></a>
     </nav>
   </header>
 
   <main class="container">
     <h1>Carrinho</h1>
+
     <div id="lista"></div>
 
+    <!-- Frete -->
+    <section class="frete">
+      <h2>Calcular frete</h2>
+      <div class="cep-row">
+        <label for="cep">CEP</label>
+        <input id="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" aria-label="Informe seu CEP">
+        <button id="btnCalcFrete" class="btn">Calcular</button>
+      </div>
+
+      <div id="opcoesFrete" class="frete-opcoes" hidden></div>
+      <small class="hint">* Para cliente não logado o frete é de livre escolha entre as opções.</small>
+    </section>
+
     <div class="totais">
-      <div><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
+      <div class="totais-col">
+        <div><strong>Subtotal:</strong> <span id="subtotal">R$ 0,00</span></div>
+        <div id="freteLinha" class="muted" hidden>Frete (<span id="freteNome"></span>): <span id="freteValor">R$ 0,00</span></div>
+        <div class="grand"><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
+      </div>
       <div class="acoes">
         <a class="btn ghost" href="index.html">← Continuar comprando</a>
         <button id="limpar" class="btn danger">Esvaziar</button>

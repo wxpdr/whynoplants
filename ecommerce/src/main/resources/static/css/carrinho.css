@@ -1,10 +1,15 @@
-*{box-sizing:border-box} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#fafafa;color:#0b0f14}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#fafafa;color:#0b0f14}
+
 .site-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#0E1B10;color:#fff}
-.brand{font-weight:800;color:#fff;text-decoration:none} .brand span{color:#72c986}
+.brand{font-weight:800;color:#fff;text-decoration:none}
+.brand span{color:#72c986}
 .actions a{color:#fff;text-decoration:none;margin-left:12px}
 .badge{background:#0f6a2b;color:#fff;border-radius:999px;padding:2px 6px;font-size:12px}
+
 .container{max-width:960px;margin:20px auto;padding:0 20px}
 h1{margin:0 0 16px}
+
 .item{display:grid;grid-template-columns:80px 1fr auto auto auto;gap:12px;align-items:center;background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:10px;margin-bottom:10px}
 .item img{width:80px;height:80px;object-fit:cover;border-radius:8px;background:#f2f4f3}
 .item .nome{font-weight:700}
@@ -13,8 +18,22 @@ h1{margin:0 0 16px}
 .qty button{width:28px;height:28px;border-radius:8px;border:1px solid #e6e6e6;background:#fff;cursor:pointer}
 .qty span{min-width:20px;text-align:center;font-weight:700}
 .item .rm{background:transparent;border:none;color:#b00020;cursor:pointer}
+
 .vazio{padding:18px;border:1px dashed #cfd8dc;border-radius:12px;background:#fff}
-.totais{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+
+.frete{margin-top:18px;background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:14px}
+.frete h2{margin:0 0 10px;font-size:18px}
+.cep-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.cep-row input{height:38px;border:1px solid #e6e6e6;border-radius:10px;padding:0 10px;max-width:160px}
+.frete-opcoes{display:grid;gap:8px}
+.frete-card{display:flex;justify-content:space-between;align-items:center;border:1px solid #e6e6e6;border-radius:10px;padding:10px}
+.frete-left{display:flex;align-items:center;gap:10px}
+.frete-prazo{color:#5a5f66;font-size:13px}
+.hint{color:#6a6a6a}
+
+.totais{display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;gap:12px}
+.totais .muted{color:#6a6a6a;margin-top:6px}
+.totais .grand{font-size:18px;margin-top:6px}
 .btn{background:#0f6a2b;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
 .btn.ghost{background:#fff;border:1px solid #e6e6e6;color:#0f6a2b}
 .btn.danger{background:#b00020}
