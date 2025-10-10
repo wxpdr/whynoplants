@@ -5,7 +5,7 @@ const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
 /* ---------- Configs ---------- */
 const AUTOPLAY = true;      // autoplay ligado
-const INTERVALO_MS = 2000;   // intervalo do autoplay (ms)
+const INTERVALO_MS = 2000;  // intervalo do autoplay (ms)
 
 /* ---------- Utilidades ---------- */
 function getId(){
@@ -144,7 +144,6 @@ async function carregar(){
     if (hidden) hidden.value = v;
     if (view) view.textContent = v;
   }
-  // inicializa com valor atual do hidden (ou 1)
   setQty($('#qtd')?.value || 1);
   $('#menos')?.addEventListener('click', ()=> setQty(Number($('#qtd')?.value || 1) - 1));
   $('#mais') ?.addEventListener('click', ()=> setQty(Number($('#qtd')?.value || 1) + 1));
@@ -168,27 +167,23 @@ async function carregar(){
     if (timer){ clearInterval(timer); timer = null; }
   }
 
-  // Pausar quando o mouse estiver sobre a galeria
   const gal = document.querySelector('.gallery');
   gal?.addEventListener('mouseenter', ()=>{ paused = true;  stopAuto(); });
   gal?.addEventListener('mouseleave', ()=>{ paused = false; startAuto(); });
 
-  // Pausar quando a aba ficar oculta e retomar ao voltar
   document.addEventListener('visibilitychange', ()=>{
     if (document.hidden) stopAuto();
     else startAuto();
   });
 
-  // Reiniciar o timer após navegação manual (setas ou thumbs)
   const restartAfterManual = ()=> { stopAuto(); startAuto(); };
   prev?.addEventListener('click', restartAfterManual);
   next?.addEventListener('click', restartAfterManual);
   thumbs?.addEventListener('click', restartAfterManual);
 
-  // Inicia o autoplay
   startAuto();
 
-  // Botão: adicionar ao carrinho
+  // Botão: adicionar ao carrinho (com redirecionamento da Task 3)
   const btn = $("#btnComprar");
   if (btn){
     btn.addEventListener("click", ()=>{
@@ -200,7 +195,10 @@ async function carregar(){
         imagem: imagens[0] || null,
         quantidade: qtd
       });
-      alert(`Adicionado ao carrinho:\n${prod.nome} — ${qtd} un.`);
+      updateCartCount();
+      const ir = confirm('Produto adicionado! Ir para o carrinho?');
+      if (ir) location.href = 'carrinho.html';
+      else location.href = '/'; // continuar comprando
     });
   }
 }

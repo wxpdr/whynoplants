@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>WNPlants — Carrinho</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/carrinho.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">WN<span>Plants</span></a>
+    <nav class="actions">
+      <a href="login.html">👤</a>
+      <a href="carrinho.html">🛒 <span id="cartCount" class="badge"></span></a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Carrinho</h1>
+    <div id="lista"></div>
+
+    <div class="totais">
+      <div><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
+      <div class="acoes">
+        <a class="btn ghost" href="index.html">← Continuar comprando</a>
+        <button id="limpar" class="btn danger">Esvaziar</button>
+        <button id="checkout" class="btn">Finalizar (fake)</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/carrinho.js" defer></script>
+</body>
+</html>
