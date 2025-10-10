@@ -44,7 +44,7 @@ async function carregarDetalheProduto(id){
 const CART_KEY = 'wnplants_cart';
 function readCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }catch{ return []; } }
 function writeCart(list){ try{ localStorage.setItem(CART_KEY, JSON.stringify(list)); }catch{} }
-function addToCart(item){ // {id,nome,valor,imagem,quantidade}
+function addToCart(item){
   const cart = readCart();
   const idx = cart.findIndex(x => String(x.id) === String(item.id));
   if (idx >= 0) cart[idx].quantidade += item.quantidade;
@@ -60,18 +60,20 @@ function updateCartCount(){
 }
 
 /* ---------- Carrossel ---------- */
-let imagens = [];      // URLs normalizadas
+let imagens = [];
 let currentIdx = 0;
 function showAt(idx){
   if (!imagens.length) return;
   currentIdx = (idx + imagens.length) % imagens.length;
   const src = imagens[currentIdx];
   const big = $('#imgPrincipal');
-  if (big) big.src = src;
-
+  if (big) {
+    big.style.opacity = '.3';
+    big.src = src;
+    big.onload = ()=> big.style.opacity = '1';
+  }
   $$('.thumbs img').forEach((t,i)=> t.classList.toggle('active', i===currentIdx));
 
-  // controla setas quando só há 1 imagem
   const prev = $('.nav.prev'), next = $('.nav.next');
   const single = imagens.length <= 1;
   if (prev) prev.disabled = single;
@@ -87,13 +89,8 @@ async function carregar(){
   if(!id){ if (tituloEl) tituloEl.textContent = "Produto não encontrado"; return; }
 
   let prod;
-  try{
-    prod = await carregarDetalheProduto(id);
-  }catch(e){
-    console.error("[produto-cliente] erro no detalhe:", e);
-    if (tituloEl) tituloEl.textContent = "Erro ao carregar";
-    return;
-  }
+  try{ prod = await carregarDetalheProduto(id); }
+  catch(e){ console.error("[produto-cliente] erro no detalhe:", e); if (tituloEl) tituloEl.textContent = "Erro ao carregar"; return; }
 
   // Cabeçalho
   if (tituloEl) tituloEl.textContent = prod.nome ?? "Produto";
@@ -101,7 +98,7 @@ async function carregar(){
   $("#descricao").textContent = prod.descricao ?? "";
   $("#avaliacao").textContent = renderStars(prod.avaliacao);
 
-  // Imagens (principal > ordem > id)
+  // Imagens
   const imgs = (prod.imagens ?? []).sort((a,b)=>{
     const pa = a.principal?1:0, pb=b.principal?1:0;
     if(pa!==pb) return pb-pa;
@@ -109,7 +106,6 @@ async function carregar(){
     if(oa!==ob) return oa-ob;
     return (a.id??0)-(b.id??0);
   });
-
   imagens = imgs.map(x => normalizarUrlUpload(x.arquivo)).filter(Boolean);
   if (!imagens.length) imagens = ["https://via.placeholder.com/800x600?text=Sem+imagem"];
 
@@ -124,7 +120,7 @@ async function carregar(){
     thumbs.appendChild(im);
   });
 
-  // Setas e teclado
+  // Setas / teclado
   const prev = $('.nav.prev'), next = $('.nav.next');
   if (prev) prev.addEventListener('click', ()=> showAt(currentIdx-1));
   if (next) next.addEventListener('click', ()=> showAt(currentIdx+1));
@@ -134,10 +130,10 @@ async function carregar(){
     if (e.key === 'ArrowRight') showAt(currentIdx+1);
   });
 
-  // Primeiro frame do carrossel
+  // Primeiro frame
   showAt(0);
 
-  // ----- contador de quantidade (- / +) -----
+  // Quantidade ±
   function setQty(v){
     v = Math.max(1, Math.floor(Number(v) || 1));
     const hidden = $('#qtd'), view = $('#qtdView');
@@ -152,10 +148,9 @@ async function carregar(){
     if (e.key === 'ArrowRight') { e.preventDefault(); setQty(Number($('#qtd')?.value || 1) + 1); }
   });
 
-  // --- Autoplay (pausa no hover/aba oculta e reinicia após interação) ---
+  // Autoplay (pausa no hover/aba oculta e reinicia após interação)
   let timer = null;
   let paused = false;
-
   function startAuto(){
     if (!AUTOPLAY || imagens.length <= 1) return;
     if (paused) return;
@@ -163,27 +158,18 @@ async function carregar(){
     stopAuto();
     timer = setInterval(()=> showAt(currentIdx + 1), INTERVALO_MS);
   }
-  function stopAuto(){
-    if (timer){ clearInterval(timer); timer = null; }
-  }
-
+  function stopAuto(){ if (timer){ clearInterval(timer); timer = null; } }
   const gal = document.querySelector('.gallery');
   gal?.addEventListener('mouseenter', ()=>{ paused = true;  stopAuto(); });
   gal?.addEventListener('mouseleave', ()=>{ paused = false; startAuto(); });
-
-  document.addEventListener('visibilitychange', ()=>{
-    if (document.hidden) stopAuto();
-    else startAuto();
-  });
-
+  document.addEventListener('visibilitychange', ()=>{ document.hidden ? stopAuto() : startAuto(); });
   const restartAfterManual = ()=> { stopAuto(); startAuto(); };
   prev?.addEventListener('click', restartAfterManual);
   next?.addEventListener('click', restartAfterManual);
   thumbs?.addEventListener('click', restartAfterManual);
-
   startAuto();
 
-  // Botão: adicionar ao carrinho (com redirecionamento da Task 3)
+  // Botão: adicionar (abre modal)
   const btn = $("#btnComprar");
   if (btn){
     btn.addEventListener("click", ()=>{
@@ -196,11 +182,33 @@ async function carregar(){
         quantidade: qtd
       });
       updateCartCount();
-      const ir = confirm('Produto adicionado! Ir para o carrinho?');
-      if (ir) location.href = 'carrinho.html';
-      else location.href = '/'; // continuar comprando
+      openAddedModal(`${prod.nome} — ${qtd} un.`);
     });
   }
+
+  // Modal "produto adicionado"
+  let lastFocus = null;
+  function openAddedModal(msg){
+    $('#modalMsg').textContent = msg || '';
+    const m = $('#modalAdd');
+    lastFocus = document.activeElement;
+    m.hidden = false;
+    document.body.style.overflow = 'hidden';
+    $('#goCart').focus();
+  }
+  function closeAddedModal(){
+    const m = $('#modalAdd');
+    m.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+  $('#goCart')?.addEventListener('click', ()=> { location.href = 'carrinho.html'; });
+  $('#goHome')?.addEventListener('click', ()=> { location.href = 'index.html'; });
+  $('#stay')  ?.addEventListener('click', closeAddedModal);
+  $('.modal__backdrop')?.addEventListener('click', closeAddedModal);
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && !$('#modalAdd').hidden) closeAddedModal();
+  });
 }
 
 document.addEventListener("DOMContentLoaded", carregar);

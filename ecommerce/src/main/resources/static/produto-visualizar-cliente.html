@@ -11,7 +11,7 @@
     <a class="brand" href="index.html">WN<span>Plants</span></a>
     <nav class="actions">
       <a href="login.html" aria-label="Entrar/Criar conta">Minha Conta</a>
-      <a href="#" aria-label="Carrinho">🛒 <span id="cartCount" class="badge"></span></a>
+      <a href="carrinho.html" aria-label="Carrinho">🛒 <span id="cartCount" class="badge"></span></a>
     </nav>
   </header>
 
@@ -40,7 +40,7 @@
           <span id="qtdView" class="qty-value" aria-live="polite">1</span>
           <button type="button" class="qty-btn" id="mais" aria-label="Aumentar quantidade">+</button>
           <input id="qtd" type="hidden" value="1">
-        </div>  
+        </div>
         <button id="btnComprar" class="btn">Adicionar ao carrinho</button>
         <small class="hint">* Carrinho local (acumula seus itens).</small>
       </div>
@@ -48,6 +48,20 @@
       <a class="back" href="index.html">← Voltar para a loja</a>
     </section>
   </main>
+
+  <!-- Modal: produto adicionado -->
+  <div id="modalAdd" class="modal" hidden>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalAddTitle">
+      <h2 id="modalAddTitle" class="modal__title">Produto adicionado ao carrinho</h2>
+      <p id="modalMsg" class="modal__msg"></p>
+      <div class="modal__actions">
+        <button id="goCart" class="btn">Ir ao carrinho</button>
+        <button id="goHome" class="btn ghost">Voltar à página inicial</button>
+        <button id="stay" class="btn outline">OK</button>
+      </div>
+    </div>
+    <button class="modal__backdrop" aria-label="Fechar modal"></button>
+  </div>
 
   <script>window.API = (window.API_BASE ?? (location.origin + "/api"));</script>
   <script src="js/produto-cliente.js" defer></script>

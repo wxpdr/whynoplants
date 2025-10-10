@@ -14,7 +14,7 @@ body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;b
 
 /* Galeria */
 .gallery{position:relative;display:grid;gap:12px}
-#imgPrincipal{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid #e6e6e6;background:#f2f4f3}
+#imgPrincipal{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid #e6e6e6;background:#f2f4f3;transition:opacity .15s ease}
 .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px}
 .thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;border:1px solid #e6e6e6;cursor:pointer;opacity:.9;background:#f2f4f3}
 .thumbs img.active{outline:2px solid #0f6a2b;opacity:1}
@@ -24,10 +24,12 @@ body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;b
   position:absolute; top:50%; transform:translateY(-50%);
   background:rgba(0,0,0,.45); color:#fff; border:0; border-radius:999px;
   width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  z-index:2;
 }
 .nav.prev{left:8px}
 .nav.next{right:8px}
 .nav:hover{background:rgba(0,0,0,.55)}
+.nav:disabled{opacity:.45;cursor:default}
 
 /* Info */
 .info{display:grid;gap:12px}
@@ -47,14 +49,22 @@ h1{margin:0;font-size:22px}
 .back{margin-top:8px;display:inline-block;color:#0f6a2b;text-decoration:none}
 .back:hover{text-decoration:underline}
 
+/* Quantidade (contador) */
+.qty{display:inline-flex;align-items:center;gap:10px}
+.qty-label{display:block;margin-bottom:6px;font-weight:600}
+.qty-btn{width:36px;height:36px;border-radius:10px;border:1px solid #e6e6e6;background:#fff;cursor:pointer;font-size:18px;line-height:1}
+.qty-btn:hover{filter:brightness(0.98)}
+.qty-btn:active{transform:scale(0.98)}
+.qty-value{min-width:28px;text-align:center;font-weight:700}
 
-.qty { display:inline-flex; align-items:center; gap:10px; }
-.qty-label { display:block; margin-bottom:6px; font-weight:600; }
-.qty-btn {
-  width:36px; height:36px; border-radius:10px;
-  border:1px solid #e6e6e6; background:#fff; cursor:pointer;
-  font-size:18px; line-height:1;
-}
-.qty-btn:hover { filter:brightness(0.98); }
-.qty-btn:active { transform:scale(0.98); }
-.qty-value { min-width:28px; text-align:center; font-weight:700; }
+/* --- Modal genérico --- */
+.modal[hidden]{display:none !important}
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center}
+.modal__backdrop{position:absolute;inset:0;border:0;background:rgba(0,0,0,.45);cursor:default}
+.modal__dialog{position:relative;z-index:1;max-width:480px;width:calc(100% - 32px);background:#fff;border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:modalIn .15s ease-out}
+@keyframes modalIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.modal__title{margin:0 0 4px;font-size:18px}
+.modal__msg{margin:0 0 12px;color:#445}
+.modal__actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.btn.ghost{background:#fff;color:#0f6a2b;border:1px solid #e6e6e6}
+.btn.outline{background:#fff;color:#0b0f14;border:1px solid #e6e6e6}

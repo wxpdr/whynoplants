@@ -3,7 +3,7 @@
 
 const grid = document.getElementById("produtosGrid");
 const tpl = document.getElementById("tplCard");
-
+ 
 document.addEventListener("DOMContentLoaded", carregarProdutos);
 
 function normalizarUrlUpload(path){
@@ -110,3 +110,29 @@ function criarSkeleton(qtd){
     </article>`);
   return arr.join('');
 }
+
+
+// js/cart-badge.js — somente badge do carrinho na index (sem "comprar" nos cards)
+
+const CART_KEY = 'wnplants_cart';
+
+function readCart(){
+  try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function updateCartCount(){
+  const el = document.querySelector('#cartCount');
+  if (!el) return;
+  const total = readCart().reduce((sum, it) => sum + Number(it.quantidade || 0), 0);
+  el.textContent = total > 0 ? String(total) : '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartCount();
+
+  // Atualiza se o carrinho mudar em OUTRA aba/janela
+  window.addEventListener('storage', (e) => {
+    if (e.key === CART_KEY) updateCartCount();
+  });
+});

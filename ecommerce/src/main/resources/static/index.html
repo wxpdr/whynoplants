@@ -9,7 +9,7 @@
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="0"/>
 </head>
-<body>
+<body> 
   <header class="site-header">
     <div class="logo" aria-label="Logo da loja">
       <a href="index.html" class="brand">WN<span>Plants</span></a>
@@ -17,7 +17,7 @@
 
     <nav class="top-actions" aria-label="Ações do usuário">
       <a href="login.html" class="link-identificacao" aria-label="Entrar ou criar conta">Minha Conta</a>
-      <a href="#" class="icon-btn" aria-label="Carrinho (não funcional)"> 🛒 </a>
+      <a href="carrinho.html" aria-label="Carrinho">🛒 <span id="cartCount" class="badge"></span></a>
     </nav>
   </header>
 
@@ -50,5 +50,6 @@
     const API = (window.API_BASE ?? (location.origin + "/api"));
   </script>
   <script src="js/index.js"></script>
+  
 </body>
 </html>
