@@ -1,55 +1,125 @@
 /* static/css/produto-cadastrar.css - CADASTRO DE PRODUTO */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR (VERDE PLANTA E TEMA CLEAN)           */
+/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
 /* ========================================================= */
 :root{
-  --primary:#059669; /* Verde Principal para destaque e botões */
-  --border:#e5e7eb;
-  --muted:#6b7280;
-  --fg:#1F2937;
+  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
+  --border:#E5E7EB; 
+  --muted:#6B7280; 
+  --fg: #212121; /* Texto Principal */
+  --card-bg: #FFFFFF;
 }
 
-/* ... (omitting unchanged sections for brevity) ... */
+/* ========================================================= */
+/* 1.1. MODO ESCURO (DARK MODE)                              */
+/* ========================================================= */
+.dark-mode{
+    --primary: #74B274;
+    --border:#4A6568;
+    --muted:#9CA3AF;
+    --fg:#ECEFF1;
+    --card-bg: #2B3E42;
+}
 
 /* ========================================================= */
-/* 5. BOTÕES DE AÇÃO (COM EFEITO DE PRESS)                   */
+/* 2. RESET E ESTRUTURA GERAL                                */
+/* ========================================================= */
+*{box-sizing:border-box} 
+body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto; 
+    color:var(--fg); 
+    background:var(--card-bg);
+    transition: all 0.3s;
+}
+
+.container{max-width:1100px;margin:24px auto;padding:0 12px}
+h1{margin:0 0 16px}
+
+/* ========================================================= */
+/* 3. FORMULÁRIO E INPUTS                                    */
+/* ========================================================= */
+label{display:block;margin:12px 0 6px;font-weight:600}
+input,textarea{
+    width:100%;border:1px solid var(--border);border-radius:10px;
+    padding:10px; background:var(--card-bg);color:var(--fg);
+    transition: all 0.3s;
+}
+.dark-mode input, .dark-mode textarea {
+    background: #1F2937;
+    border-color: var(--border);
+}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+/* ========================================================= */
+/* 4. PRÉ-VISUALIZAÇÃO DE IMAGEM                             */
+/* ========================================================= */
+.preview{
+    border:1px dashed var(--border);border-radius:12px;height:260px;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;background:#fafafa;
+    transition: all 0.3s;
+}
+.dark-mode .preview {
+    background: #374151;
+}
+
+.preview img{max-width:100%;max-height:100%}
+.placeholder{color:var(--muted);font-size:.95rem}
+
+/* ========================================================= */
+/* 5. BOTÕES DE AÇÃO (Efeito de Press)                       */
 /* ========================================================= */
 .btn{
-    border:1px solid var(--border);
-    padding:8px 14px;
-    border-radius:10px;
-    background:#fff;
-    cursor:pointer;
-    transition:all .15s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border:1px solid var(--border);padding:8px 14px;border-radius:10px;
+    background:var(--card-bg);color:var(--fg);cursor:pointer;
+    transition:all .15s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-
-.btn:active {
+.dark-mode .btn {
+    background: #1F2937;
+    border-color: var(--border);
+    color: var(--fg);
     box-shadow: none;
-    transform: translateY(1px);
 }
+.btn:active { box-shadow: none; transform: translateY(1px); }
+
 
 .btn.primary{
-    background:var(--primary);
-    color:#fff;
-    border-color:var(--primary);
-    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
+    background:var(--primary);color:#fff;border-color:var(--primary);
+    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);
+}
+.dark-mode .btn.primary {
+    background: var(--primary);
+    color: #111827;
+    border-color: var(--primary);
 }
 
-.btn.primary:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
+.btn.ghost{background:transparent;box-shadow: none;}
+.dark-mode .btn.ghost { background:transparent; border-color: var(--border); }
+.btn.ghost:active { background: #E5E7EB; transform: translateY(1px); }
+.dark-mode .btn.ghost:active { background: #374151; transform: translateY(1px); }
 
-.btn.ghost{
-    background:transparent;
-    box-shadow: none;
-}
 
-.btn.ghost:active {
-    background: #E5E7EB;
-    transform: translateY(1px);
-}
+.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:16px}
 
-/* ... (omitting unchanged sections for brevity) ... */
+/* ========================================================= */
+/* 6. MODAL (GALERIA DE IMAGENS)                             */
+/* ========================================================= */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.modal-card{background:var(--card-bg);border-radius:12px;max-width:900px;width:95%;padding:12px 12px 18px; transition: all 0.3s}
+.dark-mode .modal-card { background: #2B3E42; }
+
+.modal-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:8px}
+.modal-body{padding-top:12px}
+.grid-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:12px}
+.card-img{border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.card-img .thumb{height:120px;display:flex;justify-content:center;align-items:center;background:#fafafa;overflow:hidden;border-radius:8px}
+.card-img img{max-width:100%;max-height:100%}
+.card-img .row{display:flex;justify-content:space-between;align-items:center}
+.star{cursor:pointer;font-size:18px}
+.star.on{color:var(--primary)} 
+
+/* garante que o atributo hidden realmente esconda o modal */
+.modal[hidden] { display: none !important; }
