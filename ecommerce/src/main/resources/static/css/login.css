@@ -1,23 +1,24 @@
 /* static/css/login.css - TELA DE LOGIN (SPLIT SCREEN) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
 /* ========================================================= */
 :root{
-  --primary: #059669; /* Verde Principal */
-  --bg: #F9FAFB; /* Fundo Geral */
-  --fg: #1F2937; /* Texto Principal */
-  --card-bg: #FFFFFF; /* Fundo do Card */
-  --border: #D1D5DB; /* Borda de inputs/botões ghost */
-  --green-gradient-start: #10B981; /* Verde mais claro para o gradiente */
-  --green-gradient-end: #059669; /* Verde principal mais escuro */
+  --primary: #5F865F; /* NOVO: Verde Principal */
+  --bg: #FFFFFF; /* NOVO: Fundo Geral */
+  --fg: #212121; /* NOVO: Texto Principal */
+  --card-bg: #FFFFFF;
+  --border: #D1D5DB; 
+  --input-bg: #FFFFFF;
+  --green-gradient-start: #74B274; 
+  --green-gradient-end: #5F865F; 
 }
 
 /* ========================================================= */
-/* 2. RESET E ESTRUTURA GERAL                                */
+/* 2. RESET E ESTRUTURA GERAL (FONTE PADRONIZADA)            */
 /* ========================================================= */
 body{
-  font-family:system-ui,Arial;
+  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
   margin:0;
   padding:0;
   background:var(--bg);
@@ -29,7 +30,7 @@ body{
 }
 
 /* ========================================================= */
-/* 3. LAYOUT SPLIT-CARD (Ajuste de Padding Lateral)          */
+/* 3. LAYOUT SPLIT-CARD                                      */
 /* ========================================================= */
 .split-container{
   max-width: 900px;
@@ -49,6 +50,9 @@ body{
   .welcome-side {
     display: none; 
   }
+  .login-side {
+    padding: 30px 24px;
+  }
 }
 
 .card{
@@ -60,7 +64,6 @@ body{
   display: flex;
   flex-direction: column;
   justify-content: center; 
-  /* AUMENTADO: Padding lateral para 60px para maior espaço */
   padding: 30px 60px; 
 }
 
@@ -112,11 +115,12 @@ input{
   padding:12px 10px;
   border-radius:8px;
   border:1px solid var(--border);
-  background:var(--card-bg);
+  background:var(--input-bg);
   color:var(--fg);
   margin-top:0; 
   margin-bottom: 20px; 
   box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  transition: border-color 0.2s;
 }
 
 input:focus{ 
@@ -152,11 +156,11 @@ input:focus{
     background:var(--primary);
     color:#fff;
     border: none;
-    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+    box-shadow: 0 4px 10px rgba(95, 134, 95, 0.3);
 }
 
 .btn.primary:hover{ 
-    background:#047857;
+    background:#517451;
 }
 
 .btn.primary:active {

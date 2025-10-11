@@ -1,209 +1,143 @@
 /* static/css/usuario.css - LISTAGEM DE USUÁRIOS (ADMIN) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
 /* ========================================================= */
 :root{
-  --primary: #059669; /* Verde Principal */
-  --bg: #F9FAFB; /* Fundo Geral */
-  --fg: #1F2937; /* Texto Principal */
-  --card-bg: #FFFFFF; /* Fundo de Cartão/Dialog */
-  --border: #E5E7EB; /* Bordas e divisores */
-  --muted: #6B7280; /* Texto secundário */
+  --primary: #5F865F; 
+  --bg: #FFFFFF; 
+  --fg: #212121; 
+  --card-bg: #FFFFFF; 
+  --border: #E5E7EB; 
+  --muted: #6B7280; 
   
-  /* Cores para Badge de Status */
-  --on-bg: #DCFCE7;
-  --on-fg: #059669;
+  --on-bg: #E8F5E9;
+  --on-fg: #5F865F;
   --off-bg: #FEF2F2;
   --off-fg: #B91C1C;
 }
 
 /* ========================================================= */
-/* 2. RESET E ESTRUTURA GERAL                                */
+/* 1.1. MODO ESCURO (DARK MODE) - Variáveis Locais           */
+/* ========================================================= */
+.dark-mode {
+  --primary: #74B274;
+  --bg: #1D2B2E;
+  --fg: #ECEFF1;
+  --card-bg: #2B3E42;
+  --border: #4A6568;
+  --muted: #9CA3AF;
+  
+  --on-bg: #15803D;
+  --on-fg: #A7F3D0;
+  --off-bg:#7F1D1D;
+  --off-fg:#FECACA;
+}
+
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GERAL (FONTE PADRONIZADA)            */
 /* ========================================================= */
 body{
-  font-family:system-ui,Arial;
+  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
   background:var(--bg);
   color:var(--fg);
-  margin:0
+  margin:0;
+  transition: background-color 0.3s, color 0.3s;
 }
+
+.dark-mode body { background: var(--bg); color: var(--fg); }
 
 .card{
   max-width:1100px;
-  margin:4vh auto; /* Margem vertical para centralizar suavemente */
+  margin:4vh auto; 
   background:var(--card-bg);
   padding:20px;
   border-radius:14px;
   box-shadow:0 4px 12px rgba(0,0,0,.05);
   border: 1px solid var(--border);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
+
+.dark-mode .card { background: var(--card-bg); border-color: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,.5); }
 
 /* ========================================================= */
-/* 3. HEADER E TOOLBAR                                       */
+/* 3. HEADER E TOOLBAR (LISTAGEM)                            */
 /* ========================================================= */
-.header{
-    display:flex;
-    gap:10px;
-    align-items:center
-}
-
-.spacer{
-    flex:1
-}
-
-.toolbar{
-    display:flex;
-    gap:8px;
-    margin:10px 0
-}
+.header{display:flex;gap:10px;align-items:center}
+.spacer{flex:1}
+.toolbar{display:flex;gap:8px;margin:10px 0}
 
 /* ========================================================= */
 /* 4. INPUTS E SELECTS (LISTAGEM)                            */
 /* ========================================================= */
 input,select{
-  padding:8px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:var(--card-bg);
-  color:var(--fg)
+  padding:8px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card-bg);color:var(--fg);
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
+.dark-mode input, .dark-mode select { background: #1F2937; border-color: var(--border); color: var(--fg); }
 
 /* ========================================================= */
 /* 5. TABELA                                                 */
 /* ========================================================= */
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px
-}
+table{width:100%;border-collapse:collapse;margin-top:10px;transition: color 0.3s;}
 
-th,td{
-    padding:10px;
-    border-bottom:1px solid var(--border);
-    text-align:left
-}
+th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;transition: border-color 0.3s;}
+.dark-mode th, .dark-mode td { border-bottom-color: var(--border); }
 
 /* ========================================================= */
 /* 6. BOTÕES (COM EFEITO DE PRESS)                           */
 /* ========================================================= */
 .btn{
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:8px 12px;
-  cursor:pointer;
-  background:var(--card-bg);
-  color:var(--fg);
-  transition:all .15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border:1px solid var(--border);border-radius:8px;padding:8px 12px;
+  cursor:pointer;background:var(--card-bg);color:var(--fg);
+  transition:all .15s ease;box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.btn:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
+.dark-mode .btn { background: #1F2937; color: var(--fg); border-color: var(--border); box-shadow: none; }
 
-.btn.primary{
-  background:var(--primary);
-  color:#fff;
-  border-color:var(--primary);
-  box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
-}
+.btn:active { box-shadow: none; transform: translateY(1px); }
 
-.btn.primary:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);}
+.dark-mode .btn.primary { background: var(--primary); color: #111827; border-color: var(--primary); }
 
-.btn.ghost{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--fg);
-  box-shadow: none;
-}
-
-.btn.ghost:active {
-    background: #E5E7EB;
-    transform: translateY(1px);
-}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--fg);box-shadow: none;}
+.dark-mode .btn.ghost { background:transparent; border-color: var(--border); }
 
 /* ========================================================= */
 /* 7. BADGES DE STATUS                                       */
 /* ========================================================= */
-.badge{
-    padding:2px 8px;
-    border-radius:999px;
-    font-size:.8rem
-}
-
-.badge.on{
-    background:var(--on-bg);
-    color:var(--on-fg)
-}
-
-.badge.off{
-    background:var(--off-bg);
-    color:var(--off-fg)
-}
+.badge{padding:2px 8px;border-radius:999px;font-size:.8rem;transition: background-color 0.3s, color 0.3s;}
+.badge.on{background:var(--on-bg);color:var(--on-fg)}
+.badge.off{background:var(--off-bg);color:var(--off-fg)}
 
 /* ========================================================= */
 /* 8. DIALOG (MODAL) - REVISÃO DE LAYOUT                      */
 /* ========================================================= */
 dialog{
-  background:var(--card-bg);
-  color:var(--fg);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:18px 24px 24px; /* Aumentado padding para dar mais ar */
+  background:var(--card-bg);color:var(--fg);
+  border:1px solid var(--border);border-radius:14px;
+  padding:18px 24px 24px;
   box-shadow: 0 10px 30px rgba(0,0,0,.15);
-  max-width: 800px; /* Limita a largura do modal */
+  max-width: 800px;
+  transition: background-color 0.3s, border-color 0.3s;
 }
+
+.dark-mode dialog { background: var(--card-bg); border-color: var(--border); }
 
 /* Título dentro do Modal */
-#dlgTitle{
-    margin: 0 0 20px;
-    font-size: 1.4rem;
-}
+#dlgTitle{margin: 0 0 20px;font-size: 1.4rem;}
 
 /* Estrutura de Formulário em Grid */
-.form-grid{
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
-    gap: 24px; /* Espaçamento entre as colunas */
-}
-
-.column{
-    display: flex;
-    flex-direction: column;
-}
+.form-grid{display: grid;grid-template-columns: 1fr 1fr;gap: 24px;}
+.column{display: flex;flex-direction: column;}
 
 /* Ajusta as margens dos labels dentro do modal para padronização */
-dialog label{
-    margin-top: 12px;
-    margin-bottom: 6px;
-    font-weight: 600;
-}
+dialog label{margin-top: 12px;margin-bottom: 6px;font-weight: 600;color: var(--fg);}
 
 /* Ajusta as margens dos inputs e selects dentro do modal */
-dialog input, dialog select{
-    margin-bottom: 12px;
-    /* Garante que os inputs no modal ocupem 100% da coluna */
-    width: 100%; 
-}
+dialog input, dialog select{margin-bottom: 12px;width: 100%;}
+.spacer-senha{flex-grow: 1;}
 
-/* Espaçador para alinhamento vertical dos campos de senha */
-.spacer-senha{
-    flex-grow: 1; /* Ocupa o espaço restante */
-}
-
-
-.actions{
-    display:flex;
-    gap:8px;
-    justify-content: flex-end; /* Alinha botões à direita (padrão Admin) */
-    margin-top:20px; /* Espaçamento do form grid */
-}
-
-.msg{
-    min-height:20px;
-    margin-top:6px;
-}
+.actions{display:flex;gap:8px;justify-content: flex-end;margin-top:20px;}
+.msg{min-height:20px;margin-top:6px;}

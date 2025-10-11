@@ -6,21 +6,23 @@
 :root {
   --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
   --fg: #212121;      /* Texto Principal */
-  --bg: #FFFFFF;     /* Fundo Geral */
+  --bg: #FFFFFF;     /* Fundo Geral (Branco Puro) */
   --card-bg: #FFFFFF;
   --border: #E5E7EB;  /* Borda sutil */
-  --shop-header-bg: #2B3E42; /* Teal Escuro/Sofisticado para o Header */
+  --shop-header-bg: #F0F8F0; /* Fundo claro (igual ao backoffice header) */
   --accent-green: #74B274; /* Para acentuação (logo) */
+
+  --on-bg: #E8F5E9; /* Para destaques em hover de botões */
 }
 
 /* ========================================================= */
-/* 2. RESET E ESTRUTURA GLOBAL                               */
+/* 2. RESET E ESTRUTURA GLOBAL (FONTE PADRONIZADA)           */
 /* ========================================================= */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
   color: var(--fg); 
   background: var(--bg);
 }
@@ -37,43 +39,68 @@ body {
 }
 
 /* ========================================================= */
-/* 3. HEADER - site-header (Barra de Marca Definida)         */
+/* 3. HEADER - site-header (Estilo do Backoffice aplicado)   */
 /* ========================================================= */
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 24px; /* Aumentado padding para mais espaço */
+  padding: 12px 155px; /* CORREÇÃO: Padding horizontal aumentado para 40px */
   background: var(--shop-header-bg); 
-  color: #fff;
+  color: var(--fg); /* Texto escuro */
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
+
+/* Logo - Agora em Dark Text */
 .logo .brand {
   text-decoration: none;
   font-weight: 800;
-  font-size: 22px; /* Título maior */
+  font-size: 24px; 
   letter-spacing: .4px;
-  color: #fff;
+  color: var(--fg); 
+  transition: opacity .2s;
 }
-.logo .brand span { color: var(--accent-green); } /* Verde de acentuação */
+.logo .brand:hover { opacity: 0.8; }
+.logo .brand span { color: var(--primary); font-weight: 900; } 
 
-.top-actions { display: flex; align-items: center; gap: 16px; } 
-.top-actions a { color: #fff; text-decoration: none; font-size: 15px; transition: opacity .2s; }
-.top-actions a:hover { opacity: 0.8; }
+
+/* Ações do Topo (Botões Estilo Backoffice) */
+.top-actions { display: flex; align-items: center; gap: 10px; } 
+
+.top-actions .link-identificacao, 
+.top-actions .icon-btn {
+    color: var(--fg);
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all .2s;
+    background: var(--card-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.top-actions .link-identificacao:hover, 
+.top-actions .icon-btn:hover {
+    background: var(--on-bg);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: none;
+}
 
 .top-actions .icon-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 38px; height: 38px; border-radius: 999px; background: rgba(255,255,255,.1);
-  transition: background .2s, transform .2s;
+  padding: 8px 10px;
+  width: auto;
+  height: auto;
+  font-size: 16px; 
+  display: inline-flex;
 }
-.top-actions .icon-btn:hover { 
-  background: rgba(255,255,255,.2); 
-  transform: scale(1.05);
-}
+.top-actions a span { font-weight: 500; }
+
 
 .content { 
     padding: 30px 22px; 
@@ -94,7 +121,7 @@ body {
 /* ========================================================= */
 .produtos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Cards um pouco maiores */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
   gap: 20px; 
 }
 .card {
@@ -108,7 +135,7 @@ body {
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .card:hover {
-  transform: translateY(-4px); /* Efeito de flutuação */
+  transform: translateY(-4px); 
   box-shadow: 0 10px 30px rgba(0,0,0,.12);
 }
 .img-wrap {
@@ -123,7 +150,7 @@ body {
   transition: transform 0.3s ease;
 }
 .card:hover .img-wrap img {
-    transform: scale(1.03); /* Zoom sutil na imagem */
+    transform: scale(1.03); 
 }
 
 .card-body {
@@ -140,7 +167,7 @@ body {
 .preco { 
     font-weight: 800; 
     font-size: 18px; 
-    color: var(--primary); /* Preço em verde */
+    color: var(--primary); 
     margin-top: 4px;
 }
 .btn {
@@ -161,7 +188,7 @@ body {
     filter: none;
 }
 .btn:active {
-    transform: translateY(1px); /* Efeito de pressão */
+    transform: translateY(1px); 
     box-shadow: none;
 }
 .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }

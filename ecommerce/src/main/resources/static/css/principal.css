@@ -1,66 +1,110 @@
 /* static/css/principal.css - PAINEL PRINCIPAL (ADMIN/ESTOQUE) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (VERDE PLANTA E TEMA CLEAN)    */
+/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
 /* ========================================================= */
 :root{
-  --primary: #059669; /* Verde Principal para destaque */
-  --bg: #F9FAFB; /* Fundo do BODY mais claro que branco (Clean) */
-  --card-bg: #FFFFFF; /* Fundo de Cartão/Conteúdo */
-  --fg: #1F2937; /* Texto Principal */
-  --border: #E5E7EB; /* Bordas e divisores */
-  --muted: #6B7280; /* Texto secundário */
-  --header-bg: #E0F2F1; /* NOVO: Fundo verde suave para o header */
+  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
+  --bg: #FFFFFF; /* Fundo principal (Branco Puro) */
+  --card-bg: #FFFFFF;
+  --fg: #212121; /* Texto Principal (Quase Preto) */
+  --border: #E5E7EB; 
+  --muted: #6B7280; 
+  --header-bg: #F0F8F0; /* Fundo header (Verde muito suave) */
+
+  --on-bg: #E8F5E9; 
+  --on-fg: #5F865F; 
+  --off-bg:#FEF2F2;
+  --off-fg:#B91C1C;
 }
 
 /* ========================================================= */
-/* 2. RESET E ESTRUTURA GERAL                                */
+/* 1.1. MODO ESCURO (DARK MODE) - PALETA REFINADA            */
+/* ========================================================= */
+.dark-mode {
+  --primary: #74B274;        
+  --bg: #1D2B2E;             
+  --fg: #ECEFF1;             
+  --card-bg: #2B3E42;        
+  --border: #4A6568;         
+  --muted: #9CA3AF;          
+  --header-bg: #2B3E42;      
+
+  --on-bg: #15803D;
+  --on-fg: #A7F3D0;
+  --off-bg:#7F1D1D;
+  --off-fg:#FECACA;
+}
+
+/* ========================================================= */
+/* 2. RESET E ESTRUTURA GERAL (FONTE PADRONIZADA)            */
 /* ========================================================= */
 body{
-  font-family:system-ui,Arial;
+  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+  margin:0;
+  padding:0;
   background:var(--bg);
   color:var(--fg);
-  margin:0
+  transition: background-color 0.3s, color 0.3s;
+}
+.dark-mode body {
+  background: var(--bg);
+  color: var(--fg);
 }
 
 /* ========================================================= */
-/* 3. HEADER ESTILIZADO (.header-bar) - ESTILO ATUALIZADO    */
+/* 3. HEADER ESTILIZADO (.header-bar)                        */
 /* ========================================================= */
 .header-bar {
-    background: var(--header-bg); /* Fundo verde muito suave */
+    background: var(--header-bg); 
     border-bottom: 1px solid var(--border);
     padding: 12px 24px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.dark-mode .header-bar {
+  background: var(--header-bg);
+  border-bottom-color: var(--border);
 }
 
 .header-content {
     max-width: 1100px;
-    margin: 0 auto; /* Centraliza o conteúdo no header */
+    margin: 0 auto; 
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.header-bar h1{ 
-    font-size: 1.4rem; /* Título mais proeminente */
+.header-content #welcome-title { 
+    font-size: 1.4rem; 
     margin: 0; 
-    color: var(--fg); /* Cor do texto principal */
+    color: var(--fg);
+    font-weight: 600; 
 }
 
 .header-bar nav button{
-  /* Estilo do botão dentro do header: mais clean */
   border: 1px solid var(--border);
   padding: 8px 14px;
   border-radius: 8px;
   cursor: pointer;
-  background: white; /* Fundo branco para destacar no header verde suave */
+  background: var(--card-bg); 
   color: var(--fg);
   margin-left: 8px;
   transition:all .15s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+.dark-mode .header-bar nav button {
+  background: var(--card-bg);
+  color: var(--fg);
+  border-color: var(--border);
+}
+
 .header-bar nav button:hover {
     background: #F3F4F6;
+}
+.dark-mode .header-bar nav button:hover {
+    background: #374151;
 }
 
 .header-bar nav button:active {
@@ -68,9 +112,9 @@ body{
     transform: translateY(1px);
 }
 
-/* Garante que o cabeçalho original (se não for o header-bar) não apareça.
-   Não precisa mais do display: none geral.
-*/
+header:not(.header-bar) {
+    display: none;
+}
 
 /* ========================================================= */
 /* 4. CARD E LAYOUT PRINCIPAL                                */
@@ -83,6 +127,13 @@ body{
   border-radius:14px;
   box-shadow:0 4px 12px rgba(0,0,0,.05);
   border: 1px solid var(--border);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.dark-mode .card {
+  background: var(--card-bg);
+  border-color: var(--border);
+  box-shadow: 0 4px 12px rgba(0,0,0,.5);
 }
 
 .topbar{
@@ -119,11 +170,20 @@ body{
     border-radius:10px;
     color:var(--fg);
     text-decoration:none;
-    transition: background .2s;
+    transition: background .2s, color 0.3s;
+}
+
+.dark-mode .link {
+    background: #374151;
+    color: var(--fg);
 }
 
 .link:hover{ 
     background: #E5E7EB; 
+}
+
+.dark-mode .link:hover { 
+    background: #4B5563; 
 }
 
 .link.disabled{
@@ -132,7 +192,7 @@ body{
 }
 
 /* ========================================================= */
-/* 6. BOTÕES (Geral)                                         */
+/* 6. BOTÕES (Geral - Efeito Press)                          */
 /* ========================================================= */
 .btn{
     border:1px solid var(--border);
@@ -145,6 +205,13 @@ body{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+.dark-mode .btn {
+  background: var(--card-bg);
+  color: var(--fg);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
 .btn:active {
     box-shadow: none;
     transform: translateY(1px);
@@ -154,7 +221,13 @@ body{
     background:var(--primary);
     border-color:var(--primary);
     color:#fff;
-    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
+    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.3);
+}
+
+.dark-mode .btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #111827;
 }
 
 .btn.primary:active {
@@ -167,7 +240,16 @@ body{
     border:1px solid var(--border);
     box-shadow: none;
 }
+.dark-mode .btn.ghost {
+    background:transparent;
+    border-color: var(--border);
+}
+
 .btn.ghost:active {
     background: #E5E7EB;
+    transform: translateY(1px);
+}
+.dark-mode .btn.ghost:active {
+    background: #374151;
     transform: translateY(1px);
 }
