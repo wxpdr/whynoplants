@@ -48,6 +48,7 @@ window.Auth = (() => {
   return { whoami, ensureLoggedIn, ensureAdmin, ensureRole, preventBfcache, redirectHomeByPerfil };
 })();
 
+// ===== Seu redirecionador existente, preservado =====
 async function redirectHomeByPerfil() {
   try{
     const r = await fetch("/api/whoami", { credentials:"include" });
@@ -64,5 +65,35 @@ async function redirectHomeByPerfil() {
     }
   }catch(_){}
 }
-
 redirectHomeByPerfil();
+
+// ====== ADIÇÃO: módulo de autenticação do CLIENTE (localStorage) ======
+window.AuthCliente = (()=> {
+  const KEY = 'clientes_wnp';
+
+  function loadBase(){ try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } }
+  function byEmail(email){
+    const base = loadBase();
+    const e = (email||'').toLowerCase();
+    return base.find(c => (c.email||'').toLowerCase() === e);
+  }
+
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function signIn(email, senhaPlain){
+    const c = byEmail(email);
+    if (!c) return { ok:false, reason:'EMAIL_NAO_ENCONTRADO' };
+    const hash = await sha256(senhaPlain||'');
+    if (hash !== c.senha_hash) return { ok:false, reason:'SENHA_INVALIDA' };
+    sessionStorage.setItem('cliente_email', c.email); // sessão simples (cliente)
+    return { ok:true, cliente:c };
+  }
+
+  function signedEmail(){ return sessionStorage.getItem('cliente_email') || ''; }
+  function signOut(){ sessionStorage.removeItem('cliente_email'); }
+
+  return { loadBase, byEmail, signIn, signedEmail, signOut };
+})();

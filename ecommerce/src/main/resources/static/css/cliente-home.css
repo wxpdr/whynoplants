@@ -1,0 +1,22 @@
+:root { --bg:#fff; --fg:#111; --muted:#6b7280; --line:#e5e7eb; --pri:#5f8d63; --pri-fg:#fff; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,Segoe UI,Roboto,Arial}
+.container{max-width:980px;margin:24px auto;padding:0 16px}
+h1{margin:8px 0 16px}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#f8fafc}
+.card h3{margin:0 0 8px}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:500;margin-bottom:12px}
+input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+
+.btn{border:1px solid var(--line);padding:10px 14px;border-radius:10px;background:#f8fafc;cursor:pointer}
+.btn.primary{background:var(--pri);border-color:var(--pri);color:var(--pri-fg)}
+.btn.ghost{background:transparent}
+.btn.danger{background:#fee2e2;border-color:#fecaca;color:#7f1d1d}
+
+@media (max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.cards{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}

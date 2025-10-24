@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Editar meus dados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/cliente-editar.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Editar meus dados</h1>
+
+    <form id="formPerfil" novalidate>
+      <fieldset class="grid-2">
+        <legend>Dados pessoais</legend>
+
+        <label>Nome completo
+          <input id="nome" type="text" maxlength="120" required>
+        </label>
+
+        <label>Gênero
+          <select id="genero" required>
+            <option value="">Selecione…</option>
+            <option>Feminino</option>
+            <option>Masculino</option>
+            <option>Não-binário</option>
+            <option>Prefiro não informar</option>
+            <option>Outro</option>
+          </select>
+        </label>
+
+        <label>Data de nascimento
+          <input id="nascimento" type="date" required>
+        </label>
+
+        <label>E-mail (não editável)
+          <input id="email" type="email" disabled>
+        </label>
+      </fieldset>
+
+      <fieldset id="enderecos">
+        <legend>Endereços de entrega</legend>
+        <div class="copy-line">
+          <button type="button" id="novoEndereco" class="btn ghost">Adicionar endereço</button>
+        </div>
+        <div id="listaEntrega" class="enderecos"></div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Salvar alterações</button>
+        <a href="cliente-home.html" class="btn ghost">Voltar</a>
+      </div>
+    </form>
+
+    <form id="formSenha" novalidate style="margin-top:24px">
+      <fieldset class="grid-2" id="senha">
+        <legend>Alterar senha</legend>
+        <label>Senha atual
+          <input id="senhaAtual" type="password" minlength="8" required>
+        </label>
+        <label>Nova senha
+          <input id="senhaNova" type="password" minlength="8" required>
+        </label>
+        <label>Confirmar nova senha
+          <input id="senhaConfirma" type="password" minlength="8" required>
+        </label>
+      </fieldset>
+      <div class="actions">
+        <button type="submit" class="btn">Atualizar senha</button>
+      </div>
+    </form>
+  </div>
+
+  <template id="tplEndereco">
+    <div class="endereco">
+      <div class="grid-4">
+        <label>Apelido
+          <input class="ent_apelido" type="text" maxlength="40" required>
+        </label>
+        <label>CEP
+          <input class="ent_cep" type="text" inputmode="numeric" maxlength="9" required>
+        </label>
+        <label>Logradouro
+          <input class="ent_logradouro" type="text" required>
+        </label>
+        <label>Número
+          <input class="ent_numero" type="text" required>
+        </label>
+        <label>Complemento
+          <input class="ent_complemento" type="text">
+        </label>
+        <label>Bairro
+          <input class="ent_bairro" type="text" required>
+        </label>
+        <label>Cidade
+          <input class="ent_cidade" type="text" required>
+        </label>
+        <label>UF
+          <input class="ent_uf" type="text" maxlength="2" required>
+        </label>
+      </div>
+      <div class="end-actions">
+        <button type="button" class="btn danger removerEndereco">Remover</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="js/cliente-editar.js"></script>
+</body>
+</html>

@@ -189,3 +189,26 @@ input:focus{
     min-height:20px;
     text-align: center;
 }
+
+/* ====== ADIÇÕES: linha cliente ====== */
+.inline-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:4px;
+  margin-bottom: 6px;
+}
+
+.chk{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.link-sutil{
+  font-size:.95rem;
+  text-decoration:none;
+  color:var(--primary);
+}
+.link-sutil:hover{ text-decoration:underline; }

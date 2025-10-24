@@ -8,6 +8,8 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link rel="stylesheet" href="css/login.css" />
+  <!-- Reaproveita o estilo do cadastro do cliente (botão/inputs) -->
+  <link rel="stylesheet" href="css/cliente-cadastrar.css" />
 </head>
 <body>
   
@@ -20,6 +22,17 @@
 
       <label>Senha</label>
       <input id="senha" type="password" placeholder="••••••••" />
+
+      <div class="inline-row">
+        <label class="chk">
+          <input id="souCliente" type="checkbox">
+          Entrar como <strong>Cliente</strong>
+        </label>
+
+        <a class="link-sutil" id="btnCriarConta" href="cliente-cadastrar.html" title="Criar nova conta (Cliente)">
+          Criar conta de cliente →
+        </a>
+      </div>
 
       <div class="actions">
         <button id="ok" class="btn primary">Entrar</button>
@@ -34,10 +47,11 @@
       <p>
         Acesso exclusivo para colaboradores. Gerencie produtos e pedidos com eficiência.
       </p>
-      </div>
+    </div>
   </div>
 
   <script>window.API = "http://localhost:8080";</script>
+  <script src="js/auth.js"></script>
   <script src="js/login.js"></script>
 </body>
 </html>

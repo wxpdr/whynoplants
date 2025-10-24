@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Minha conta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/cliente-home.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1 id="saudacao">Minha conta</h1>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Meus dados</h3>
+        <p>Atualize nome, gênero, nascimento e endereços.</p>
+        <div class="quick">
+          <a id="btnEditar" class="btn primary" href="#">Editar meus dados</a>
+          <a id="btnEnderecos" class="btn ghost" href="#">Meus endereços</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Pedidos</h3>
+        <p>Consulte seus pedidos e status.</p>
+        <div class="quick">
+          <a id="btnPedidos" class="btn" href="#">Ver pedidos</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Segurança</h3>
+        <p>Troque sua senha quando quiser.</p>
+        <div class="quick">
+          <a id="btnSenha" class="btn" href="#">Alterar senha</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Sessão</h3>
+        <p>Gerencie seu acesso.</p>
+        <div class="quick">
+          <button id="btnSair" class="btn danger">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <fieldset class="grid-2">
+      <legend>Resumo do meu cadastro</legend>
+      <label>E-mail
+        <input id="resEmail" type="email" disabled>
+      </label>
+      <label>Gênero
+        <input id="resGenero" type="text" disabled>
+      </label>
+      <label>Data de Nascimento
+        <input id="resNascimento" type="text" disabled>
+      </label>
+      <label>Endereços de entrega
+        <input id="resQtdEnderecos" type="text" disabled>
+      </label>
+    </fieldset>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/cliente-home.js"></script>
+</body>
+</html>
