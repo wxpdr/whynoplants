@@ -7,8 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.ecommerce.dto.LoginRequest;
 import projeto.ecommerce.model.Usuario;
+import projeto.ecommerce.model.Cliente;
+import projeto.ecommerce.repository.ClienteRepository;
 import projeto.ecommerce.service.SecurityService;
 import projeto.ecommerce.service.UsuarioService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,23 +21,51 @@ public class AuthController {
 
     private final UsuarioService usuarios;
     private final SecurityService security;
+    private final ClienteRepository clientes; // <-- novo
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req, HttpSession session) {
-        Usuario u = usuarios.buscarPorEmail(req.email());
-        if (u == null) return ResponseEntity.status(401).body("Credenciais inválidas");
-        if (!u.isAtivo()) return ResponseEntity.status(403).body("Usuário desativado");
-        if (!security.checkPassword(req.senha(), u.getSenha())) return ResponseEntity.status(401).body("Credenciais inválidas");
+        String email = req.email().trim().toLowerCase();
+        String senha = req.senha();
 
-        session.setAttribute("USER_ID", u.getId());
-        session.setAttribute("USER_PERFIL", u.getPerfil());
-        session.setAttribute("USER_NOME", u.getNome());
+        // 1) Tenta USUÁRIO (Admin / Estoquista)
+        Usuario u = usuarios.buscarPorEmail(email);
+        if (u != null && u.isAtivo() && security.checkPassword(senha, u.getSenha())) {
+            session.setAttribute("USER_ID", u.getId());
+            session.setAttribute("USER_PERFIL", u.getPerfil()); // "Administrador" | "Estoquista"
+            session.setAttribute("USER_NOME", u.getNome());
 
-        java.util.Map<String, Object> payload = new java.util.HashMap<>();
-        payload.put("id", u.getId());
-        payload.put("perfil", u.getPerfil()); // "Administrador" | "Estoquista"
-        payload.put("nome", u.getNome());
-        return ResponseEntity.ok(payload);
+            Map<String,Object> payload = new HashMap<>();
+            payload.put("id", u.getId());
+            payload.put("perfil", u.getPerfil());
+            payload.put("nome", u.getNome());
+            payload.put("redirect", "Administrador".equals(u.getPerfil())
+                    ? "principal.html"
+                    : "principal-estoque.html");
+            return ResponseEntity.ok(payload);
+        }
+
+        // 2) Tenta CLIENTE
+        var cOpt = clientes.findByEmail(email);
+        if (cOpt.isPresent()) {
+            Cliente c = cOpt.get();
+            // campo do Cliente é senhaHash
+            if (security.checkPassword(senha, c.getSenhaHash())) {
+                session.setAttribute("USER_ID", c.getId());
+                session.setAttribute("USER_PERFIL", "Cliente");
+                session.setAttribute("USER_NOME", c.getNomeCompleto());
+
+                Map<String,Object> payload = new HashMap<>();
+                payload.put("id", c.getId());
+                payload.put("perfil", "Cliente");
+                payload.put("nome", c.getNomeCompleto());
+                payload.put("redirect", "principal-cliente.html");
+                return ResponseEntity.ok(payload);
+            }
+        }
+
+        // 3) Falhou
+        return ResponseEntity.status(401).body("Credenciais inválidas");
     }
 
     @GetMapping("/me")
@@ -58,5 +91,4 @@ public class AuthController {
         out.put("nome", session.getAttribute("USER_NOME"));
         return ResponseEntity.ok(out);
     }
-
 }

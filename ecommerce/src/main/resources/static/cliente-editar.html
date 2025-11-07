@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Editar meus dados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/cliente-editar.css">
+
+</head>
+<body>
+<header>
+  <div><a href="principal-cliente.html" class="btn ghost">← Voltar</a></div>
+  <div><strong>Editar meus dados</strong></div>
+  <div></div>
+</header>
+
+<div class="page">
+  <div class="grid">
+    <section class="card">
+      <h2>Dados pessoais</h2>
+      <form id="formPerfil">
+        <label>Nome</label>
+        <input id="primeiroNome">
+        <label>Sobrenome</label>
+        <input id="sobrenome">
+        <div class="row">
+          <div>
+            <label>Data de nascimento</label>
+            <input id="nascimento" type="date">
+          </div>
+          <div>
+            <label>Gênero</label>
+            <select id="genero">
+              <option value="NAO_INFORMAR">Prefiro não informar</option>
+              <option value="FEMININO">Feminino</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="OUTRO">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn primary" type="submit">Salvar alterações</button>
+        </div>
+      </form>
+
+      <hr style="margin:18px 0;border:0;border-top:1px solid #eee">
+
+      <h2>Alterar senha</h2>
+      <form id="formSenha">
+        <label>Senha atual</label>
+        <input id="senhaAtual" type="password">
+        <label>Nova senha</label>
+        <input id="novaSenha" type="password">
+        <div style="margin-top:12px">
+          <button class="btn primary" type="submit">Alterar senha</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Endereços de entrega</h2>
+      <div id="enderecos" class="list"></div>
+
+      <details style="margin-top:12px">
+        <summary class="muted">Adicionar novo endereço</summary>
+        <form id="formEndereco" style="margin-top:10px">
+          <div class="row">
+            <div>
+              <label>CEP</label>
+              <input id="e_cep" placeholder="00000-000" maxlength="9" inputmode="numeric">
+            </div>
+            <div>
+              <label>Número</label>
+              <input id="e_numero">
+            </div>
+          </div>
+          <label>Logradouro</label>
+          <input id="e_logradouro">
+          <label>Complemento</label>
+          <input id="e_complemento">
+          <div class="row">
+            <div>
+              <label>Bairro</label>
+              <input id="e_bairro">
+            </div>
+            <div>
+              <label>Cidade</label>
+              <input id="e_cidade">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>UF</label>
+              <input id="e_uf" maxlength="2">
+            </div>
+            <div style="display:flex;align-items:end;justify-content:end">
+              <button class="btn primary" type="submit">Adicionar</button>
+            </div>
+          </div>
+        </form>
+      </details>
+      <p class="muted" style="margin-top:8px">Para corrigir dados de um endereço, crie um novo e marque-o como padrão.</p>
+    </section>
+  </div>
+</div>
+
+<script src="js/cliente-editar.js"></script>
+</body>
+</html>

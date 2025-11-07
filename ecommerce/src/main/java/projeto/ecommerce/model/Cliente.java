@@ -46,6 +46,7 @@ public class Cliente {
     private Genero genero;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @lombok.Builder.Default
     private List<Endereco> enderecos = new ArrayList<>();
 
     public String getNomeCompleto() { return primeiroNome + " " + sobrenome; }

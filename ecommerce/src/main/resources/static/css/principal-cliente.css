@@ -1,0 +1,61 @@
+/* Layout base */
+:root{
+  --bg:#f7f7f8;
+  --card:#ffffff;
+  --ink:#111;
+  --muted:#666;
+  --brand:#5b8e61;
+  --brand-2:#2a5930;
+  --soft:#eef3ef;
+  --border:#e6e6e6;
+  --shadow:0 8px 20px rgba(0,0,0,.06);
+  --radius:14px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+
+/* Header */
+.header{
+  background:linear-gradient(135deg,#6ba971,var(--brand));
+  color:#fff;
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.header .who{font-weight:600}
+.header .actions{display:flex;gap:10px}
+.btn{border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+.btn.ghost{background:var(--soft);color:var(--brand-2)}
+.btn.primary{background:var(--brand);color:#fff}
+
+/* Page grid */
+.page{max-width:1100px;margin:24px auto;padding:0 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* Cards */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.card h2{margin:0 0 12px}
+.muted{color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:10px}
+
+/* Endereços */
+.addr{
+  border:1px solid var(--border);
+  padding:12px;border-radius:12px;background:#fcfcfc
+}
+.addr strong{font-weight:700}
+
+/* Section actions */
+.section-actions{
+  margin-top:12px;display:flex;gap:8px;flex-wrap:wrap
+}
+
+/* “Meus pedidos” placeholder */
+.placeholder{padding:8px 0;color:var(--muted)}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Área do Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/principal-cliente.css">
+</head>
+<body>
+<header class="header">
+  <div class="who">Bem-vindo(a), <strong id="who-name">Cliente</strong></div>
+  <div class="actions">
+    <button id="btnLogout" class="btn primary">Sair</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="grid">
+    <section class="card">
+      <h2>Meus dados</h2>
+      <div id="me-dados" class="muted">Carregando…</div>
+
+      <!-- ação dentro do card também, se preferir editar por aqui -->
+      <div class="section-actions">
+        <a class="btn ghost" href="cliente-editar.html">Editar meus dados</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Endereços de entrega</h2>
+      <div id="enderecos" class="list"></div>
+      <p class="muted" style="margin-top:8px">
+        Para incluir ou trocar o endereço padrão, use “Editar meus dados”.
+      </p>
+      <div class="section-actions">
+        <a class="btn ghost" href="cliente-editar.html">Gerenciar endereços</a>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:20px">
+    <h2>Meus pedidos</h2>
+    <div id="pedidos" class="list placeholder">
+      Em breve listamos aqui (endpoint de pedidos).
+    </div>
+  </section>
+</div>
+
+<script src="js/principal-cliente.js"></script>
+</body>
+</html>
