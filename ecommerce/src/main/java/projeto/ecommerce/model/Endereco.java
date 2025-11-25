@@ -25,15 +25,21 @@ public class Endereco {
     @NotBlank private String bairro;
     @NotBlank private String cidade;
 
-    @NotBlank @Size(min = 2, max = 2)
-    @Column(length = 2) 
-
+    @NotBlank
+    @Size(min = 2, max = 2)
+    @Column(length = 2)
     private String uf;
 
-    @NotBlank private String numero;
+    @NotBlank
+    private String numero;
+
     private String complemento;
+
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    private boolean padrao = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-}
+    }
+

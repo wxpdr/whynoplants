@@ -155,23 +155,24 @@ public class ClienteService {
     }
 
     public List<EnderecoResumoDTO> listarEnderecosEntrega(Long clienteId, Long userIdSessao){
-        if (!clienteId.equals(userIdSessao)) throw new SecurityException("Acesso negado.");
+    if (!clienteId.equals(userIdSessao)) throw new SecurityException("Acesso negado.");
 
-        return endRepo.findByClienteAndTipo(clienteId, TipoEndereco.ENTREGA)
-                .stream()
-                .map(e -> new EnderecoResumoDTO(
-                        e.getId(),
-                        formataCep(soDigitos(e.getCep())), // mostra 12345-678 para o front
-                        e.getLogradouro(),
-                        e.getNumero(),
-                        e.getComplemento(),
-                        e.getBairro(),
-                        e.getCidade(),
-                        e.getUf(),
-                        false // se ainda não existe coluna 'padrao', mantemos false
-                ))
-                .toList();
-    }
+    return endRepo.findByClienteAndTipo(clienteId, TipoEndereco.ENTREGA)
+            .stream()
+            .map(e -> new EnderecoResumoDTO(
+                    e.getId(),
+                    formataCep(soDigitos(e.getCep())),
+                    e.getLogradouro(),
+                    e.getNumero(),
+                    e.getComplemento(),
+                    e.getBairro(),
+                    e.getCidade(),
+                    e.getUf(),
+                    e.isPadrao()   // <<<<<<<<<< AQUI
+            ))
+            .toList();
+}
+
 
     /* ===================== helpers ===================== */
 
@@ -236,4 +237,50 @@ public class ClienteService {
         if (cep8 == null || cep8.length() != 8) return cep8;
         return cep8.substring(0,5) + "-" + cep8.substring(5);
     }
+
+    @Transactional
+    public void adicionarEnderecoEntrega(Long clienteId, EnderecoDTO dto, Long userIdSessao) {
+        if (!clienteId.equals(userIdSessao)) {
+            throw new SecurityException("Acesso negado.");
+        }
+
+        Cliente cliente = clienteRepo.findById(clienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
+
+        // Reaproveita toda a validação + ViaCEP
+        Endereco end = montarEnderecoComViaCep(dto);
+
+        // Garante que é endereço de ENTREGA se o front não mandar explicitamente
+        if (end.getTipo() == null) {
+            end.setTipo(TipoEndereco.ENTREGA);
+        }
+
+        end.setCliente(cliente);
+        endRepo.save(end);
+    }
+
+    @Transactional
+    public void tornarEnderecoPadrao(Long enderecoId, Long userIdSessao) {
+
+        Endereco endereco = endRepo.findById(enderecoId)
+                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado."));
+
+        Cliente cliente = endereco.getCliente();
+
+        if (!cliente.getId().equals(userIdSessao)) {
+            throw new SecurityException("Você só pode alterar seus próprios endereços.");
+        }
+
+        // Desmarca todos os endereços do cliente
+        List<Endereco> todos = endRepo.findByCliente(cliente);
+        for (Endereco e : todos) {
+            e.setPadrao(false);
+        }
+
+        // Marca apenas o selecionado como padrão
+        endereco.setPadrao(true);
+
+        // Salva (o commit do @Transactional aplica tudo)
+    }
+
 }

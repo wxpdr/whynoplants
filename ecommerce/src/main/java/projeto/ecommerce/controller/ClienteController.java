@@ -11,6 +11,7 @@ import projeto.ecommerce.dto.ClienteBasicoDTO;
 import projeto.ecommerce.dto.ClienteCreateDTO;
 import projeto.ecommerce.dto.ClienteResumoDTO;
 import projeto.ecommerce.dto.ClienteUpdateDTO;
+import projeto.ecommerce.dto.EnderecoDTO;
 import projeto.ecommerce.dto.EnderecoResumoDTO;
 
 import projeto.ecommerce.service.ClienteService;
@@ -41,13 +42,14 @@ public class ClienteController {
     }
 
     /** Cadastro do cliente (retorna 201 + Location /login.html) */
-    @PostMapping
+    @PostMapping("/criar")
     public ResponseEntity<ClienteResumoDTO> criar(@Valid @RequestBody ClienteCreateDTO dto) {
         ClienteResumoDTO resumo = service.criar(dto);
         return ResponseEntity
                 .created(URI.create("/login.html"))
                 .body(resumo);
     }
+
 
     /* -------------------- Requer sessão do cliente -------------------- */
 
@@ -69,6 +71,16 @@ public class ClienteController {
         return ResponseEntity.ok(service.listarEnderecosEntrega(id, userId));
     }
 
+     /** Adiciona um novo endereço de ENTREGA para o cliente logado */
+    @PostMapping("/{id}/enderecos")
+    public ResponseEntity<Void> adicionarEndereco(@PathVariable Long id,
+                                                  @RequestBody EnderecoDTO dto,
+                                                  HttpSession session) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+        service.adicionarEnderecoEntrega(id, dto, userId);
+        return ResponseEntity.noContent().build();
+    }
+
     /** Atualiza dados pessoais (nome, data, gênero) */
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarPerfil(@PathVariable Long id,
@@ -88,4 +100,13 @@ public class ClienteController {
         service.alterarSenha(id, dto, userId);
         return ResponseEntity.noContent().build();
     }
+
+       @PutMapping("/enderecos/{enderecoId}/padrao")
+    public ResponseEntity<Void> tornarEnderecoPadrao(@PathVariable Long enderecoId,
+                                                 HttpSession session) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+        service.tornarEnderecoPadrao(enderecoId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

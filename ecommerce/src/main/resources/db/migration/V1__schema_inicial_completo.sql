@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS enderecos (
   uf          VARCHAR(2)   NOT NULL,
   numero      VARCHAR(30)  NOT NULL,
   complemento VARCHAR(120),
+  padrao      TINYINT(1)   NOT NULL DEFAULT 0,
   cliente_id  BIGINT       NOT NULL,
 
   CONSTRAINT fk_endereco_cliente
@@ -83,8 +84,8 @@ CREATE TABLE IF NOT EXISTS enderecos (
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE INDEX idx_cliente_nome     ON clientes (primeiro_nome, sobrenome);
 CREATE INDEX idx_endereco_cliente ON enderecos (cliente_id);
+
 
 /* ================== PEDIDOS / CARRINHO (Sprints 3, 5 e 6) ==================
    - Um "pedido" com status CARRINHO representa o carrinho em aberto.
