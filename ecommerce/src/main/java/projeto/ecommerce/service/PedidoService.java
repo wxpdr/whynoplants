@@ -6,10 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import projeto.ecommerce.dto.CheckoutItemDTO;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
+import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
+import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
 import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.model.*;
 import projeto.ecommerce.repository.*;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +155,84 @@ public class PedidoService {
                         p.getValorTotal()
                 ))
                 .toList();
+    }
+
+
+
+    // ===================== FINALIZAR CARRINHO (Sprint 5) =====================
+
+    @Transactional
+    public PedidoConfirmacaoDTO finalizarCarrinho(Long clienteId,
+                                                  PedidoFinalizacaoDTO dto,
+                                                  Long userIdSessao) {
+        // 1) segurança básica: sessão obrigatória e dono certo
+        if (userIdSessao == null) {
+            throw new SecurityException("Usuário não autenticado.");
+        }
+        if (!clienteId.equals(userIdSessao)) {
+            throw new SecurityException("Você só pode finalizar seus próprios pedidos.");
+        }
+        if (dto == null) {
+            throw new IllegalArgumentException("Dados de finalização são obrigatórios.");
+        }
+
+        // 2) buscar o carrinho em aberto do cliente
+        Pedido pedido = pedidoRepo.findCarrinho(clienteId, StatusPedido.CARRINHO);
+        if (pedido == null) {
+            throw new IllegalStateException("Nenhum carrinho em aberto para este cliente.");
+        }
+
+        // 3) validar endereço de entrega
+        if (dto.enderecoId() == null) {
+            throw new IllegalArgumentException("Endereço de entrega é obrigatório.");
+        }
+
+        Endereco endereco = enderecoRepo.findById(dto.enderecoId())
+                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado."));
+
+        if (!endereco.getCliente().getId().equals(clienteId)) {
+            throw new SecurityException("Endereço não pertence ao cliente.");
+        }
+
+        pedido.setEnderecoEntrega(endereco);
+
+        // 4) forma de pagamento (string -> enum)
+        if (dto.formaPagamento() != null && !dto.formaPagamento().isBlank()) {
+            try {
+                FormaPagamento fp = FormaPagamento.valueOf(dto.formaPagamento().toUpperCase());
+                pedido.setFormaPagamento(fp);
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Forma de pagamento inválida.");
+            }
+        }
+
+        // 5) frete
+        pedido.setFreteOpcao(dto.freteOpcao());
+        BigDecimal frete = dto.freteValor() != null ? dto.freteValor() : BigDecimal.ZERO;
+        pedido.setFreteValor(frete);
+
+        // 6) recalcular valor total
+        if (pedido.getValorItens() == null) {
+            pedido.setValorItens(BigDecimal.ZERO);
+        }
+        pedido.setValorTotal(pedido.getValorItens().add(frete));
+
+        // 7) mudar status para AGUARDANDO_PAGAMENTO
+        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);
+
+        // (Sprint 6: aqui entra o registro em pedido_status_historico)
+
+        // 8) salvar
+        pedido = pedidoRepo.save(pedido);
+
+        // 9) retorno bonitinho
+        return new PedidoConfirmacaoDTO(
+                pedido.getId(),
+                pedido.getValorItens(),
+                pedido.getFreteValor(),
+                pedido.getValorTotal(),
+                pedido.getStatus().name()
+        );
     }
 
 }

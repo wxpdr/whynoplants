@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
+import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
+import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
 import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.service.PedidoService;
 
@@ -39,5 +41,17 @@ public class PedidoController {
                 pedidoService.listarPedidosDoCliente(userId, clienteId);
 
         return ResponseEntity.ok(lista);
+    }
+
+    // ----------- FINALIZAR CARRINHO DO CLIENTE -----------
+    @PutMapping("/cliente/{clienteId}/finalizar")
+    public ResponseEntity<PedidoConfirmacaoDTO> finalizarCarrinho(
+            @PathVariable Long clienteId,
+            @RequestBody PedidoFinalizacaoDTO dto,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+        PedidoConfirmacaoDTO r = pedidoService.finalizarCarrinho(clienteId, dto, userId);
+        return ResponseEntity.ok(r);
     }
 }
