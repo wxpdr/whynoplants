@@ -231,74 +231,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
     localStorage.removeItem(FRETE_KEY);
     render();
   });
-  $('#checkout')?.addEventListener('click', async ()=>{
-  const itensCarrinho = read();         // itens do localStorage
-  const frete = readFrete();            // frete salvo no localStorage
 
-  if (!itensCarrinho.length) {
-    alert('Seu carrinho está vazio.');
-    return;
-  }
 
-  if (!frete) {
-    alert('Escolha uma opção de frete antes de finalizar.');
-    return;
-  }
+   $('#checkout')?.addEventListener('click', ()=>{
+    const itensCarrinho = read();
+    const frete = readFrete();
 
-  try {
-    // 1) Verificar se o usuário está logado (sessão)
-    const who = await fetch('/whoami', { credentials: 'include' });
-    if (who.status === 401) {
-      alert('Você precisa estar logado para finalizar a compra.');
-      // Carrinho continua salvo no localStorage
-      location.href = 'login.html';
+    if (!itensCarrinho.length) {
+      alert('Seu carrinho está vazio.');
       return;
     }
 
-    const me = await who.json();
-    console.log('Usuário logado:', me);
-
-    // 2) Montar payload para o back (CheckoutRequestDTO)
-    const payload = {
-      itens: itensCarrinho.map(i => ({
-        produtoId: i.id,
-        quantidade: i.quantidade
-      })),
-      freteOpcao: frete.nome || frete.id,   // você escolhe se quer gravar nome ou id
-      freteValor: frete.valor,              // number
-      formaPagamento: 'PIX'                 // por enquanto fixo (pode virar seletor depois)
-    };
-
-    console.log('Checkout payload:', payload);
-
-    // 3) Chamar o endpoint de pedidos
-    const res = await fetch('/pedidos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) {
-      const txt = await res.text();
-      alert('Erro ao finalizar pedido: ' + (txt || res.status));
+    if (!frete) {
+      alert('Escolha uma opção de frete antes de continuar.');
       return;
     }
 
-    const resumo = await res.json(); // PedidoResumoDTO: { id, dataCriacao, status, valorTotal }
+    // Não finaliza nada ainda, apenas vai para a página de pagamento
+    location.href = 'pagamento.html';
+  });
 
-    // 4) Limpar carrinho e frete e redirecionar
-    localStorage.removeItem(CART_KEY);
-    localStorage.removeItem(FRETE_KEY);
-
-    alert(`Pedido #${resumo.id} criado com sucesso!\nTotal: ${money(resumo.valorTotal)}`);
-
-    // Por enquanto redireciona para a página de pedidos (placeholder)
-    location.href = 'pedidos.html';
-  } catch (e) {
-    console.error(e);
-    alert('Erro de rede ao finalizar o pedido.');
-  }
-});
 
 });

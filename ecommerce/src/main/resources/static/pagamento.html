@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>WNPlants — Pagamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/pagamento.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">WN<span>Plants</span></a>
+    <nav class="actions">
+      <a href="login.html">Minha Conta</a>
+      <a href="carrinho.html">🛒 <span id="cartCount" class="badge"></span></a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Pagamento</h1>
+
+    <!-- Resumo do pedido -->
+    <section class="card">
+      <h2>Resumo do pedido</h2>
+
+      <div id="itensResumo" class="itens-resumo">
+        <!-- Itens do carrinho serão renderizados aqui -->
+      </div>
+
+      <div class="resumo-row">
+        <div><strong>Subtotal:</strong> <span id="subtotal">R$ 0,00</span></div>
+        <div>
+          <strong>Frete:</strong>
+          <span id="frete">R$ 0,00</span>
+          <small id="freteInfo" class="muted"></small>
+        </div>
+        <div class="grand"><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
+      </div>
+    </section>
+
+    <!-- Forma de pagamento -->
+    <section class="card">
+      <h2>Forma de pagamento</h2>
+
+      <div class="pagamento-opcoes">
+        <label>
+          <input type="radio" name="formaPagamento" value="PIX" checked>
+          Pix
+        </label>
+        <label>
+          <input type="radio" name="formaPagamento" value="CARTAO">
+          Cartão de crédito
+        </label>
+        <label>
+          <input type="radio" name="formaPagamento" value="BOLETO">
+          Boleto
+        </label>
+      </div>
+
+      <!-- PIX -->
+      <div id="campos-pix" class="pagamento-campos">
+        <p class="muted">
+          Use o código abaixo no seu app do banco para pagar via Pix (cópia e cola).
+        </p>
+        <label for="pix-codigo">Código Pix</label>
+        <textarea id="pix-codigo" rows="3" readonly></textarea>
+      </div>
+
+      <!-- Cartão -->
+      <div id="campos-cartao" class="pagamento-campos hidden">
+        <p class="muted">Preencha os dados do cartão. Não validamos com operadora, é apenas para simulação.</p>
+        <label for="cartao-numero">Número do cartão</label>
+        <input id="cartao-numero" type="text" placeholder="0000 0000 0000 0000"/>
+
+        <div class="row">
+          <div>
+            <label for="cartao-validade">Validade</label>
+            <input id="cartao-validade" type="text" placeholder="MM/AA"/>
+          </div>
+          <div>
+            <label for="cartao-cvc">CVC</label>
+            <input id="cartao-cvc" type="text" placeholder="123"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boleto -->
+      <div id="campos-boleto" class="pagamento-campos hidden">
+        <p class="muted">
+          Informe o e-mail para envio e utilize a linha digitável abaixo para simulação do pagamento.
+        </p>
+        <label for="boleto-email">E-mail para envio do boleto</label>
+        <input id="boleto-email" type="email" placeholder="seuemail@exemplo.com"/>
+
+        <label for="boleto-linha">Linha digitável</label>
+        <textarea id="boleto-linha" rows="2" readonly></textarea>
+      </div>
+    </section>
+
+    <!-- Confirmação final -->
+    <section class="card">
+      <h2>Confirme os dados antes de finalizar</h2>
+      <div class="resumo-row">
+        <div>
+          <strong>Forma de pagamento:</strong>
+          <span id="resumoFormaPagamento">Pix</span>
+        </div>
+        <div>
+          <strong>Endereço de entrega:</strong>
+          <span id="resumoEndereco">
+            Será utilizado o endereço de ENTREGA padrão cadastrado na sua conta.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <div class="acoes">
+      <button id="btnVoltar" class="btn ghost">← Voltar ao carrinho</button>
+      <button id="btnFinalizar" class="btn primary">Finalizar pedido</button>
+    </div>
+  </main>
+
+  <script src="js/pagamento.js"></script>
+</body>
+</html>
