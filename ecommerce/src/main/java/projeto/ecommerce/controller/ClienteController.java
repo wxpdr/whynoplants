@@ -13,8 +13,9 @@ import projeto.ecommerce.dto.ClienteResumoDTO;
 import projeto.ecommerce.dto.ClienteUpdateDTO;
 import projeto.ecommerce.dto.EnderecoDTO;
 import projeto.ecommerce.dto.EnderecoResumoDTO;
-
+import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.service.ClienteService;
+import projeto.ecommerce.service.PedidoService;
 import projeto.ecommerce.util.viacep.ViaCepResponse;
 import projeto.ecommerce.util.viacep.ViaCepService;
 
@@ -28,6 +29,8 @@ public class ClienteController {
 
     private final ClienteService service;
     private final ViaCepService viaCep;
+        private final PedidoService pedidoService;
+
 
     /* -------------------- Público -------------------- */
 
@@ -108,5 +111,17 @@ public class ClienteController {
         service.tornarEnderecoPadrao(enderecoId, userId);
         return ResponseEntity.noContent().build();
     }
+
+        /** Lista pedidos do cliente (Sprint 5) */
+    @GetMapping("/{id}/pedidos")
+    public ResponseEntity<List<PedidoResumoDTO>> listarPedidosDoCliente(
+            @PathVariable Long id,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+        List<PedidoResumoDTO> lista = pedidoService.listarPedidosDoCliente(userId, id);
+        return ResponseEntity.ok(lista);
+    }
+
 
 }

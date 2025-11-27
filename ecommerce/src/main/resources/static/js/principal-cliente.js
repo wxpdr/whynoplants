@@ -44,6 +44,59 @@
       $('#enderecos').innerHTML = '<div class="muted">Erro ao carregar endereços.</div>';
     }
 
+        // pedidos
+    try {
+      const lista = await api(`/clientes/${id}/pedidos`);
+      const box = document.querySelector('#pedidos');
+      box.classList.remove('placeholder');
+      box.innerHTML = '';
+
+      if (!lista || lista.length === 0) {
+        box.innerHTML = '<div class="muted">Você ainda não tem pedidos.</div>';
+      } else {
+        lista.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'pedido-item';
+
+          const data = p.dataCriacao
+            ? new Date(p.dataCriacao).toLocaleString('pt-BR')
+            : '-';
+
+          const total = p.valorTotal != null
+            ? Number(p.valorTotal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+            : 'R$ 0,00';
+
+          div.innerHTML = `
+            <div class="linha">
+              <strong>Pedido #${p.id}</strong>
+              <span>${data}</span>
+            </div>
+            <div class="linha">
+              <span>Status: <b>${p.status}</b></span>
+              <span>Total: <b>${total}</b></span>
+            </div>
+            <div class="linha">
+              <button class="btn small" data-id="${p.id}">Ver detalhes</button>
+            </div>
+          `;
+
+          box.appendChild(div);
+        });
+
+        box.addEventListener('click', e => {
+          const btn = e.target.closest('button[data-id]');
+          if (!btn) return;
+          const pid = btn.getAttribute('data-id');
+          location.href = `pedido-detalhes.html?id=${pid}`;
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      document.querySelector('#pedidos').innerHTML =
+        '<div class="muted">Erro ao carregar pedidos.</div>';
+    }
+
+
     // logout
     $('#btnLogout').addEventListener('click', async ()=>{
       try{ await api('/logout', {method:'POST'}); } finally { location.href='login.html'; }

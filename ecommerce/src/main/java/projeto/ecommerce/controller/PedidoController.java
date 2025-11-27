@@ -2,10 +2,13 @@ package projeto.ecommerce.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
 import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
+import projeto.ecommerce.dto.PedidoDetalheDTO;
 import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
 import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.service.PedidoService;
@@ -19,16 +22,23 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
 
+    
+
     // ----------- FINALIZAR PEDIDO (CHECKOUT) -----------
     @PostMapping
     public ResponseEntity<PedidoResumoDTO> finalizar(
             @RequestBody CheckoutRequestDTO dto,
             HttpSession session
     ) {
-        Long userId = (Long) session.getAttribute("USER_ID");
+        Long userId = (Long) session.getAttribute("USER_ID");  // Garantir que o usuário esteja logado
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
         PedidoResumoDTO resumo = pedidoService.finalizarPedido(userId, dto);
         return ResponseEntity.ok(resumo);
     }
+
 
     // ----------- LISTAR PEDIDOS DO CLIENTE -----------
     @GetMapping("/cliente/{clienteId}")
@@ -54,4 +64,18 @@ public class PedidoController {
         PedidoConfirmacaoDTO r = pedidoService.finalizarCarrinho(clienteId, dto, userId);
         return ResponseEntity.ok(r);
     }
+
+        // ----------- DETALHES DO PEDIDO -----------
+    @GetMapping("/{pedidoId}")
+    public ResponseEntity<PedidoDetalheDTO> detalhes(
+            @PathVariable Long pedidoId,
+            HttpSession session
+    ) {
+        Long userId = (Long) session.getAttribute("USER_ID");
+        PedidoDetalheDTO dto = pedidoService.buscarDetalhesPedido(userId, pedidoId);
+        return ResponseEntity.ok(dto);
+    }
+
+    
+
 }

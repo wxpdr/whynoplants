@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import projeto.ecommerce.dto.CheckoutItemDTO;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
 import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
+import projeto.ecommerce.dto.PedidoDetalheDTO;
 import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
+import projeto.ecommerce.dto.PedidoItemDetalheDTO;
 import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.model.*;
 import projeto.ecommerce.repository.*;
@@ -232,6 +234,47 @@ public class PedidoService {
                 pedido.getFreteValor(),
                 pedido.getValorTotal(),
                 pedido.getStatus().name()
+        );
+    }
+
+        // ===================== DETALHES DO PEDIDO (Sprint 5) =====================
+
+    public PedidoDetalheDTO buscarDetalhesPedido(Long userIdSessao, Long pedidoId) {
+        if (userIdSessao == null) {
+            throw new SecurityException("Usuário não autenticado.");
+        }
+
+        Pedido pedido = pedidoRepo.findById(pedidoId)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+
+        // segurança: só dono do pedido pode ver
+        if (!pedido.getCliente().getId().equals(userIdSessao)) {
+            throw new SecurityException("Você não tem permissão para ver este pedido.");
+        }
+
+        // carrega itens (já existe findByPedidoId no PedidoItemRepository)
+        List<PedidoItem> itens = pedidoItemRepo.findByPedidoId(pedidoId);
+
+        List<PedidoItemDetalheDTO> itensDTO = itens.stream()
+                .map(i -> new PedidoItemDetalheDTO(
+                        i.getProduto().getId(),
+                        i.getProduto().getNome(),
+                        i.getQuantidade(),
+                        i.getValorUnitario(),
+                        i.getValorTotal()
+                ))
+                .toList();
+
+        return new PedidoDetalheDTO(
+                pedido.getId(),
+                pedido.getDataCriacao(),
+                pedido.getStatus(),
+                pedido.getFormaPagamento(),
+                pedido.getFreteOpcao(),
+                pedido.getFreteValor(),
+                pedido.getValorItens(),
+                pedido.getValorTotal(),
+                itensDTO
         );
     }
 
