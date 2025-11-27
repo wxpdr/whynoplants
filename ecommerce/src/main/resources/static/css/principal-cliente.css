@@ -59,3 +59,131 @@ body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:
 
 /* “Meus pedidos” placeholder */
 .placeholder{padding:8px 0;color:var(--muted)}
+
+
+/* ==== Timeline de status do pedido (pedido-detalhes) ==== */
+
+.pedido-resumo-top{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:8px;
+}
+
+.pedido-resumo-valores{
+  text-align:right;
+  font-size:0.9rem;
+}
+.pedido-resumo-valores div{
+  margin-bottom:2px;
+}
+
+.pedido-resumo-extra{
+  margin-top:4px;
+  font-size:0.9rem;
+  display:grid;
+  gap:2px;
+}
+
+.status-timeline{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  padding-top:10px;
+  border-top:1px solid #e5e7eb;
+}
+
+.status-step{
+  flex:1;
+  text-align:center;
+  position:relative;
+  font-size:0.75rem;
+  color:#9ca3af;
+}
+
+.status-step::before{
+  content:"";
+  position:absolute;
+  top:10px;
+  left:0;
+  right:0;
+  height:2px;
+  background:#e5e7eb;
+  z-index:0;
+}
+
+.status-dot{
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  border:2px solid #d1d5db;
+  background:#fff;
+  margin:0 auto 4px;
+  position:relative;
+  z-index:1;
+}
+
+.status-label{
+  line-height:1.2;
+}
+
+.status-step.done .status-dot{
+  border-color:#16a34a;
+  background:#bbf7d0;
+}
+.status-step.done .status-label{
+  color:#166534;
+  font-weight:600;
+}
+
+.status-step.current .status-dot{
+  border-color:#2563eb;
+  background:#bfdbfe;
+}
+.status-step.current .status-label{
+  color:#1d4ed8;
+  font-weight:600;
+}
+
+/* Estado cancelado */
+.status-cancelado{
+  flex:1;
+  text-align:center;
+}
+.status-cancelado .status-dot{
+  width:16px;
+  height:16px;
+  border-radius:999px;
+  border:2px solid #b91c1c;
+  background:#fecaca;
+  margin:0 auto 4px;
+}
+.status-cancelado .status-label{
+  color:#b91c1c;
+  font-weight:700;
+}
+
+/* itens do pedido (aproveita e deixa bonitinho) */
+.pedido-item-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 0;
+  border-bottom:1px solid #e5e7eb;
+  font-size:0.9rem;
+}
+.pedido-item-row:last-child{
+  border-bottom:none;
+}
+.pi-nome{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.pi-valores{
+  text-align:right;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}

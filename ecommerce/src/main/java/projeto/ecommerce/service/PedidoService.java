@@ -278,4 +278,57 @@ public class PedidoService {
         );
     }
 
+
+        // ===================== LISTAR TODOS OS PEDIDOS (ADMIN/ESTOQUE) =====================
+
+    public List<PedidoResumoDTO> listarTodosPedidos() {
+        List<Pedido> pedidos = pedidoRepo.findAllByOrderByDataCriacaoDesc();
+        List<PedidoResumoDTO> dtos = new ArrayList<>();
+
+        for (Pedido p : pedidos) {
+            dtos.add(new PedidoResumoDTO(
+                    p.getId(),
+                    p.getDataCriacao(),
+                    p.getStatus(),
+                    p.getValorTotal()
+            ));
+        }
+
+        return dtos;
+    }
+
+    // ===================== ATUALIZAR STATUS DE UM PEDIDO (SPRINT 6) =====================
+
+    @Transactional
+    public PedidoResumoDTO atualizarStatus(Long pedidoId, String novoStatusStr) {
+        if (novoStatusStr == null || novoStatusStr.isBlank()) {
+            throw new IllegalArgumentException("Status não informado.");
+        }
+
+        StatusPedido novoStatus;
+        try {
+            // aceita tanto "PAGO" quanto "pago" etc.
+            novoStatus = StatusPedido.valueOf(novoStatusStr.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Status de pedido inválido: " + novoStatusStr);
+        }
+
+        Pedido pedido = pedidoRepo.findById(pedidoId)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+
+        // aqui você poderia colocar regras: ex: não voltar de ENTREGUE para CARRINHO, etc.
+        pedido.setStatus(novoStatus);
+
+        // (Sprint 6: aqui poderia registrar histórico em tabela própria, se existir)
+
+        pedido = pedidoRepo.save(pedido);
+
+        return new PedidoResumoDTO(
+                pedido.getId(),
+                pedido.getDataCriacao(),
+                pedido.getStatus(),
+                pedido.getValorTotal()
+        );
+    }
 }
+

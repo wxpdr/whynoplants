@@ -40,6 +40,37 @@ public class PedidoController {
     }
 
 
+        // ----------- LISTAR TODOS OS PEDIDOS (ADMIN / ESTOQUE) -----------
+    @GetMapping
+    public ResponseEntity<List<PedidoResumoDTO>> listarTodos(HttpSession session) {
+        String perfil = (String) session.getAttribute("USER_PERFIL");
+        if (perfil == null || 
+           (!perfil.equals("Administrador") && !perfil.equals("Estoquista"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        List<PedidoResumoDTO> lista = pedidoService.listarTodosPedidos();
+        return ResponseEntity.ok(lista);
+    }
+
+    // ----------- ATUALIZAR STATUS DE UM PEDIDO -----------
+    @PatchMapping("/{pedidoId}/status")
+    public ResponseEntity<PedidoResumoDTO> atualizarStatus(
+            @PathVariable Long pedidoId,
+            @RequestParam String status,
+            HttpSession session
+    ) {
+        String perfil = (String) session.getAttribute("USER_PERFIL");
+        if (perfil == null || 
+           (!perfil.equals("Administrador") && !perfil.equals("Estoquista"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        PedidoResumoDTO dto = pedidoService.atualizarStatus(pedidoId, status);
+        return ResponseEntity.ok(dto);
+    }
+
+
     // ----------- LISTAR PEDIDOS DO CLIENTE -----------
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<List<PedidoResumoDTO>> listar(

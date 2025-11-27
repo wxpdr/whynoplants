@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
-    // lista pedidos do cliente
+    // lista pedidos do cliente (Sprint 5)
     @Query("""
        select p from Pedido p
         where p.cliente.id = :clienteId
@@ -17,11 +17,14 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     """)
     List<Pedido> findByCliente(Long clienteId);
 
-    // busca carrinho atual em aberto
+    // busca carrinho atual em aberto (Sprint 3/5)
     @Query("""
         select p from Pedido p
          where p.cliente.id = :clienteId
            and p.status = :status
     """)
     Pedido findCarrinho(Long clienteId, StatusPedido status);
+
+    // lista TODOS os pedidos (para admin/estoque) ordenados do mais recente pro mais antigo (Sprint 6)
+    List<Pedido> findAllByOrderByDataCriacaoDesc();
 }
