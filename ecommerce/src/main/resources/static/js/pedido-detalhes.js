@@ -147,7 +147,7 @@
           const sub = Number(item.valorUnitario || 0) * Number(item.quantidade || 0);
           div.innerHTML = `
             <div class="pi-nome">
-              <strong>${item.nomeProduto}</strong>
+              <strong>${item.produtoNome}</strong>
               <span class="muted">Qtd: ${item.quantidade}</span>
             </div>
             <div class="pi-valores">

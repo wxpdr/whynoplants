@@ -65,7 +65,7 @@
       sobrenome: sobrenome,
       email: $("#email").value.trim(),
       senha: $("#senha").value,
-      cpf: onlyDigits($("#cpf").value), // <<< AQUI
+      cpf: onlyDigits($("#cpf").value), // <<< AQUI: envia só dígitos
       dataNascimento: $("#nascimento").value || null,
       genero: generoEnum, // FEMININO | MASCULINO | NAO_INFORMAR | OUTRO
       enderecos: [faturamento, ...entregas],
@@ -131,7 +131,7 @@
     });
   }
 
-    function formatValidationMessage(msg) {
+  function formatValidationMessage(msg) {
     if (!msg) return "Erro no cadastro. Verifique os campos.";
 
     // tira colchetes [ ... ]
@@ -156,29 +156,30 @@
     if (lower.includes("cep")) {
       return "CEP inválido. Verifique o endereço informado.";
     }
+    if (lower.includes("e-mail") || lower.includes("email")) {
+      return "E-mail inválido. Verifique o endereço informado.";
+    }
 
     return msg;
   }
 
-
   // --------------- submissão ---------------
   async function cadastrarCliente(payload) {
-    const res = await fetch("/clientes/criar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    let msg = "Erro no cadastro. Verifique os campos.";
 
-    if (res.status === 201 || res.ok) {
-      alert('Conta criada com sucesso! 🎉');
-      window.location.href = '/login.html';
-      return;
-    }
-
-
-    // tenta extrair mensagem amigável
-    let msg = "Erro no cadastro";
     try {
+      const res = await fetch("/clientes/criar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.status === 201 || res.ok) {
+        alert('Conta criada com sucesso! 🎉');
+        window.location.href = '/login.html';
+        return;
+      }
+
       const ct = res.headers.get("content-type") || "";
       if (ct.includes("application/json")) {
         const j = await res.json();
@@ -187,7 +188,12 @@
         const t = await res.text();
         if (t) msg = t;
       }
-    } catch (_) {}
+    } catch (e) {
+      console.error(e);
+      // mantém msg padrão se der erro inesperado
+    }
+
+    msg = formatValidationMessage(msg);
     alert(msg);
   }
 
@@ -225,8 +231,6 @@
       const payload = montarPayload();
 
       if (!validateFront(payload)) return;
-      // debug opcional:
-      // console.log("payload cadastro:", payload);
 
       await cadastrarCliente(payload);
     });

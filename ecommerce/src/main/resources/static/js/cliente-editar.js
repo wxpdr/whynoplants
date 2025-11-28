@@ -30,28 +30,73 @@
     alert(msg); // simples; se quiser, troca depois por um toast bonitinho
   }
 
+  function onlyDigits(s) {
+    return (s || "").replace(/\D+/g, "");
+  }
+
+  function formatDateISOToInput(iso) {
+    // espera "YYYY-MM-DD"
+    return iso || "";
+  }
+
+  function formatValidationMessage(msg) {
+    if (!msg) return "Erro na requisição. Verifique os dados.";
+
+    msg = String(msg);
+
+    // se vier no formato [campo: erro, campo2: erro]
+    if (msg.startsWith("[") && msg.endsWith("]")) {
+      msg = msg.slice(1, -1);
+    }
+
+    const parts = msg.split(",").map(s => s.trim()).filter(Boolean);
+    if (parts.length > 1) {
+      return "Corrija os seguintes campos:\n- " + parts.join("\n- ");
+    }
+
+    const lower = msg.toLowerCase();
+
+    if (lower.includes("cpf")) {
+      return "CPF inválido. Verifique os dígitos.";
+    }
+    if (lower.includes("e-mail") || lower.includes("email")) {
+      return "E-mail inválido. Verifique o endereço informado.";
+    }
+    if (lower.includes("cep")) {
+      return "CEP inválido. Verifique o endereço.";
+    }
+    if (lower.includes("senha atual")) {
+      // caso o back mande algo tipo "Senha atual incorreta"
+      return msg;
+    }
+
+    return msg;
+  }
+
   async function fetchJson(url, opts = {}) {
     const res = await fetch(url, {
       headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
       credentials: "include",
       ...opts,
     });
+
     if (res.status === 204) return null;
+
     const text = await res.text();
     let data;
-    try { data = text ? JSON.parse(text) : null; } catch { data = { message: text }; }
+    try {
+      data = text ? JSON.parse(text) : null;
+    } catch {
+      data = { message: text };
+    }
+
     if (!res.ok) {
-      const msg = data?.message || data?.error || text || "Erro na requisição";
+      const raw = data?.message || data?.error || text || "Erro na requisição";
+      const msg = formatValidationMessage(raw);
       throw new Error(msg);
     }
+
     return data;
-  }
-
-  function onlyDigits(s) { return (s || "").replace(/\D+/g, ""); }
-
-  function formatDateISOToInput(iso) {
-    // espera "YYYY-MM-DD"
-    return iso || "";
   }
 
   function buildEnderecoLinha(e) {
@@ -119,7 +164,10 @@
     ev.preventDefault();
     const senhaAtual = $("#senhaAtual").value;
     const novaSenha = $("#novaSenha").value;
-    if (!senhaAtual || !novaSenha) { toast("Preencha as senhas."); return; }
+    if (!senhaAtual || !novaSenha) {
+      toast("Preencha as senhas.");
+      return;
+    }
     try {
       await fetchJson(`${API}/clientes/${USER_ID}/senha`, {
         method: "PUT",
@@ -162,11 +210,16 @@
       cidade: eCidade.value.trim(),
       uf: eUF.value.trim().toUpperCase(),
     };
-    if (!body.cep || body.cep.length !== 8) { toast("CEP inválido."); return; }
-    if (!body.numero) { toast("Informe o número."); return; }
+    if (!body.cep || body.cep.length !== 8) {
+      toast("CEP inválido.");
+      return;
+    }
+    if (!body.numero) {
+      toast("Informe o número.");
+      return;
+    }
 
     try {
-      // ✅ agora envia para o endpoint correto, vinculado ao usuário logado
       await fetchJson(`${API}/clientes/${USER_ID}/enderecos`, {
         method: "POST",
         body: JSON.stringify(body),
@@ -181,8 +234,7 @@
     }
   });
 
-
-  // tornar padrão (placeholder; backend já aceita PUT e valida ownership)
+  // tornar padrão
   boxEnderecos?.addEventListener("click", async (ev) => {
     const btn = ev.target.closest("[data-acao='padrao']");
     if (!btn) return;
@@ -190,7 +242,6 @@
     try {
       await fetchJson(`${API}/clientes/enderecos/${id}/padrao`, { method: "PUT" });
       toast("Endereço definido como padrão!");
-      // se quiser, recarregue e destaque depois
       await loadEnderecos();
     } catch (e) {
       toast(e.message);
@@ -204,7 +255,7 @@
       await loadPerfil();
       await loadEnderecos();
     } catch (e) {
-      if (/401|Não autenticado/i.test(e.message)) {
+      if (/401|não autenticado|nao autenticado/i.test(e.message)) {
         location.href = "login.html";
       } else {
         toast(e.message);
