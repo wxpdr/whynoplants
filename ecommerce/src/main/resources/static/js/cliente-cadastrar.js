@@ -65,7 +65,7 @@
       sobrenome: sobrenome,
       email: $("#email").value.trim(),
       senha: $("#senha").value,
-      cpf: $("#cpf").value, // o back já normaliza para dígitos
+      cpf: onlyDigits($("#cpf").value), // <<< AQUI
       dataNascimento: $("#nascimento").value || null,
       genero: generoEnum, // FEMININO | MASCULINO | NAO_INFORMAR | OUTRO
       enderecos: [faturamento, ...entregas],

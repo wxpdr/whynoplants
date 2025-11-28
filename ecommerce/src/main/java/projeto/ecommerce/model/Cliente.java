@@ -2,7 +2,6 @@ package projeto.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,29 +20,22 @@ public class Cliente {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email @NotBlank
     private String email;
 
     @JsonIgnore
-    @NotBlank
     private String senhaHash;
 
-    @NotBlank @Size(min = 3)
     private String primeiroNome;
 
-    @NotBlank @Size(min = 3)
     private String sobrenome;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos numéricos")
     private String cpf;
 
-    @Past @NotNull
     private LocalDate dataNascimento;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Genero genero;
+
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @lombok.Builder.Default
