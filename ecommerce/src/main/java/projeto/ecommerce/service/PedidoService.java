@@ -97,12 +97,32 @@ public class PedidoService {
                     .valorTotal(totalItem) // reforça antes do @PrePersist
                     .build();
 
-            itens.add(pi);
-            somaItens = somaItens.add(totalItem);
+                itens.add(pi);
+                somaItens = somaItens.add(totalItem);
 
-            // (Opcional) atualizar estoque aqui em Sprint 6:
-            // produto.setQuantidade(produto.getQuantidade() - qtd);
-        }
+                // Atualiza estoque e inativa se zerar
+                Integer estoqueAtual = produto.getQuantidade();
+                if (estoqueAtual == null) {
+                    estoqueAtual = 0;
+                }
+
+                if (estoqueAtual < qtd) {
+                    throw new IllegalArgumentException(
+                            "Estoque insuficiente para o produto: " + produto.getNome()
+                    );
+                }
+
+                int novoEstoque = estoqueAtual - qtd;
+                produto.setQuantidade(novoEstoque);
+
+                // Se zerou, inativa o produto (some da loja pública)
+                if (novoEstoque == 0) {
+                    produto.setAtivo(false);
+                }
+
+                produtoRepo.save(produto);
+            }
+
 
         // 4) Calcula frete + total
         BigDecimal freteValor = dto.freteValor() != null ? dto.freteValor() : BigDecimal.ZERO;

@@ -131,6 +131,36 @@
     });
   }
 
+    function formatValidationMessage(msg) {
+    if (!msg) return "Erro no cadastro. Verifique os campos.";
+
+    // tira colchetes [ ... ]
+    msg = String(msg);
+    if (msg.startsWith("[") && msg.endsWith("]")) {
+      msg = msg.slice(1, -1);
+    }
+
+    // quebra em itens se tiver vários campos
+    const parts = msg.split(",").map(s => s.trim()).filter(Boolean);
+
+    if (parts.length > 1) {
+      // vira lista bonitinha:
+      return "Corrija os seguintes campos:\n- " + parts.join("\n- ");
+    }
+
+    const lower = msg.toLowerCase();
+
+    if (lower.includes("cpf")) {
+      return "CPF inválido. Verifique os números digitados.";
+    }
+    if (lower.includes("cep")) {
+      return "CEP inválido. Verifique o endereço informado.";
+    }
+
+    return msg;
+  }
+
+
   // --------------- submissão ---------------
   async function cadastrarCliente(payload) {
     const res = await fetch("/clientes/criar", {
