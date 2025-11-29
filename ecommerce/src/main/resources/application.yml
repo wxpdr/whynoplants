@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/wnplants?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+    url: jdbc:mysql://localhost:3306/wnplants_novo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
     username: root
     password: 130500
 

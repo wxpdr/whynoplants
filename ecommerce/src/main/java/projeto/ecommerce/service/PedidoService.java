@@ -13,6 +13,7 @@ import projeto.ecommerce.dto.PedidoItemDetalheDTO;
 import projeto.ecommerce.dto.PedidoResumoDTO;
 import projeto.ecommerce.model.*;
 import projeto.ecommerce.repository.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,15 @@ public class PedidoService {
     private final EnderecoRepository enderecoRepo;
 
     /**
-     * Finaliza a compra do cliente logado.
+     * Finaliza a compra do cliente logado (fluxo direto).
      *
-     * Regras (Sprint 5):
+     * Regras:
      * - Cliente deve estar logado (id sessão obrigatório)
      * - Deve haver ao menos 1 item no carrinho
      * - Usa endereço de ENTREGA padrão; se não tiver, usa o primeiro
      * - Calcula valor dos itens a partir do valor atual do produto no banco
      * - Salva frete e valor total
-     * - Cria pedido com status AGUARDANDO_PAGAMENTO
+     * - Cria pedido com status PAGO (pagamento automático)
      */
     @Transactional
     public PedidoResumoDTO finalizarPedido(Long userIdSessao, CheckoutRequestDTO dto) {
@@ -61,7 +62,6 @@ public class PedidoService {
         Endereco enderecoEntrega = endEntregas.stream()
                 .filter(e -> {
                     try {
-                        // se tiver campo boolean padrao
                         return e.isPadrao();
                     } catch (Exception ex) {
                         return false;
@@ -86,7 +86,6 @@ public class PedidoService {
             Produto produto = produtoRepo.findById(itemDTO.produtoId())
                     .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado: " + itemDTO.produtoId()));
 
-            // valor unitário atual do produto
             BigDecimal unit = produto.getValor();
             BigDecimal totalItem = unit.multiply(BigDecimal.valueOf(qtd));
 
@@ -94,35 +93,33 @@ public class PedidoService {
                     .produto(produto)
                     .quantidade(qtd)
                     .valorUnitario(unit)
-                    .valorTotal(totalItem) // reforça antes do @PrePersist
+                    .valorTotal(totalItem)
                     .build();
 
-                itens.add(pi);
-                somaItens = somaItens.add(totalItem);
+            itens.add(pi);
+            somaItens = somaItens.add(totalItem);
 
-                // Atualiza estoque e inativa se zerar
-                Integer estoqueAtual = produto.getQuantidade();
-                if (estoqueAtual == null) {
-                    estoqueAtual = 0;
-                }
-
-                if (estoqueAtual < qtd) {
-                    throw new IllegalArgumentException(
-                            "Estoque insuficiente para o produto: " + produto.getNome()
-                    );
-                }
-
-                int novoEstoque = estoqueAtual - qtd;
-                produto.setQuantidade(novoEstoque);
-
-                // Se zerou, inativa o produto (some da loja pública)
-                if (novoEstoque == 0) {
-                    produto.setAtivo(false);
-                }
-
-                produtoRepo.save(produto);
+            // Atualiza estoque e inativa se zerar
+            Integer estoqueAtual = produto.getQuantidade();
+            if (estoqueAtual == null) {
+                estoqueAtual = 0;
             }
 
+            if (estoqueAtual < qtd) {
+                throw new IllegalArgumentException(
+                        "Estoque insuficiente para o produto: " + produto.getNome()
+                );
+            }
+
+            int novoEstoque = estoqueAtual - qtd;
+            produto.setQuantidade(novoEstoque);
+
+            if (novoEstoque == 0) {
+                produto.setAtivo(false);
+            }
+
+            produtoRepo.save(produto);
+        }
 
         // 4) Calcula frete + total
         BigDecimal freteValor = dto.freteValor() != null ? dto.freteValor() : BigDecimal.ZERO;
@@ -132,7 +129,9 @@ public class PedidoService {
         Pedido pedido = Pedido.builder()
                 .cliente(cliente)
                 .enderecoEntrega(enderecoEntrega)
-                .status(StatusPedido.AGUARDANDO_PAGAMENTO)
+                // 🔴 ANTES: .status(StatusPedido.AGUARDANDO_PAGAMENTO)
+                // 🟢 AGORA: pagamento automático
+                .status(StatusPedido.PAGO)               // ou StatusPedido.PAGAMENTO_APROVADO, se esse for o nome do enum
                 .formaPagamento(dto.formaPagamento())
                 .freteOpcao(dto.freteOpcao())
                 .freteValor(freteValor)
@@ -140,18 +139,13 @@ public class PedidoService {
                 .valorTotal(total)
                 .build();
 
-        // vincula itens ao pedido
         for (PedidoItem pi : itens) {
             pi.setPedido(pedido);
             pedido.getItens().add(pi);
         }
 
-        // 6) Persiste tudo (cascade em Pedido -> PedidoItem)
         pedido = pedidoRepo.save(pedido);
 
-        // 7) (Opcional para Sprint 6) Registrar histórico de status aqui
-
-        // 8) Retorno para o front
         return new PedidoResumoDTO(
                 pedido.getId(),
                 pedido.getDataCriacao(),
@@ -179,15 +173,12 @@ public class PedidoService {
                 .toList();
     }
 
-
-
-    // ===================== FINALIZAR CARRINHO (Sprint 5) =====================
+    // ===================== FINALIZAR CARRINHO (Sprint 5/6) =====================
 
     @Transactional
     public PedidoConfirmacaoDTO finalizarCarrinho(Long clienteId,
                                                   PedidoFinalizacaoDTO dto,
                                                   Long userIdSessao) {
-        // 1) segurança básica: sessão obrigatória e dono certo
         if (userIdSessao == null) {
             throw new SecurityException("Usuário não autenticado.");
         }
@@ -198,13 +189,11 @@ public class PedidoService {
             throw new IllegalArgumentException("Dados de finalização são obrigatórios.");
         }
 
-        // 2) buscar o carrinho em aberto do cliente
         Pedido pedido = pedidoRepo.findCarrinho(clienteId, StatusPedido.CARRINHO);
         if (pedido == null) {
             throw new IllegalStateException("Nenhum carrinho em aberto para este cliente.");
         }
 
-        // 3) validar endereço de entrega
         if (dto.enderecoId() == null) {
             throw new IllegalArgumentException("Endereço de entrega é obrigatório.");
         }
@@ -218,7 +207,7 @@ public class PedidoService {
 
         pedido.setEnderecoEntrega(endereco);
 
-        // 4) forma de pagamento (string -> enum)
+        // forma de pagamento
         if (dto.formaPagamento() != null && !dto.formaPagamento().isBlank()) {
             try {
                 FormaPagamento fp = FormaPagamento.valueOf(dto.formaPagamento().toUpperCase());
@@ -228,36 +217,35 @@ public class PedidoService {
             }
         }
 
-        // 5) frete
+        // frete
         pedido.setFreteOpcao(dto.freteOpcao());
         BigDecimal frete = dto.freteValor() != null ? dto.freteValor() : BigDecimal.ZERO;
         pedido.setFreteValor(frete);
 
-        // 6) recalcular valor total
+        // recalcular valor total
         if (pedido.getValorItens() == null) {
             pedido.setValorItens(BigDecimal.ZERO);
         }
         pedido.setValorTotal(pedido.getValorItens().add(frete));
 
-        // 7) mudar status para AGUARDANDO_PAGAMENTO
-        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);
+        // 🔴 ANTES: status AGUARDANDO_PAGAMENTO
+        // 🟢 AGORA: pagamento automático ao finalizar
+        pedido.setStatus(StatusPedido.PAGO);   // ou StatusPedido.PAGAMENTO_APROVADO
 
-        // (Sprint 6: aqui entra o registro em pedido_status_historico)
+        // (Sprint 6: histórico de status aqui, se tiver)
 
-        // 8) salvar
         pedido = pedidoRepo.save(pedido);
 
-        // 9) retorno bonitinho
         return new PedidoConfirmacaoDTO(
-                pedido.getId(),
-                pedido.getValorItens(),
-                pedido.getFreteValor(),
-                pedido.getValorTotal(),
-                pedido.getStatus().name()
+            pedido.getId(),
+            pedido.getValorItens(),
+            pedido.getFreteValor(),
+            pedido.getValorTotal(),
+            pedido.getStatus().name()
         );
     }
 
-        // ===================== DETALHES DO PEDIDO (Sprint 5) =====================
+    // ===================== DETALHES DO PEDIDO (Sprint 5) =====================
 
     public PedidoDetalheDTO buscarDetalhesPedido(Long userIdSessao, Long pedidoId) {
         if (userIdSessao == null) {
@@ -267,12 +255,10 @@ public class PedidoService {
         Pedido pedido = pedidoRepo.findById(pedidoId)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
 
-        // segurança: só dono do pedido pode ver
         if (!pedido.getCliente().getId().equals(userIdSessao)) {
             throw new SecurityException("Você não tem permissão para ver este pedido.");
         }
 
-        // carrega itens (já existe findByPedidoId no PedidoItemRepository)
         List<PedidoItem> itens = pedidoItemRepo.findByPedidoId(pedidoId);
 
         List<PedidoItemDetalheDTO> itensDTO = itens.stream()
@@ -298,8 +284,7 @@ public class PedidoService {
         );
     }
 
-
-        // ===================== LISTAR TODOS OS PEDIDOS (ADMIN/ESTOQUE) =====================
+    // ===================== LISTAR TODOS OS PEDIDOS (ADMIN/ESTOQUE) =====================
 
     public List<PedidoResumoDTO> listarTodosPedidos() {
         List<Pedido> pedidos = pedidoRepo.findAllByOrderByDataCriacaoDesc();
@@ -327,7 +312,6 @@ public class PedidoService {
 
         StatusPedido novoStatus;
         try {
-            // aceita tanto "PAGO" quanto "pago" etc.
             novoStatus = StatusPedido.valueOf(novoStatusStr.toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("Status de pedido inválido: " + novoStatusStr);
@@ -336,10 +320,7 @@ public class PedidoService {
         Pedido pedido = pedidoRepo.findById(pedidoId)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
 
-        // aqui você poderia colocar regras: ex: não voltar de ENTREGUE para CARRINHO, etc.
         pedido.setStatus(novoStatus);
-
-        // (Sprint 6: aqui poderia registrar histórico em tabela própria, se existir)
 
         pedido = pedidoRepo.save(pedido);
 
@@ -351,4 +332,3 @@ public class PedidoService {
         );
     }
 }
-

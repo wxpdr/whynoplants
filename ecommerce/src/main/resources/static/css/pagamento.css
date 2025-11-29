@@ -147,3 +147,27 @@ textarea#boleto-linha{
   width:100%;
   resize:vertical;
 }
+
+
+.modal-loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-loading .modal-box {
+  background: #121212;
+  padding: 24px 32px;
+  border-radius: 12px;
+  color: #f5f5f5;
+  font-size: 1.1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.hidden {
+  display: none;
+}

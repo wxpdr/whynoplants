@@ -63,10 +63,9 @@
       { code: 'ENTREGUE',             label: 'Entregue' }
     ];
 
-    // Se o status estiver "atrás" (ex.: CARRINHO), nada fica feito
     let reachedIndex = steps.findIndex(s => s.code === status);
     if (reachedIndex === -1) {
-      reachedIndex = -1; // nenhum concluído
+      reachedIndex = -1;
     }
 
     steps.forEach((step, index) => {
@@ -74,9 +73,9 @@
       stepDiv.className = 'status-step';
 
       if (reachedIndex > index) {
-        stepDiv.classList.add('done'); // já passou
+        stepDiv.classList.add('done');
       } else if (reachedIndex === index) {
-        stepDiv.classList.add('current'); // status atual
+        stepDiv.classList.add('current');
       }
 
       stepDiv.innerHTML = `
@@ -104,13 +103,12 @@
       ? new Date(dto.dataCriacao).toLocaleString('pt-BR')
       : '-';
 
-    const total     = dto.valorTotal != null ? money(dto.valorTotal) : 'R$ 0,00';
-    const valorItens = dto.valorItens != null ? money(dto.valorItens) : 'R$ 0,00';
+    const total      = dto.valorTotal  != null ? money(dto.valorTotal)  : 'R$ 0,00';
+    const valorItens = dto.valorItens  != null ? money(dto.valorItens)  : 'R$ 0,00';
     const freteValor = dto.freteValor != null ? money(dto.freteValor) : 'R$ 0,00';
-    const status    = dto.status || 'AGUARDANDO_PAGAMENTO';
-    const forma     = dto.formaPagamento || null;
+    const status     = dto.status || 'AGUARDANDO_PAGAMENTO';
+    const forma      = dto.formaPagamento || null;
 
-    // monta resumo textual + placeholder pra timeline
     resumoBox.innerHTML = `
       <div class="pedido-resumo-top">
         <div>
@@ -131,11 +129,9 @@
       </div>
     `;
 
-    // insere timeline logo abaixo do resumo
     const timeline = buildStatusTimeline(status);
     resumoBox.appendChild(timeline);
 
-    // Itens do pedido
     if (itensBox) {
       if (!dto.itens || dto.itens.length === 0) {
         itensBox.textContent = 'Nenhum item encontrado neste pedido.';
@@ -174,7 +170,17 @@
     } catch (e) {
       console.error(e);
       $('#pedido-resumo').textContent = 'Erro ao carregar detalhes do pedido.';
-      $('#pedido-itens').textContent = '';
+      $('#pedido-itens').textContent  = '';
+    }
+
+    // 👉 handler do botão Voltar: manda para o cadastro do cliente
+    const btnVoltar = $('#btnVoltar');
+    if (btnVoltar) {
+      btnVoltar.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        // Se preferir a home, troque para 'index.html'
+        window.location.href = 'index.html';
+      });
     }
   }
 

@@ -26,9 +26,53 @@
 
   async function api(path, opts={}){
     const r = await fetch(path, { credentials:'include', ...opts });
-    if (!r.ok) throw new Error(await r.text());
+    const text = await r.text();
+    if (!r.ok) {
+      // devolve SEMPRE a mensagem que veio do back (ex: "Estoque insuficiente para o produto: X")
+      throw new Error(text || 'Erro na requisição');
+    }
     const ct = r.headers.get('content-type') || '';
-    return ct.includes('json') ? r.json() : r.text();
+    return ct.includes('json') ? JSON.parse(text || 'null') : text;
+  }
+
+  // ---------- Helpers de “carregando pagamento” ----------
+  function showPaymentLoading() {
+    const el = document.getElementById('payment-loading');
+    if (el) el.classList.remove('hidden');
+  }
+
+  function hidePaymentLoading() {
+    const el = document.getElementById('payment-loading');
+    if (el) el.classList.add('hidden');
+  }
+
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // ---------- Tratamento amigável de erros ----------
+  function formatApiError(msg) {
+    if (!msg) return 'Não foi possível finalizar o pedido. Tente novamente.';
+
+    msg = String(msg).trim();
+
+    const lower = msg.toLowerCase();
+
+    if (lower.includes('estoque insuficiente')) {
+      return msg; // já vem boa: "Estoque insuficiente para o produto: X"
+    }
+    if (lower.includes('usuário não autenticado') || lower.includes('usuario nao autenticado')) {
+      return 'Você precisa estar logado como CLIENTE para finalizar o pedido.';
+    }
+    if (lower.includes('carrinho vazio')) {
+      return 'Seu carrinho está vazio. Volte e adicione produtos antes de finalizar.';
+    }
+    if (lower.includes('endereço de entrega é obrigatório') || lower.includes('endereco de entrega e obrigatorio')) {
+      return 'Selecione um endereço de entrega válido antes de finalizar.';
+    }
+
+    // fallback: mostra a mensagem original do back
+    return msg;
   }
 
   // ---------- Geração "fake" de código Pix com valor ----------
@@ -176,6 +220,8 @@
       formaPagamento
     };
 
+    showPaymentLoading();
+
     try {
       const resumo = await api('/pedidos', {
         method: 'POST',
@@ -183,15 +229,21 @@
         body: JSON.stringify(payload)
       });
 
+      // teatrinho de gateway de pagamento
+      await delay(1500);
+
       // Sucesso → agora sim apaga carrinho/frete
       localStorage.removeItem(CART_KEY);
       localStorage.removeItem(FRETE_KEY);
 
-      alert(`Pedido #${resumo.id} criado com sucesso!\nTotal: ${money(resumo.valorTotal)}`);
+      alert(`Pagamento aprovado! ✅\n\nPedido #${resumo.id} criado com sucesso.\nTotal: ${money(resumo.valorTotal)}`);
       location.href = `pedido-detalhes.html?id=${resumo.id}`;
     } catch (e) {
       console.error(e);
-      alert('Não foi possível finalizar o pedido. Verifique se está logado como CLIENTE e tente novamente.');
+      const msg = formatApiError(e.message);
+      alert(msg);
+    } finally {
+      hidePaymentLoading();
     }
   }
 
