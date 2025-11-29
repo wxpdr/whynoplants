@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let novas = []; // File[]
   let principalIndexNovas = null;
 
+  // -------------------- LOAD DO PRODUTO --------------------
   (async function load(){
     const r = await fetch(`${API}/produtos/${id}/detalhe`, { credentials:"include" });
     if (!r.ok) { alert("Não foi possível carregar o produto"); location.href="produto.html"; return; }
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderGaleriaAtual(p.imagens);
   })();
 
+  // -------------------- GALERIA ATUAL --------------------
   function renderGaleriaAtual(imagens){
     galeriaAtual.innerHTML = "";
     imagens.forEach(img => {
@@ -83,18 +85,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Modal
+  // -------------------- MODAL --------------------
   abrirModal?.addEventListener("click", (e)=>{ e.preventDefault(); modal.removeAttribute("hidden"); });
   fechar?.addEventListener("click", (e)=>{ e.preventDefault(); modal.setAttribute("hidden",""); });
   modal?.addEventListener("click", (e)=>{ if (e.target===modal) modal.setAttribute("hidden",""); });
 
-  // Novas imagens
   addNova?.addEventListener("click", ()=> inputNovas.click());
   inputNovas?.addEventListener("change", (e)=>{
     for (const f of e.target.files) novas.push(f);
     renderNovas(); e.target.value = "";
   });
 
+  // -------------------- NOVAS IMAGENS --------------------
   function renderNovas(){
     gridNovas.innerHTML = "";
     novas.forEach((file, idx)=>{
@@ -128,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // <<< CORRIGIDO: principalIndex como string simples no FormData
   salvarImgs?.addEventListener("click", async (e)=>{
     e.preventDefault();
     if (!novas.length){ modal.setAttribute("hidden",""); return; }
@@ -139,8 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const r = await fetch(`${API}/produtos/${id}/imagens`, { method:"POST", credentials:"include", body: fd });
     if (!r.ok){
-      const txt = await r.text().catch(()=> "");
-      console.error("Falha ao adicionar imagens:", r.status, txt);
       alert("Falha ao adicionar imagens");
       return;
     }
@@ -149,11 +148,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const p = await rr.json();
     renderGaleriaAtual(p.imagens);
 
-    novas = []; principalIndexNovas = null; gridNovas.innerHTML="";
+    novas = [];
+    principalIndexNovas = null;
+    gridNovas.innerHTML="";
     modal.setAttribute("hidden","");
   });
 
-  // salvar dados do produto
+  // -------------------- SALVAR PRODUTO --------------------
   form?.addEventListener("submit", async (e)=>{
     e.preventDefault();
     const dados = {
@@ -165,18 +166,43 @@ document.addEventListener("DOMContentLoaded", () => {
       avaliacao: avaliacao.value ? Number(avaliacao.value) : null,
       ativo: ativo.value === "true"
     };
-    if (!dados.codigo || !dados.nome || isNaN(dados.valor) || isNaN(dados.quantidade)) { alert("Preencha Código, Nome, Preço e Estoque."); return; }
-    if (dados.descricao && dados.descricao.length>2000){ alert("Descrição até 2000 caracteres."); return; }
-    if (dados.avaliacao && (dados.avaliacao<1 || dados.avaliacao>5)){ alert("Avaliação entre 1 e 5."); return; }
+
+    if (!dados.codigo || !dados.nome || isNaN(dados.valor) || isNaN(dados.quantidade)) {
+      alert("Preencha Código, Nome, Preço e Estoque.");
+      return;
+    }
+
+    if (dados.descricao && dados.descricao.length>2000){
+      alert("Descrição até 2000 caracteres.");
+      return;
+    }
+
+    if (dados.avaliacao && (dados.avaliacao<1 || dados.avaliacao>5)){
+      alert("Avaliação entre 1 e 5.");
+      return;
+    }
 
     const r = await fetch(`${API}/produtos/${id}`, {
-      method:"PUT", credentials:"include",
+      method:"PUT",
+      credentials:"include",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify(dados)
     });
-    if (!r.ok){ alert("Falha ao salvar alterações"); return; }
-    location.href = "produto.html";
+
+    if (!r.ok){
+      alert("Falha ao salvar alterações");
+      return;
+    }
+
+    // >>> CORREÇÃO AQUI <<<  
+    alert("Produto salvo com sucesso!");
+    setTimeout(() => {
+      location.href = "produto.html";
+    }, 300);
   });
 
-  cancelar?.addEventListener("click", (e)=>{ e.preventDefault(); location.href="produto.html"; });
+  cancelar?.addEventListener("click", (e)=>{
+    e.preventDefault();
+    location.href="produto.html";
+  });
 });
