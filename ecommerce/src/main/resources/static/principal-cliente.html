@@ -2,50 +2,70 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
-  <title>Área do Cliente</title>
+  <title>Minha Conta - WNPlants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="css/principal-cliente.css">
 </head>
 <body>
-<header class="header">
-  <div class="who">Bem-vindo(a), <strong id="who-name">Cliente</strong></div>
-  <div class="actions">
-    <button id="btnLogout" class="btn primary">Sair</button>
-  </div>
-</header>
 
-<div class="page">
-  <div class="grid">
-    <section class="card">
-      <h2>Meus dados</h2>
-      <div id="me-dados" class="muted">Carregando…</div>
-
-      <!-- ação dentro do card também, se preferir editar por aqui -->
-      <div class="section-actions">
-        <a class="btn ghost" href="cliente-editar.html">Editar meus dados</a>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>Endereços de entrega</h2>
-      <div id="enderecos" class="list"></div>
-      <p class="muted" style="margin-top:8px">
-        Para incluir ou trocar o endereço padrão, use “Editar meus dados”.
-      </p>
-      <div class="section-actions">
-        <a class="btn ghost" href="cliente-editar.html">Gerenciar endereços</a>
-      </div>
-    </section>
-  </div>
-
-  <section class="card" style="margin-top:20px">
-    <h2>Meus pedidos</h2>
-    <div id="pedidos" class="list placeholder">
-      Em breve listamos aqui (endpoint de pedidos).
+  <header class="navbar">
+    <div class="navbar-content">
+      <div class="brand">WNPlants <small>| Cliente</small></div>
+      <button id="btnLogout" class="btn ghost-red">Sair</button>
     </div>
-  </section>
-</div>
+  </header>
 
-<script src="js/principal-cliente.js"></script>
+  <div class="container">
+    
+    <div class="welcome-section">
+      <h1>Olá, <span id="who-name">Cliente</span></h1>
+      <p class="subtitle">Bem-vindo à sua área exclusiva.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      
+      <section class="card data-card">
+        <div class="card-header">
+          <h2>Meus Dados</h2>
+          <a href="cliente-editar.html" class="icon-link" title="Editar">✎</a>
+        </div>
+        
+        <div id="me-dados" class="card-content">
+          <div class="loader">Carregando dados...</div>
+        </div>
+
+        <div class="card-footer">
+          <a href="cliente-editar.html" class="btn ghost small">Alterar dados</a>
+        </div>
+      </section>
+
+      <section class="card address-section">
+        <div class="card-header">
+          <h2>Endereços</h2>
+          <a href="cliente-editar.html" class="icon-link" title="Gerenciar">⚙️</a>
+        </div>
+        <div id="enderecos" class="address-list">
+          <div class="loader">Carregando...</div>
+        </div>
+        <div class="card-footer">
+          <a href="cliente-editar.html" class="btn ghost small">Gerenciar endereços</a>
+        </div>
+      </section>
+
+    </div>
+
+    <section class="card orders-section">
+      <div class="card-header">
+        <h2>Meus Pedidos</h2>
+      </div>
+      <div id="pedidos" class="orders-list">
+        <div class="loader">Carregando pedidos...</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>window.API = "http://localhost:8080";</script>
+  <script src="js/principal-cliente.js"></script>
 </body>
 </html>

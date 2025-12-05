@@ -1,189 +1,126 @@
-/* Layout base */
-:root{
-  --bg:#f7f7f8;
-  --card:#ffffff;
-  --ink:#111;
-  --muted:#666;
-  --brand:#5b8e61;
-  --brand-2:#2a5930;
-  --soft:#eef3ef;
-  --border:#e6e6e6;
-  --shadow:0 8px 20px rgba(0,0,0,.06);
-  --radius:14px;
+/* static/css/principal-cliente.css */
+
+:root {
+  --primary: #4CAF50;
+  --primary-dark: #388E3C;
+  --bg: #f5f5f5;
+  --fg: #333333;
+  --card-bg: #FFFFFF;
+  --border: #e0e0e0;
+  --muted: #757575;
+  --danger: #e74c3c;
+  
+  --status-pending-bg: #fff3cd; --status-pending-fg: #856404;
+  --status-paid-bg: #d4edda;    --status-paid-fg: #155724;
+  --status-shipped-bg: #cce5ff; --status-shipped-fg: #004085;
+  --status-cancel-bg: #f8d7da;  --status-cancel-fg: #721c24;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+* { box-sizing: border-box; }
 
-/* Header */
-.header{
-  background:linear-gradient(135deg,#6ba971,var(--brand));
-  color:#fff;
-  padding:16px 24px;
-  display:flex;align-items:center;justify-content:space-between;
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  padding-bottom: 40px;
 }
-.header .who{font-weight:600}
-.header .actions{display:flex;gap:10px}
-.btn{border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-.btn.ghost{background:var(--soft);color:var(--brand-2)}
-.btn.primary{background:var(--brand);color:#fff}
 
-/* Page grid */
-.page{max-width:1100px;margin:24px auto;padding:0 16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+/* Navbar */
+.navbar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 0;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.navbar-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+.brand small { color: var(--muted); font-weight: normal; font-size: 0.9rem; }
+
+/* Layout */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+.welcome-section { margin-bottom: 30px; }
+.welcome-section h1 { margin: 0; font-size: 1.8rem; color: var(--fg); }
+.subtitle { color: var(--muted); margin: 5px 0 0 0; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+@media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
 /* Cards */
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column;
 }
-.card h2{margin:0 0 12px}
-.muted{color:var(--muted)}
-.list{display:flex;flex-direction:column;gap:10px}
+
+.card-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex; justify-content: space-between; align-items: center;
+  background: #fafafa;
+}
+.card-header h2 { margin: 0; font-size: 1.1rem; color: var(--fg); text-transform: uppercase; font-weight: 600; }
+
+.card-content { padding: 20px; flex: 1; }
+.card-footer { padding: 15px 20px; border-top: 1px solid #f0f0f0; text-align: right; background: #fafafa; }
+
+/* Lista de Dados Pessoais */
+.data-row { margin-bottom: 12px; display: flex; flex-direction: column; }
+.data-label { font-size: 0.85rem; color: var(--muted); font-weight: 500; text-transform: uppercase; }
+.data-value { font-size: 1.1rem; color: var(--fg); font-weight: 500; }
+
+/* Destaque para o e-mail */
+.email-destaque { color: var(--primary); font-weight: 600; }
 
 /* Endereços */
-.addr{
-  border:1px solid var(--border);
-  padding:12px;border-radius:12px;background:#fcfcfc
-}
-.addr strong{font-weight:700}
+.address-list { padding: 20px; display: flex; flex-direction: column; gap: 15px; max-height: 400px; overflow-y: auto; }
+.addr-item { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 15px; transition: border-color 0.2s; }
+.addr-item:hover { border-color: var(--primary); }
+.addr-main { font-weight: 600; font-size: 1rem; margin-bottom: 4px; display: block; }
+.addr-details { color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+.badge-default { background: var(--primary); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
 
-/* Section actions */
-.section-actions{
-  margin-top:12px;display:flex;gap:8px;flex-wrap:wrap
-}
+/* Pedidos */
+.orders-list { padding: 0; }
+.order-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; padding: 20px; border-bottom: 1px solid #eee; align-items: center; }
+.order-row:last-child { border-bottom: none; }
+.order-row:hover { background: #f9f9f9; }
+.ord-id { font-weight: 700; color: var(--fg); }
+.ord-total { font-weight: 600; color: var(--fg); }
 
-/* “Meus pedidos” placeholder */
-.placeholder{padding:8px 0;color:var(--muted)}
+/* Status Badge */
+.status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; display: inline-block; }
+.st-aguardando { background: var(--status-pending-bg); color: var(--status-pending-fg); }
+.st-pago, .st-entregue { background: var(--status-paid-bg); color: var(--status-paid-fg); }
+.st-enviado { background: var(--status-shipped-bg); color: var(--status-shipped-fg); }
+.st-cancelado { background: var(--status-cancel-bg); color: var(--status-cancel-fg); }
 
-
-/* ==== Timeline de status do pedido (pedido-detalhes) ==== */
-
-.pedido-resumo-top{
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  align-items:flex-start;
-  margin-bottom:8px;
-}
-
-.pedido-resumo-valores{
-  text-align:right;
-  font-size:0.9rem;
-}
-.pedido-resumo-valores div{
-  margin-bottom:2px;
-}
-
-.pedido-resumo-extra{
-  margin-top:4px;
-  font-size:0.9rem;
-  display:grid;
-  gap:2px;
-}
-
-.status-timeline{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-  padding-top:10px;
-  border-top:1px solid #e5e7eb;
-}
-
-.status-step{
-  flex:1;
-  text-align:center;
-  position:relative;
-  font-size:0.75rem;
-  color:#9ca3af;
-}
-
-.status-step::before{
-  content:"";
-  position:absolute;
-  top:10px;
-  left:0;
-  right:0;
-  height:2px;
-  background:#e5e7eb;
-  z-index:0;
-}
-
-.status-dot{
-  width:14px;
-  height:14px;
-  border-radius:999px;
-  border:2px solid #d1d5db;
-  background:#fff;
-  margin:0 auto 4px;
-  position:relative;
-  z-index:1;
-}
-
-.status-label{
-  line-height:1.2;
-}
-
-.status-step.done .status-dot{
-  border-color:#16a34a;
-  background:#bbf7d0;
-}
-.status-step.done .status-label{
-  color:#166534;
-  font-weight:600;
-}
-
-.status-step.current .status-dot{
-  border-color:#2563eb;
-  background:#bfdbfe;
-}
-.status-step.current .status-label{
-  color:#1d4ed8;
-  font-weight:600;
-}
-
-/* Estado cancelado */
-.status-cancelado{
-  flex:1;
-  text-align:center;
-}
-.status-cancelado .status-dot{
-  width:16px;
-  height:16px;
-  border-radius:999px;
-  border:2px solid #b91c1c;
-  background:#fecaca;
-  margin:0 auto 4px;
-}
-.status-cancelado .status-label{
-  color:#b91c1c;
-  font-weight:700;
-}
-
-/* itens do pedido (aproveita e deixa bonitinho) */
-.pedido-item-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:6px 0;
-  border-bottom:1px solid #e5e7eb;
-  font-size:0.9rem;
-}
-.pedido-item-row:last-child{
-  border-bottom:none;
-}
-.pi-nome{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-.pi-valores{
-  text-align:right;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
+/* Botões */
+.btn { padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-flex; border: 1px solid transparent; transition: all 0.2s; }
+.btn.primary { background: var(--primary); color: #fff; }
+.btn.primary:hover { background: var(--primary-dark); }
+.btn.ghost { background: #fff; border: 1px solid var(--border); color: var(--muted); }
+.btn.ghost:hover { background: #f5f5f5; color: var(--fg); }
+.btn.ghost-red { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+.btn.ghost-red:hover { background: #fff5f5; }
+.btn.small { padding: 5px 12px; font-size: 0.85rem; }
+.icon-link { text-decoration: none; font-size: 1.2rem; color: var(--muted); opacity: 0.6; }
+.icon-link:hover { opacity: 1; }
