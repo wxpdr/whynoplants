@@ -129,9 +129,7 @@ public class PedidoService {
         Pedido pedido = Pedido.builder()
                 .cliente(cliente)
                 .enderecoEntrega(enderecoEntrega)
-                // 🔴 ANTES: .status(StatusPedido.AGUARDANDO_PAGAMENTO)
-                // 🟢 AGORA: pagamento automático
-                .status(StatusPedido.PAGO)               // ou StatusPedido.PAGAMENTO_APROVADO, se esse for o nome do enum
+                .status(StatusPedido.AGUARDANDO_PAGAMENTO)               
                 .formaPagamento(dto.formaPagamento())
                 .freteOpcao(dto.freteOpcao())
                 .freteValor(freteValor)
