@@ -2,41 +2,47 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Principal (Admin)</title>
+  <title>Principal (Admin) - WNPlants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
-    <header class="header-bar">
-    <div class="header-content">
-        <h1>WNPlants</h1>
-        <nav>
-            <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
-            <button class="btn ghost" id="logout-btn">Sair</button>
-        </nav>
-    </div>
-  </header>
-  
-  <div class="card">
-    <div class="topbar">
-      <h1>Área Administrativa</h1>
-      <div class="spacer"></div>
-      <span id="welcome"></span>
-      <button id="logout" class="btn ghost">Sair</button>
-    </div>
-    <ul class="menu">
-      <li><a class="link" href="produto.html">Listar Produto</a></li>
-      <li><a class="link" href="usuario.html">Listar Usuário</a></li>
-    </ul>
 
+  <div class="card">
+    <header class="header">
+      <h1>WNPlants <small style="font-size: 0.9rem; color: #666; font-weight: normal;">| Admin</small></h1>
+      
+      <div class="user-info">
+        <span id="welcome">Carregando...</span>
+        <button id="logout" class="btn ghost">Sair</button>
+      </div>
+    </header>
+
+    <div class="menu-grid">
+      
+      <a class="menu-item" href="produto.html">
+        <span>📦</span>
+        Gerenciar Produtos
+      </a>
+
+      <a class="menu-item" href="usuario.html">
+        <span>👥</span>
+        Gerenciar Usuários
+      </a>
+
+    </div>
   </div>
 
-  <script>window.API="http://localhost:8080";</script>
+  <script>window.API = "http://localhost:8080";</script>
+  
   <script src="js/principal.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    Auth.preventBfcache();
-    Auth.ensureAdmin(); // expulsa quem não for Admin
+    // Se o auth.js estiver carregado, verifica permissão
+    if(window.Auth && window.Auth.ensureAdmin) {
+        window.Auth.preventBfcache();
+        window.Auth.ensureAdmin(); 
+    }
   </script>
 
 </body>

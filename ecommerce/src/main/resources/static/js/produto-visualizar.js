@@ -1,135 +1,173 @@
-// Preview de produto (admin) – carrossel + dados
-const API = (window.API_BASE ?? (location.origin + "/api"));
+document.addEventListener("DOMContentLoaded", () => {
+    const API = (window.API_BASE ?? (location.origin + "/api"));
+    const qs = (k) => new URLSearchParams(location.search).get(k);
 
-const params = new URLSearchParams(location.search);
-const id = Number(params.get("id"));
+    const id = Number(qs("id"));
+    const btnVoltar = document.getElementById("btnVoltar");
+    
+    // Elementos do Carrossel
+    const imgStage = document.getElementById("imgStage");
+    const thumbsContainer = document.getElementById("thumbs");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const galleryContainer = document.querySelector(".gallery .stage"); // Para detectar o mouse
 
-const btnVoltar = document.getElementById("btnVoltar");
-const imgStage = document.getElementById("imgStage");
-const thumbs = document.getElementById("thumbs");
+    // Campos de texto
+    const campos = {
+        nome: document.getElementById("nome"),
+        valor: document.getElementById("valor"),
+        qtd: document.getElementById("quantidade"),
+        status: document.getElementById("status"),
+        codigo: document.getElementById("codigo"),
+        desc: document.getElementById("descricao"),
+        rating: document.getElementById("rating")
+    };
 
-const elNome = document.getElementById("nome");
-const elValor = document.getElementById("valor");
-const elQtd = document.getElementById("quantidade");
-const elStatus = document.getElementById("status");
-const elCodigo = document.getElementById("codigo");
-const elDesc = document.getElementById("descricao");
-const elRating = document.getElementById("rating");
+    let imagens = [];
+    let indexAtual = 0;
+    let autoPlayInterval = null;
+    const TEMPO_TROCA = 3000; // 3 segundos por imagem
 
-btnVoltar.addEventListener("click", ()=> history.length > 1 ? history.back() : location.href="produto.html");
-
-let imagens = [];
-let index = 0;
-
-(async function init(){
-  if (!id){ alert("ID inválido"); location.href="produto.html"; return; }
-
-  // carrega produto
-  try{
-    const r = await fetch(`${API}/produtos/${id}`, { credentials:"include" });
-    if (!r.ok) throw new Error();
-    const p = await r.json();
-    preencherProduto(p);
-  }catch(_){
-    alert("Falha ao carregar produto.");
-    location.href="produto.html";
-    return;
-  }
-
-  // carrega imagens a partir do detalhe (endpoint que existe no back)
-  try{
-    const r2 = await fetch(`${API}/produtos/${id}/detalhe`, { credentials:"include" });
-    if (r2.ok){
-      const det = await r2.json();
-      imagens = det.imagens ?? [];
-      imagens.sort((a,b)=>{ // principal > ordem > id
-        const pa = a.principal ? 1 : 0, pb = b.principal ? 1 : 0;
-        if (pa !== pb) return pb - pa;
-        const oa = a.ordem ?? 0, ob = b.ordem ?? 0;
-        if (oa !== ob) return oa - ob;
-        return (a.id ?? 0) - (b.id ?? 0);
-      });
+    // Botão Voltar
+    if(btnVoltar) {
+        btnVoltar.onclick = () => {
+            if (document.referrer && document.referrer.includes("/produto.html")) history.back();
+            else location.href = "produto.html";
+        };
     }
-  }catch{}
 
-
-  // fallback: se não tiver imagens, coloca placeholder
-  if (!imagens || imagens.length === 0){
-    imagens = [{ arquivo: "uploads/placeholder.png", principal:true }];
-  }
-
-  montarThumbs();
-  mostrar(0);
-})();
-
-function preencherProduto(p){
-  elNome.textContent = p.nome ?? "Produto";
-  elCodigo.textContent = p.codigo ?? "—";
-  elValor.textContent = (p.valor != null ? Number(p.valor).toFixed(2).replace('.', ',') : "0,00");
-  elQtd.textContent = (p.quantidade ?? 0);
-  elStatus.textContent = (p.ativo ? "Ativo" : "Inativo");
-  elDesc.textContent = (p.descricao ?? "—");
-
-  // estrelas (1..5 com passos de 0.5, se vier null deixa vazio)
-  elRating.innerHTML = "";
-  const nota = p.avaliacao != null ? Number(p.avaliacao) : null;
-  if (nota != null){
-    for (let i=1; i<=5; i++){
-      const star = document.createElement("span");
-      star.className = "star" + (i <= Math.floor(nota) ? "" : " off");
-      star.textContent = "★";
-      elRating.appendChild(star);
+    if (!id) {
+        alert("ID não informado");
+        location.href = "produto.html";
+        return;
     }
-  }
-}
 
-function montarThumbs(){
-  thumbs.innerHTML = "";
-  imagens.forEach((img, i)=>{
-    const div = document.createElement("div");
-    div.className = "item";
-    if (i === 0) div.classList.add("active");
-    const imgt = document.createElement("img");
-    imgt.src = urlArquivo(img.arquivo);
-    imgt.alt = `Imagem ${i+1}`;
-    div.appendChild(imgt);
-    div.addEventListener("click", ()=> mostrar(i));
-    thumbs.appendChild(div);
-  });
+    // --- INIT ---
+    (async function init() {
+        try {
+            const r = await fetch(`${API}/produtos/${id}`, { credentials: "include" });
+            if (!r.ok) throw new Error();
+            const p = await r.json();
+            preencherDados(p);
 
-  document.getElementById("btnPrev").onclick = ()=> navegar(-1);
-  document.getElementById("btnNext").onclick = ()=> navegar(+1);
-}
+            const r2 = await fetch(`${API}/produtos/${id}/detalhe`, { credentials: "include" });
+            if (r2.ok) {
+                const det = await r2.json();
+                imagens = det.imagens || [];
+            }
+        } catch (err) { console.error(err); }
 
-function mostrar(i){
-  if (i < 0) i = 0;
-  if (i >= imagens.length) i = imagens.length-1;
-  index = i;
-  imgStage.src = urlArquivo(imagens[i].arquivo);
-  Array.from(thumbs.children).forEach((t, k)=>{
-    t.classList.toggle("active", k === i);
-  });
-}
+        if (imagens.length === 0) {
+            imagens = [{ arquivo: "https://via.placeholder.com/800x800?text=Sem+Imagem", principal: true }];
+        } else {
+            imagens.sort((a, b) => (b.principal === true) - (a.principal === true));
+        }
 
-function navegar(delta){
-  let i = index + delta;
-  if (i < 0) i = imagens.length - 1;
-  if (i >= imagens.length) i = 0;
-  mostrar(i);
-}
+        montarCarrossel();
+    })();
 
-function urlArquivo(path){
-  if (!path) return "https://via.placeholder.com/800x600?text=Sem+imagem";
-  // se vier URL absoluta, apenas retorne
-  if (/^https?:\/\//i.test(path)) return path;
+    function preencherDados(p) {
+        if(campos.nome) campos.nome.textContent = p.nome || "Produto";
+        if(campos.codigo) campos.codigo.textContent = p.codigo || "—";
+        if(campos.valor) campos.valor.textContent = (p.valor != null ? Number(p.valor).toFixed(2).replace('.', ',') : "0,00");
+        if(campos.qtd) campos.qtd.textContent = p.quantidade || 0;
+        if(campos.status) campos.status.textContent = p.ativo ? "Ativo" : "Inativo";
+        if(campos.desc) campos.desc.textContent = p.descricao || "—";
 
-  // 🔧 normaliza caminho vindo do banco (Windows -> web)
-  let p = String(path).trim()
-    .replace(/\\/g, "/")        // ← troca todas as backslashes por slash
-    .replace(/^\/+/, "");       // remove barras extras no começo
+        if(campos.rating) {
+            campos.rating.innerHTML = "";
+            const nota = p.avaliacao != null ? Number(p.avaliacao) : 0;
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement("span");
+                star.className = "star" + (i <= Math.floor(nota) ? "" : " off");
+                star.textContent = "★";
+                campos.rating.appendChild(star);
+            }
+        }
+    }
 
-  return "/" + p;               // => /uploads/...
-}
+    function montarCarrossel() {
+        thumbsContainer.innerHTML = "";
 
+        // Controla visibilidade das setas
+        const temMaisDeUma = imagens.length > 1;
+        if(btnPrev) btnPrev.style.display = temMaisDeUma ? "flex" : "none";
+        if(btnNext) btnNext.style.display = temMaisDeUma ? "flex" : "none";
 
+        // Cria miniaturas
+        imagens.forEach((img, i) => {
+            const div = document.createElement("div");
+            div.className = "item";
+            const imgEl = document.createElement("img");
+            imgEl.src = resolverUrl(img.arquivo);
+            div.appendChild(imgEl);
+            div.onclick = () => {
+                mudarImagem(i);
+                resetAutoPlay(); // Reinicia contagem se o usuário clicar
+            };
+            thumbsContainer.appendChild(div);
+        });
 
+        if(btnPrev) btnPrev.onclick = (e) => { e.preventDefault(); navegar(-1); resetAutoPlay(); };
+        if(btnNext) btnNext.onclick = (e) => { e.preventDefault(); navegar(1); resetAutoPlay(); };
+
+        mudarImagem(0);
+
+        // Se tiver mais de uma imagem, liga o automático
+        if (temMaisDeUma) {
+            iniciarAutoPlay();
+            
+            // Pausa ao passar o mouse (UX melhor)
+            if(galleryContainer) {
+                galleryContainer.addEventListener("mouseenter", pararAutoPlay);
+                galleryContainer.addEventListener("mouseleave", iniciarAutoPlay);
+            }
+        }
+    }
+
+    function navegar(direcao) {
+        let novo = indexAtual + direcao;
+        if (novo < 0) novo = imagens.length - 1;
+        if (novo >= imagens.length) novo = 0;
+        mudarImagem(novo);
+    }
+
+    function mudarImagem(i) {
+        indexAtual = i;
+        if(imgStage) {
+            imgStage.style.opacity = "0.8"; 
+            imgStage.src = resolverUrl(imagens[i].arquivo);
+            setTimeout(() => imgStage.style.opacity = "1", 200);
+        }
+
+        Array.from(thumbsContainer.children).forEach((el, k) => {
+            if (k === i) el.classList.add("active");
+            else el.classList.remove("active");
+        });
+    }
+
+    // --- LÓGICA AUTOMÁTICA ---
+    function iniciarAutoPlay() {
+        if (autoPlayInterval) clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+            navegar(1); // Vai para a próxima
+        }, TEMPO_TROCA);
+    }
+
+    function pararAutoPlay() {
+        if (autoPlayInterval) clearInterval(autoPlayInterval);
+    }
+
+    function resetAutoPlay() {
+        pararAutoPlay();
+        // Só reinicia se o mouse NÃO estiver em cima (opcional, mas evita bugs visuais)
+        // Aqui vamos reiniciar direto para garantir fluxo contínuo
+        iniciarAutoPlay(); 
+    }
+
+    function resolverUrl(path) {
+        if (!path) return "https://via.placeholder.com/800x800?text=Sem+Imagem";
+        if (path.startsWith("http")) return path;
+        return "/" + path.replace(/\\/g, "/").replace(/^\/+/, "");
+    }
+});

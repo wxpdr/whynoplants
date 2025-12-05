@@ -11,12 +11,12 @@
     <div class="header">
       <h1>Lista de Usuários</h1>
       <div class="spacer"></div>
-      <button id="btnNovo" class="btn primary">+ Novo</button>
-      <button id="logout" class="btn ghost">Sair</button>
+      <button id="btnNovo" class="btn primary">+ Novo Usuário</button>
+      <button id="logout" class="btn ghost" style="margin-left: 10px;">Sair</button>
     </div>
 
     <div class="toolbar">
-      <input id="busca" type="text" placeholder="procurar por nome..." />
+      <input id="busca" type="text" placeholder="Procurar por nome..." />
       <button id="btnBuscar" class="btn">Buscar</button>
     </div>
 
@@ -27,61 +27,78 @@
           <th>E-mail</th>
           <th>Status</th>
           <th>Perfil</th>
-          <th>Ações</th>
-          <th></th>
+          <th style="text-align: right;">Ações</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        </tbody>
     </table>
 
     <dialog id="dlg">
-      <form method="dialog" id="formDlg">
+      <form method="dialog" id="formDlg" autocomplete="off">
         <h3 id="dlgTitle">Novo usuário</h3>
         <input type="hidden" id="u-id" />
         
         <div class="form-grid">
             <div class="column">
-                <label>Nome</label>
-                <input id="u-nome" required />
+                <div>
+                  <label for="u-nome">Nome</label>
+                  <input id="u-nome" required />
+                </div>
                 
-                <label>CPF (11 dígitos)</label>
-                <input id="u-cpf" maxlength="11" pattern="\d{11}" required />
+                <div>
+                  <label for="u-cpf">CPF (11 dígitos)</label>
+                  <input id="u-cpf" maxlength="11" pattern="\d{11}" placeholder="Apenas números" required />
+                </div>
                 
-                <label>E-mail</label>
-                <input id="u-email" type="email" required />
+                <div>
+                  <label for="u-email">E-mail</label>
+                  <input id="u-email" type="email" required />
+                </div>
                 
-                <label>Perfil</label>
-                <select id="u-perfil">
-                  <option>Administrador</option>
-                  <option>Estoquista</option>
-                </select>
+                <div>
+                  <label for="u-perfil">Perfil</label>
+                  <select id="u-perfil">
+                    <option value="Administrador">Administrador</option>
+                    <option value="Estoquista">Estoquista</option>
+                  </select>
+                </div>
             </div>
 
             <div class="column">
-                <label>Nova senha</label>
-                <input id="u-nova" type="password" />
+                <div>
+                  <label for="u-nova">Nova senha</label>
+                  <input id="u-nova" type="password" placeholder="********" />
+                </div>
                 
-                <label>Confirmar senha (apenas no cadastro)</label>
-                <input id="u-confirma" type="password" />
+                <div>
+                  <label for="u-confirma">Confirmar senha</label>
+                  <input id="u-confirma" type="password" placeholder="********" />
+                </div>
                 
                 <div class="spacer-senha"></div>
             </div>
         </div>
-        <div class="actions">
-          <button class="btn primary" id="okDlg">OK</button>
-          <button class="btn ghost" id="cancelDlg">Cancelar</button>
-        </div>
+
         <p id="msg" class="msg"></p>
+
+        <div class="actions">
+          <button class="btn ghost" id="cancelDlg">Cancelar</button>
+          <button class="btn primary" id="okDlg">Salvar</button>
+        </div>
       </form>
     </dialog>
   </div>
 
-  <script>window.API="http://localhost:8080";</script>
+  <script>window.API = "http://localhost:8080";</script>
+
   <script src="js/usuario.js"></script>
-  <script src="js/auth.js"></script>
+  <script src="js/auth.js"></script> 
   <script>
-    Auth.preventBfcache();
-    Auth.ensureAdmin(); // expulsa quem não for Admin
+    if(window.Auth && window.Auth.ensureAdmin) {
+        window.Auth.preventBfcache();
+        window.Auth.ensureAdmin(); 
+    }
   </script>
 
 </body>

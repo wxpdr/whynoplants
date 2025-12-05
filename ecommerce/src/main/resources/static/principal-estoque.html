@@ -2,48 +2,45 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Estoque</title>
+  <title>Estoque - WNPlants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="css/principal.css" />
 </head>
 <body>
-  
-  <header class="header-bar">
-    <div class="header-content">
-        <h1>WNPlants</h1>
-        <nav>
-            <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
-            <button class="btn ghost" id="logout-btn">Sair</button>
-        </nav>
-    </div>
-  </header>
-  <div class="card">
-    <div class="topbar">
-      <h1>Área de Estoque</h1>
-      <div class="spacer"></div>
-      <span id="welcome"></span>
-      <button id="logout" class="btn ghost">Sair</button>
-    </div>
 
-    <ul class="menu">
-      <li><a class="link" href="estoque-produto.html">Listar Produto</a></li>
-      <li><a class="link" href="pedidos.html">Listar Pedidos</a></li>
-    </ul>
+  <div class="card">
+    <header class="header">
+      <h1>WNPlants <small style="font-size: 0.9rem; color: #666; font-weight: normal;">| Estoque</small></h1>
+      
+      <div class="user-info">
+        <button id="logout" class="btn ghost">Sair</button>
+      </div>
+    </header>
+
+    <div class="menu-grid">
+      
+      <a class="menu-item" href="estoque-produto.html">
+        <span>📦</span>
+        Listar Produtos
+      </a>
+
+      <a class="menu-item" href="pedidos.html">
+        <span>📋</span>
+        Listar Pedidos
+      </a>
+
+    </div>
   </div>
 
-  <script>window.API="http://localhost:8080";</script>
+  <script>window.API = "http://localhost:8080";</script>
+  
   <script src="js/principal.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    Auth.preventBfcache();
-    Auth.ensureLoggedIn(); // expulsa quem não estiver logado
-    
-    // Adiciona o evento de logout ao novo botão do header
-    document.getElementById("logout-btn")?.addEventListener("click", async (e)=>{
-        e.preventDefault();
-        try{ await fetch(`${API}/logout`, { method:"POST", credentials:"include" }); }catch{}
-        location.href="login.html";
-    });
+    if(window.Auth) {
+        Auth.preventBfcache();
+        Auth.ensureLoggedIn(); 
+    }
   </script>
 
 </body>

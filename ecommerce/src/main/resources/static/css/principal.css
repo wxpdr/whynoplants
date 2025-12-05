@@ -1,255 +1,150 @@
-/* static/css/principal.css - PAINEL PRINCIPAL (ADMIN/ESTOQUE) */
+/* static/css/principal.css - PAINEL PRINCIPAL (DASHBOARD) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
+/* 1. VARIÁVEIS E TEMA (PADRONIZADO)                         */
 /* ========================================================= */
-:root{
-  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
-  --bg: #FFFFFF; /* Fundo principal (Branco Puro) */
-  --card-bg: #FFFFFF;
-  --fg: #212121; /* Texto Principal (Quase Preto) */
-  --border: #E5E7EB; 
-  --muted: #6B7280; 
-  --header-bg: #F0F8F0; /* Fundo header (Verde muito suave) */
-
-  --on-bg: #E8F5E9; 
-  --on-fg: #5F865F; 
-  --off-bg:#FEF2F2;
-  --off-fg:#B91C1C;
+:root {
+  --primary: #4CAF50;       /* Verde padrão do sistema */
+  --bg: #f5f5f5;           /* Fundo cinza claro */
+  --fg: #333333;           /* Texto Principal */
+  --card-bg: #FFFFFF;      /* Fundo dos cartões */
+  --border: #cccccc;       /* Bordas */
+  --muted: #666666;
+  --hover-bg: #f0f0f0;
 }
 
-/* ========================================================= */
-/* 1.1. MODO ESCURO (DARK MODE) - PALETA REFINADA            */
-/* ========================================================= */
+/* Modo Escuro */
 .dark-mode {
-  --primary: #74B274;        
-  --bg: #1D2B2E;             
-  --fg: #ECEFF1;             
-  --card-bg: #2B3E42;        
-  --border: #4A6568;         
-  --muted: #9CA3AF;          
-  --header-bg: #2B3E42;      
-
-  --on-bg: #15803D;
-  --on-fg: #A7F3D0;
-  --off-bg:#7F1D1D;
-  --off-fg:#FECACA;
+  --primary: #81C784;
+  --bg: #1D2B2E;
+  --fg: #ECEFF1;
+  --card-bg: #2B3E42;
+  --border: #4A6568;
+  --muted: #9CA3AF;
+  --hover-bg: #374151;
 }
 
 /* ========================================================= */
-/* 2. RESET E ESTRUTURA GERAL (FONTE PADRONIZADA)            */
+/* 2. ESTRUTURA GERAL                                        */
 /* ========================================================= */
-body{
-  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
-  margin:0;
-  padding:0;
-  background:var(--bg);
-  color:var(--fg);
-  transition: background-color 0.3s, color 0.3s;
-}
-.dark-mode body {
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--fg);
+  margin: 0;
+  padding: 20px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* ========================================================= */
-/* 3. HEADER ESTILIZADO (.header-bar)                        */
-/* ========================================================= */
-.header-bar {
-    background: var(--header-bg); 
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-.dark-mode .header-bar {
-  background: var(--header-bg);
-  border-bottom-color: var(--border);
-}
-
-.header-content {
-    max-width: 1100px;
-    margin: 0 auto; 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-content #welcome-title { 
-    font-size: 1.4rem; 
-    margin: 0; 
-    color: var(--fg);
-    font-weight: 600; 
-}
-
-.header-bar nav button{
-  border: 1px solid var(--border);
-  padding: 8px 14px;
+/* Cartão Centralizado (Igual Usuario/Produto) */
+.card {
+  max-width: 900px;
+  margin: 5vh auto; 
+  background: var(--card-bg);
+  padding: 40px;
   border-radius: 8px;
-  cursor: pointer;
-  background: var(--card-bg); 
-  color: var(--fg);
-  margin-left: 8px;
-  transition:all .15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+  border: 1px solid transparent;
+}
+.dark-mode .card { border-color: var(--border); }
+
+/* ========================================================= */
+/* 3. HEADER DO PAINEL                                       */
+/* ========================================================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+.dark-mode .header { border-color: var(--border); }
+
+.header h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.dark-mode .header-bar nav button {
-  background: var(--card-bg);
-  color: var(--fg);
-  border-color: var(--border);
-}
-
-.header-bar nav button:hover {
-    background: #F3F4F6;
-}
-.dark-mode .header-bar nav button:hover {
-    background: #374151;
-}
-
-.header-bar nav button:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
-
-header:not(.header-bar) {
-    display: none;
+#welcome {
+  font-weight: 500;
+  color: var(--muted);
 }
 
 /* ========================================================= */
-/* 4. CARD E LAYOUT PRINCIPAL                                */
+/* 4. MENU DE NAVEGAÇÃO (GRID DE CARTÕES)                    */
 /* ========================================================= */
-.card{
-  max-width:980px;
-  margin:4vh auto; 
-  background:var(--card-bg);
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 4px 12px rgba(0,0,0,.05);
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilo dos Links como Botões Grandes */
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg); /* Fundo sutil */
   border: 1px solid var(--border);
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  border-radius: 8px;
+  padding: 30px;
+  text-decoration: none;
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.dark-mode .card {
-  background: var(--card-bg);
-  border-color: var(--border);
-  box-shadow: 0 4px 12px rgba(0,0,0,.5);
+.menu-item:hover {
+  background: #fff;
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+  transform: translateY(-2px);
 }
 
-.topbar{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:12px
+.menu-item span {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--muted);
 }
-
-.topbar h1{ 
-    font-size: 1.4rem; 
-    margin:0; 
-}
-
-.spacer{
-    flex:1
-}
-
-/* ========================================================= */
-/* 5. MENU DE NAVEGAÇÃO (UL)                                 */
-/* ========================================================= */
-.menu{
-    list-style:none;
-    padding:0;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:10px
-}
-
-.link{
-    display:block;
-    background:#F3F4F6;
-    padding:12px 14px;
-    border-radius:10px;
-    color:var(--fg);
-    text-decoration:none;
-    transition: background .2s, color 0.3s;
-}
-
-.dark-mode .link {
-    background: #374151;
-    color: var(--fg);
-}
-
-.link:hover{ 
-    background: #E5E7EB; 
-}
-
-.dark-mode .link:hover { 
-    background: #4B5563; 
-}
-
-.link.disabled{
-    opacity:.5;
-    pointer-events:none
-}
+.menu-item:hover span { color: var(--primary); }
 
 /* ========================================================= */
-/* 6. BOTÕES (Geral - Efeito Press)                          */
+/* 5. BOTÕES                                                 */
 /* ========================================================= */
-.btn{
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:8px 12px;
-    cursor:pointer;
-    background:var(--card-bg);
-    color:var(--fg);
-    transition:all .15s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.dark-mode .btn {
+.btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
   background: var(--card-bg);
   color: var(--fg);
-  border-color: var(--border);
-  box-shadow: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
 }
 
-.btn:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
+.btn:hover { background: #eee; }
 
-.btn.primary{
-    background:var(--primary);
-    border-color:var(--primary);
-    color:#fff;
-    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.3);
+/* Botão Sair (Ghost) */
+.btn.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
 }
-
-.dark-mode .btn.primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #111827;
-}
-
-.btn.primary:active {
-    box-shadow: none;
-    transform: translateY(1px);
-}
-
-.btn.ghost{
-    background:transparent;
-    border:1px solid var(--border);
-    box-shadow: none;
-}
-.dark-mode .btn.ghost {
-    background:transparent;
-    border-color: var(--border);
-}
-
-.btn.ghost:active {
-    background: #E5E7EB;
-    transform: translateY(1px);
-}
-.dark-mode .btn.ghost:active {
-    background: #374151;
-    transform: translateY(1px);
+.btn.ghost:hover {
+  background: #ffebee; /* Vermelho bem claro */
+  color: #c62828;
+  border-color: #ef9a9a;
 }
