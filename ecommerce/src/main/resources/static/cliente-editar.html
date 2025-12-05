@@ -2,108 +2,132 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
-  <title>Editar meus dados</title>
+  <title>Editar Meus Dados</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="css/cliente-editar.css">
-
 </head>
 <body>
-<header>
-  <div><a href="principal-cliente.html" class="btn ghost">← Voltar</a></div>
-  <div><strong>Editar meus dados</strong></div>
-  <div></div>
-</header>
 
-<div class="page">
-  <div class="grid">
-    <section class="card">
-      <h2>Dados pessoais</h2>
-      <form id="formPerfil">
-        <label>Nome</label>
-        <input id="primeiroNome">
-        <label>Sobrenome</label>
-        <input id="sobrenome">
-        <div class="row">
-          <div>
-            <label>Data de nascimento</label>
-            <input id="nascimento" type="date">
-          </div>
-          <div>
-            <label>Gênero</label>
-            <select id="genero">
-              <option value="NAO_INFORMAR">Prefiro não informar</option>
-              <option value="FEMININO">Feminino</option>
-              <option value="MASCULINO">Masculino</option>
-              <option value="OUTRO">Outro</option>
-            </select>
-          </div>
-        </div>
-        <div style="margin-top:12px">
-          <button class="btn primary" type="submit">Salvar alterações</button>
-        </div>
-      </form>
+  <div class="container">
+    
+    <div class="card main-card">
+      
+      <div class="card-header">
+        <h1>Editar Meus Dados</h1>
+        <a href="principal-cliente.html" class="btn ghost">← Voltar</a>
+      </div>
 
-      <hr style="margin:18px 0;border:0;border-top:1px solid #eee">
+      <div class="grid-content">
+        
+        <div class="col-left">
+          
+          <section class="sub-section">
+            <h3>Dados Pessoais</h3>
+            <form id="formPerfil">
+              <label>Nome</label>
+              <input id="primeiroNome" required>
+              
+              <label>Sobrenome</label>
+              <input id="sobrenome" required>
+              
+              <div class="row">
+                <div>
+                  <label>Nascimento</label>
+                  <input id="nascimento" type="date">
+                </div>
+                <div>
+                  <label>Gênero</label>
+                  <select id="genero">
+                    <option value="NAO_INFORMAR">Prefiro não informar</option>
+                    <option value="FEMININO">Feminino</option>
+                    <option value="MASCULINO">Masculino</option>
+                    <option value="OUTRO">Outro</option>
+                  </select>
+                </div>
+              </div>
 
-      <h2>Alterar senha</h2>
-      <form id="formSenha">
-        <label>Senha atual</label>
-        <input id="senhaAtual" type="password">
-        <label>Nova senha</label>
-        <input id="novaSenha" type="password">
-        <div style="margin-top:12px">
-          <button class="btn primary" type="submit">Alterar senha</button>
-        </div>
-      </form>
-    </section>
+              <div class="submit-wrap">
+                <button class="btn primary" type="submit">Salvar Alterações</button>
+              </div>
+            </form>
+          </section>
 
-    <section class="card">
-      <h2>Endereços de entrega</h2>
-      <div id="enderecos" class="list"></div>
+          <hr class="divider">
 
-      <details style="margin-top:12px">
-        <summary class="muted">Adicionar novo endereço</summary>
-        <form id="formEndereco" style="margin-top:10px">
-          <div class="row">
-            <div>
-              <label>CEP</label>
-              <input id="e_cep" placeholder="00000-000" maxlength="9" inputmode="numeric">
-            </div>
-            <div>
-              <label>Número</label>
-              <input id="e_numero">
-            </div>
-          </div>
-          <label>Logradouro</label>
-          <input id="e_logradouro">
-          <label>Complemento</label>
-          <input id="e_complemento">
-          <div class="row">
-            <div>
-              <label>Bairro</label>
-              <input id="e_bairro">
-            </div>
-            <div>
-              <label>Cidade</label>
-              <input id="e_cidade">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label>UF</label>
-              <input id="e_uf" maxlength="2">
-            </div>
-            <div style="display:flex;align-items:end;justify-content:end">
-              <button class="btn primary" type="submit">Adicionar</button>
-            </div>
-          </div>
-        </form>
-      </details>
-      <p class="muted" style="margin-top:8px">Para corrigir dados de um endereço, crie um novo e marque-o como padrão.</p>
-    </section>
-  </div>
-</div>
+          <section class="sub-section">
+            <h3>Segurança</h3>
+            <form id="formSenha">
+              <label>Senha Atual</label>
+              <input id="senhaAtual" type="password">
+              
+              <label>Nova Senha</label>
+              <input id="novaSenha" type="password">
+              
+              <div class="submit-wrap">
+                <button class="btn ghost" type="submit">Atualizar Senha</button>
+              </div>
+            </form>
+          </section>
 
-<script src="js/cliente-editar.js"></script>
+        </div> <div class="col-right">
+          <section class="sub-section">
+            <h3>Endereços de Entrega</h3>
+            
+            <div id="enderecos" class="list">
+              <p class="muted">Carregando endereços...</p>
+            </div>
+
+            <details>
+              <summary>+ Adicionar Novo Endereço</summary>
+              <form id="formEndereco" style="margin-top:15px">
+                
+                <div class="row">
+                  <div>
+                    <label>CEP</label>
+                    <input id="e_cep" placeholder="00000-000" maxlength="9" required>
+                  </div>
+                  <div>
+                    <label>Número</label>
+                    <input id="e_numero" required>
+                  </div>
+                </div>
+
+                <label>Logradouro</label>
+                <input id="e_logradouro" required>
+
+                <label>Complemento</label>
+                <input id="e_complemento">
+
+                <div class="row">
+                  <div>
+                    <label>Bairro</label>
+                    <input id="e_bairro" required>
+                  </div>
+                  <div>
+                    <label>Cidade</label>
+                    <input id="e_cidade" required>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div>
+                    <label>UF</label>
+                    <input id="e_uf" maxlength="2" required style="text-transform:uppercase">
+                  </div>
+                  <div style="display:flex; align-items:flex-end; justify-content:flex-end;">
+                    <button class="btn primary" type="submit">Salvar Endereço</button>
+                  </div>
+                </div>
+
+              </form>
+            </details>
+
+            <p style="margin-top:15px; font-size:0.85rem; color:#888;">
+              * O endereço marcado como <strong>Padrão</strong> será usado automaticamente em novos pedidos.
+            </p>
+          </section>
+        </div> </div> </div> </div>
+
+  <script src="js/cliente-editar.js"></script>
 </body>
 </html>

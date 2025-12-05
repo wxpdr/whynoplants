@@ -1,121 +1,231 @@
-/* ===== tokens ===== */
-:root{
-  --bg:#f7f7f8;
-  --card:#ffffff;
-  --ink:#121212;
-  --muted:#667085;
-  --border:#e7e7e7;
-  --brand:#5b8e61;
-  --brand-2:#2a5930;
-  --brand-soft:#eef3ef;
-  --danger:#c0392b;
-  --shadow:0 10px 24px rgba(16,24,40,.06);
-  --radius:14px;
-  --radius-sm:10px;
+/* static/css/cliente-editar.css */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS E TEMA                                       */
+/* ========================================================= */
+:root {
+  --primary: #4CAF50;
+  --primary-dark: #388E3C;
+  --bg: #f5f5f5;
+  --fg: #333333;
+  --card-bg: #FFFFFF;
+  --border: #cccccc;
+  --muted: #666666;
+  --danger: #e74c3c;
 }
 
-/* ===== base ===== */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--ink);
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  padding: 40px 20px;
 }
 
-/* ===== header/topo ===== */
-header{
-  background:linear-gradient(135deg,#6aa870,var(--brand));
-  color:#fff;
-  padding:14px 20px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-header .btn.ghost{
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.25);
+/* ========================================================= */
+/* 2. CARD PRINCIPAL (CONTAINER ÚNICO)                       */
+/* ========================================================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* ===== layout ===== */
-.page{max-width:1100px;margin:22px auto;padding:0 16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-@media (max-width:980px){.grid{grid-template-columns:1fr}}
-
-/* ===== cards ===== */
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-}
-.card h2{margin:0 0 12px;font-size:26px}
-hr{margin:18px 0;border:0;border-top:1px solid var(--border)}
-
-/* ===== forms & inputs ===== */
-label{display:block;font-size:12px;color:var(--muted);margin:8px 0 6px}
-input,select{
-  width:100%;padding:12px 14px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-sm);
-  font-size:15px;background:#fff;outline:none;
-  transition:border-color .15s, box-shadow .15s, background .15s;
-}
-input:focus,select:focus{
-  border-color:var(--brand);
-  box-shadow:0 0 0 4px rgba(91,142,97,.12);
-  background:#fff;
+.main-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  padding: 40px;
 }
 
-/* agrupar dois campos lado a lado */
-.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media (max-width:560px){.row{grid-template-columns:1fr}}
+/* Cabeçalho INTERNO do Card */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
 
-/* ===== buttons ===== */
-.btn{
-  border:0;padding:10px 14px;border-radius:12px;cursor:pointer;
-  font-weight:600;line-height:1;transition:filter .15s, transform .03s;
+.card-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--fg);
+  font-weight: 700;
 }
-.btn:active{transform:translateY(1px)}
-.btn.primary{background:var(--brand);color:#fff}
-.btn.primary:hover{filter:brightness(.96)}
-.btn.ghost{background:var(--brand-soft);color:var(--brand-2)}
-.btn.ghost:hover{filter:brightness(.97)}
-.btn.danger{background:var(--danger);color:#fff}
 
-/* ===== listas e endereços ===== */
-.list{display:flex;flex-direction:column;gap:12px}
-.addr{
-  border:1px solid var(--border);
-  padding:12px;border-radius:12px;background:#fcfcfc;
-  display:flex;justify-content:space-between;align-items:center;gap:12px
+/* ========================================================= */
+/* 3. LAYOUT INTERNO (GRID)                                  */
+/* ========================================================= */
+.grid-content {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* Direita (Endereços) um pouco maior */
+  gap: 50px;
 }
-.pill{
-  font-size:12px;font-weight:700;
-  padding:6px 10px;border-radius:999px;
-  background:var(--brand-soft);color:var(--brand-2)
-}
-.muted{color:var(--muted);font-size:13px}
 
-/* ===== details / summary (adicionar novo endereço) ===== */
-details{
-  border:1px dashed var(--border);
-  border-radius:12px;background:#fafafa;
-  padding:10px 12px;
+@media (max-width: 900px) {
+  .grid-content { grid-template-columns: 1fr; gap: 30px; }
+  .col-right { border-left: none; padding-left: 0; border-top: 1px solid #eee; padding-top: 30px; }
 }
-summary{
-  list-style:none;cursor:pointer;color:var(--brand-2);font-weight:600;
-  display:flex;align-items:center;gap:8px;
-}
-summary::before{
-  content:"▸";display:inline-block;transform:translateY(-1px);
-}
-details[open] summary::before{content:"▾"}
-details[open]{background:#fefefe;border-style:solid}
-details form{margin-top:10px}
 
-/* tornar visualmente claro o botão de submit dentro de grid */
-.row .btn.primary{width:max-content;justify-self:end}
+/* Colunas */
+.col-left {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 
-/* deixa o input date consistente */
-input[type="date"]{color:inherit}
+.col-right {
+  /* Opcional: Linha vertical separando as colunas em telas grandes */
+  border-left: 1px solid #eee;
+  padding-left: 50px;
+  margin-left: -25px; /* Ajuste visual */
+}
+@media (max-width: 900px) {
+    .col-right { border-left: none; padding-left: 0; margin-left: 0; }
+}
+
+/* Títulos das Seções Internas */
+h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px dashed #ddd;
+  margin: 10px 0;
+}
+
+/* ========================================================= */
+/* 4. FORMULÁRIOS                                            */
+/* ========================================================= */
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+  margin-top: 15px;
+}
+label:first-child { margin-top: 0; }
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s;
+  color: var(--fg);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ========================================================= */
+/* 5. LISTA DE ENDEREÇOS                                     */
+/* ========================================================= */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.addr-item {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.addr-item:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+  background: #fff;
+}
+
+.addr-info { display: flex; flex-direction: column; gap: 4px; }
+
+.addr-header { display: flex; align-items: center; gap: 10px; }
+.addr-header strong { font-size: 1rem; color: var(--fg); }
+
+/* Badge Pílula */
+.badge-default {
+  background-color: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.addr-details { font-size: 0.9rem; color: var(--muted); }
+
+/* Novo Endereço (Accordion) */
+details {
+  margin-top: 25px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  padding: 15px 20px;
+  background: #fafafa;
+}
+details[open] { background: #fff; border-style: solid; border-color: var(--border); }
+
+summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 700;
+  outline: none;
+}
+
+/* ========================================================= */
+/* 6. BOTÕES                                                 */
+/* ========================================================= */
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn.primary { background: var(--primary); color: #fff; }
+.btn.primary:hover { background: var(--primary-dark); }
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn.ghost:hover { background: #f0f0f0; color: var(--fg); }
+
+.submit-wrap { margin-top: 20px; text-align: right; }
