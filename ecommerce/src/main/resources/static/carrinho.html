@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
-  <title>WNPlants — Carrinho</title>
+  <title>Carrinho - WNPlants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" href="css/carrinho.css"/>
 </head>
@@ -11,39 +11,56 @@
     <a class="brand" href="index.html">WN<span>Plants</span></a>
     <nav class="actions">
       <a href="login.html">Minha Conta</a>
-      <a href="carrinho.html">🛒 <span id="cartCount" class="badge"></span></a>
+      <a href="carrinho.html">🛒 <span id="cartCount" class="badge">0</span></a>
     </nav>
   </header>
 
   <main class="container">
-    <h1>Carrinho</h1>
+    <h1>Carrinho de Compras</h1>
 
-    <div id="lista"></div>
+    <div class="cart-grid">
+      
+      <section class="cart-items">
+        <div id="lista"></div>
+        <a class="btn ghost btn-continue" href="index.html">← Continuar comprando</a>
+      </section>
 
-    <!-- Frete -->
-    <section class="frete">
-      <h2>Calcular frete</h2>
-      <div class="cep-row">
-        <label for="cep">CEP</label>
-        <input id="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" aria-label="Informe seu CEP">
-        <button id="btnCalcFrete" class="btn">Calcular</button>
-      </div>
+      <aside class="cart-summary">
+        <div class="summary-card">
+          <h2>Resumo do Pedido</h2>
+          
+          <div class="frete-section">
+            <label for="cep">Calcular Frete</label>
+            <div class="cep-row">
+              <input id="cep" inputmode="numeric" placeholder="CEP" maxlength="9">
+              <button id="btnCalcFrete" class="btn ghost small">OK</button>
+            </div>
+            <div id="opcoesFrete" class="frete-opcoes" hidden></div>
+          </div>
 
-      <div id="opcoesFrete" class="frete-opcoes" hidden></div>
-      <small class="hint">* Para cliente não logado o frete é de livre escolha entre as opções.</small>
-    </section>
+          <hr class="divider">
 
-    <div class="totais">
-      <div class="totais-col">
-        <div><strong>Subtotal:</strong> <span id="subtotal">R$ 0,00</span></div>
-        <div id="freteLinha" class="muted" hidden>Frete (<span id="freteNome"></span>): <span id="freteValor">R$ 0,00</span></div>
-        <div class="grand"><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
-      </div>
-      <div class="acoes">
-        <a class="btn ghost" href="index.html">← Continuar comprando</a>
-        <button id="limpar" class="btn danger">Esvaziar</button>
-        <button id="checkout" class="btn">Finalizar (fake)</button>
-      </div>
+          <div class="totals-section">
+            <div class="row">
+              <span>Subtotal</span>
+              <span id="subtotal">R$ 0,00</span>
+            </div>
+            <div id="freteLinha" class="row muted" hidden>
+              <span>Frete (<span id="freteNome"></span>)</span>
+              <span id="freteValor">R$ 0,00</span>
+            </div>
+            <div class="row grand">
+              <span>Total</span>
+              <span id="total">R$ 0,00</span>
+            </div>
+          </div>
+
+          <div class="actions-vertical">
+            <button id="checkout" class="btn primary full">Finalizar Compra</button>
+          </div>
+        </div>
+      </aside>
+
     </div>
   </main>
 

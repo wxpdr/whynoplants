@@ -1,9 +1,12 @@
 const $  = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
 
+// Garante API correta
+const API_BASE = window.API || "http://localhost:8080";
+
 /* -------- Carrinho base -------- */
 const CART_KEY='wnplants_cart';
-const FRETE_KEY='wnplants_frete'; // {cep, regiao, id, nome, valor, prazo}
+const FRETE_KEY='wnplants_frete'; 
 const money = v => Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 
 function read(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }catch{ return []; } }
@@ -11,33 +14,14 @@ function write(x){ try{ localStorage.setItem(CART_KEY, JSON.stringify(x)); }catc
 function count(){ return read().reduce((s,i)=>s+Number(i.quantidade||0),0); }
 function updateBadge(){ const b=$('#cartCount'); if(b) b.textContent = count()||''; }
 
-/* ---------- Frete por região (cliente não logado) ---------- */
-/**
- * Origem fixa (apenas informativa para a regra de valores).
- * Se quiser alterar, basta mudar aqui.
- */
+/* ---------- Frete por região ---------- */
 const ORIGEM = { cep: '01000-000', regiao: 'SP' };
 
-/**
- * Normaliza CEP em 00000-000 e devolve só os dígitos quando precisar.
- */
 function normalizarCEP(str){
   const d = (str||'').replace(/\D/g,'').slice(0,8);
   return d.length>5 ? d.slice(0,5)+'-'+d.slice(5) : d;
 }
 
-/**
- * Deduz a região do destino a partir do 1º dígito do CEP.
- * É uma aproximação proposital para o projeto (sem API externa).
- *
- * 0–1 => SP
- * 2–3 => Sudeste (RJ/MG/ES)
- * 4–5 => Nordeste (BA/SE/PE/AL/PB/RN)
- * 6    => Norte/Nordeste (CE/PI/MA/PA/AP/AM/RR/AC)
- * 7    => Centro-Oeste / Norte (DF/GO/TO/RO/MT/MS)
- * 8    => Sul (PR/SC)
- * 9    => Sul (RS)
- */
 function regiaoPorCep(cep){
   const dig = Number(String(cep).replace(/\D/g,'')[0] || 0);
   if (dig<=1) return 'SP';
@@ -46,13 +30,9 @@ function regiaoPorCep(cep){
   if (dig===6) return 'Norte';
   if (dig===7) return 'Centro-Oeste';
   if (dig===8) return 'Sul';
-  return 'Sul'; // 9
+  return 'Sul'; 
 }
 
-/**
- * Tabela de preços por região (3 opções).
- * Você pode ajustar valores e prazos aqui.
- */
 const TABELA_FRETE = {
   'SP': [
     { id:'eco', nome:'Econômico', valor:12.90, prazo:'3–5 dias' },
@@ -86,27 +66,19 @@ const TABELA_FRETE = {
   ],
 };
 
-/**
- * Gera as opções de frete a partir do CEP de destino.
- * Pode usar o subtotal para regras extra (ex.: frete grátis acima de X).
- */
 function calcularFretePorRegiao(cepDestino, subtotal){
   const reg = regiaoPorCep(cepDestino);
   let opcoes = TABELA_FRETE[reg] || TABELA_FRETE['Sudeste'];
-
-  // exemplo: frete econômico grátis acima de 300 para SP (ajuste/retire se quiser)
   if (reg === 'SP' && subtotal >= 300){
     opcoes = opcoes.map(o => o.id==='eco' ? { ...o, valor:0 } : o);
   }
-
-  // retorna cópia com região
   return opcoes.map(o => ({ ...o, regiao: reg }));
 }
 
 function saveFrete(sel){ try{ localStorage.setItem(FRETE_KEY, JSON.stringify(sel||null)); }catch{} }
 function readFrete(){ try{ return JSON.parse(localStorage.getItem(FRETE_KEY)||'null'); }catch{ return null; } }
 
-/* -------- Render dos itens e totais -------- */
+/* -------- Render -------- */
 function render(){
   updateBadge();
   const box = $('#lista');
@@ -157,7 +129,6 @@ function render(){
 
   $('#subtotal').textContent = money(subtotal);
 
-  // aplica frete salvo (se existir)
   const freteSel = readFrete();
   let total = subtotal;
   if (freteSel && typeof freteSel.valor === 'number'){
@@ -171,7 +142,6 @@ function render(){
   $('#total').textContent = money(total);
 }
 
-/* -------- Frete UI -------- */
 function renderFreteUI(opcoes, selecionado){
   const wrap = $('#opcoesFrete');
   wrap.innerHTML = '';
@@ -202,7 +172,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   render();
 
   const cepInput = $('#cep');
-  // reaplica CEP salvo (se houver)
   const freteSalvo = readFrete();
   if (freteSalvo?.cep) cepInput.value = normalizarCEP(freteSalvo.cep);
 
@@ -215,7 +184,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const subtotal = read().reduce((s,i)=>s + Number(i.valor||0)*Number(i.quantidade||0), 0);
     const opcoes = calcularFretePorRegiao(cep, subtotal);
 
-    // mantém seleção salva se ela existir e ainda for válida
     let sel = readFrete();
     if (!sel || !opcoes.some(o=>o.id===sel.id && o.regiao===sel.regiao)) {
       sel = { ...opcoes[0], cep: cepInput.value };
@@ -226,14 +194,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     render();
   });
 
-  $('#limpar')?.addEventListener('click', ()=>{
-    localStorage.removeItem(CART_KEY);
-    localStorage.removeItem(FRETE_KEY);
-    render();
-  });
-
-
-   $('#checkout')?.addEventListener('click', ()=>{
+  // ========== VALIDAÇÃO DE PERFIL E LOGIN NO CHECKOUT ==========
+  $('#checkout')?.addEventListener('click', async () => {
     const itensCarrinho = read();
     const frete = readFrete();
 
@@ -247,9 +209,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return;
     }
 
-    // Não finaliza nada ainda, apenas vai para a página de pagamento
-    location.href = 'pagamento.html';
+    // Verifica Login e Perfil
+    try {
+        const r = await fetch(`${API_BASE}/whoami`, { credentials: "include" });
+        
+        if (r.ok) {
+            // Logado: Verifica se é Cliente
+            const user = await r.json();
+            
+            if (user.perfil === 'Administrador' || user.perfil === 'Estoquista') {
+                alert("Atenção:\nAdministradores e Estoquistas não podem realizar compras.\n\nPor favor, entre com uma conta de Cliente.");
+                return;
+            }
+
+            // Tudo certo -> Vai para pagamento
+            location.href = 'pagamento.html';
+
+        } else {
+            // Não logado -> Vai para login
+            sessionStorage.setItem("redirect_after_login", "pagamento.html");
+            alert("Você precisa estar logado para finalizar o pedido.");
+            location.href = 'login.html';
+        }
+    } catch (e) {
+        console.error("Erro auth:", e);
+        alert("Erro de conexão ao verificar usuário.");
+    }
   });
-
-
 });
