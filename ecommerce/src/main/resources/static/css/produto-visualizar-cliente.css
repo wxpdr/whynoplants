@@ -1,0 +1,366 @@
+/* static/css/produto-visualizar-cliente.css */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS E TEMA (PADRONIZADO)                         */
+/* ========================================================= */
+:root {
+  --primary: #4CAF50;       /* Verde padrão */
+  --primary-dark: #388E3C;
+  --bg: #f5f5f5;           /* Fundo cinza claro */
+  --card-bg: #FFFFFF;      /* Fundo dos cartões */
+  --fg: #333333;           /* Texto Principal */
+  --muted: #666666;        /* Texto Secundário */
+  --border: #e0e0e0;       /* Bordas */
+  --star: #FFD700;         /* Estrelas */
+  
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  padding-bottom: 40px;
+  line-height: 1.5;
+}
+
+/* ========================================================= */
+/* 2. HEADER (CLEAN & WHITE)                                 */
+/* ========================================================= */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--fg);
+  letter-spacing: -0.5px;
+}
+.brand span { color: var(--primary); }
+
+.actions a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.actions a:hover { color: var(--primary); }
+
+.badge {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+/* ========================================================= */
+/* 3. LAYOUT (CARD PRINCIPAL)                                */
+/* ========================================================= */
+.container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Coluna da imagem maior */
+  gap: 40px;
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 40px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    margin: 20px;
+  }
+}
+
+/* ========================================================= */
+/* 4. GALERIA DE IMAGENS                                     */
+/* ========================================================= */
+.gallery {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Imagem Principal */
+#imgPrincipal {
+  width: 100%;
+  aspect-ratio: 1/1; /* Quadrado moderno */
+  object-fit: contain; /* Não corta a imagem */
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fafafa;
+  transition: opacity 0.2s ease;
+}
+
+/* Miniaturas */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 10px;
+}
+
+.thumbs img {
+  width: 100%;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: #fafafa;
+  border: 1px solid var(--border);
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+.thumbs img:hover { opacity: 1; }
+
+.thumbs img.active {
+  border-color: var(--primary);
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* Setas de Navegação (Estilo Circular Branco) */
+.nav {
+  position: absolute;
+  top: 50%; /* Centraliza na altura da galeria, pode precisar de ajuste manual se thumbs crescerem */
+  top: calc(50% - 40px); /* Ajuste para centralizar na Imagem Principal */
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  font-size: 1.2rem;
+}
+
+.nav:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.nav:disabled { opacity: 0; pointer-events: none; }
+.nav.prev { left: 10px; }
+.nav.next { right: 10px; }
+
+/* ========================================================= */
+/* 5. INFORMAÇÕES DO PRODUTO                                 */
+/* ========================================================= */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.rating {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1.2rem;
+  color: var(--star);
+}
+
+.price {
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.desc {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+/* ========================================================= */
+/* 6. ÁREA DE COMPRA                                         */
+/* ========================================================= */
+.purchase {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* Contador de Quantidade */
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.qty-label {
+  font-weight: 600;
+  color: var(--fg);
+  min-width: 80px;
+}
+
+.qty-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  color: var(--fg);
+}
+
+.qty-btn:hover { background: #eee; }
+
+.qty-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+  width: 30px;
+  text-align: center;
+}
+
+/* Botão Adicionar ao Carrinho */
+.btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 100%;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.back {
+  margin-top: 10px;
+  display: inline-block;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.back:hover { color: var(--primary); text-decoration: underline; }
+
+/* ========================================================= */
+/* 7. MODAL (Padrão)                                         */
+/* ========================================================= */
+.modal[hidden] { display: none !important; }
+.modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.modal__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+}
+
+.modal__dialog {
+  position: relative; z-index: 1001;
+  width: 90%; max-width: 400px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.modal__title {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.modal__msg { margin: 0 0 20px; color: var(--muted); }
+
+.modal__actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn.outline {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn.outline:hover { background: #f5f5f5; }
+
+.btn.ghost {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
