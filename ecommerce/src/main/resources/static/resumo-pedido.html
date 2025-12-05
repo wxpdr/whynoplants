@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <title>Resumo do Pedido - WNPlants</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="css/resumo-pedido.css"/>
+</head>
+<body>
+  
+  <header class="site-header">
+    <div class="header-container">
+      <a href="index.html" class="brand">WN<span>Plants</span></a>
+      <div class="checkout-steps">
+        <span class="step done">Carrinho</span>
+        <span class="step done">Pagamento</span>
+        <span class="step active">Resumo</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Revisão Final</h1>
+
+    <div class="grid-review">
+      
+      <section class="col-details">
+        
+        <div class="card">
+          <h2>Endereço de Entrega</h2>
+          <div id="review-endereco" class="info-block">
+            <p class="muted">Carregando endereço...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Forma de Pagamento</h2>
+          <div id="review-pagamento" class="info-block">
+            <p class="muted">Carregando pagamento...</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Itens do Pedido</h2>
+          <div id="lista-itens" class="items-list">
+            </div>
+        </div>
+
+      </section>
+
+      <section class="col-summary">
+        <div class="card sticky-card">
+          <h2>Valores</h2>
+          
+          <div class="pricing">
+            <div class="row">
+              <span>Subtotal</span>
+              <span id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="row">
+              <span>Frete <small id="frete-nome" class="muted"></small></span>
+              <span id="frete-valor">R$ 0,00</span>
+            </div>
+            <div class="row grand">
+              <span>Total</span>
+              <span id="total">R$ 0,00</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="btnConfirmarCompra" class="btn primary full">Confirmar Compra</button>
+            <a href="pagamento.html" class="btn ghost full">Voltar e Editar</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+    <p>Processando seu pedido...</p>
+  </div>
+
+  <script>window.API = "http://localhost:8080";</script>
+  <script src="js/resumo-pedido.js"></script>
+</body>
+</html>
