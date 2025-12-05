@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import projeto.ecommerce.dto.CheckoutItemDTO;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
-import projeto.ecommerce.dto.EnderecoDetalheDTO; // ADIÇÃO: Importa o novo DTO
+import projeto.ecommerce.dto.EnderecoDetalheDTO;
 import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
 import projeto.ecommerce.dto.PedidoDetalheDTO;
 import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
@@ -18,6 +18,7 @@ import projeto.ecommerce.repository.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +29,11 @@ public class PedidoService {
     private final ClienteRepository clienteRepo;
     private final ProdutoRepository produtoRepo;
     private final EnderecoRepository enderecoRepo;
+    private final UsuarioRepository usuarioRepo; // Necessário para verificar o perfil
 
     // ADIÇÃO 1: Método Helper para mapear a entidade Endereco
     private EnderecoDetalheDTO mapEndereco(Endereco endereco) {
         if (endereco == null) return null;
-        // Usa o construtor do EnderecoDetalheDTO que acabamos de criar
         return new EnderecoDetalheDTO(
             endereco.getCep(),
             endereco.getLogradouro(),
@@ -43,7 +44,6 @@ public class PedidoService {
             endereco.getUf()
         );
     }
-    // FIM ADIÇÃO 1
 
     /**
      * Finaliza a compra do cliente logado (fluxo direto).
@@ -234,9 +234,9 @@ public class PedidoService {
             pedido.setValorItens(BigDecimal.ZERO);
         }
         pedido.setValorTotal(pedido.getValorItens().add(frete));
-        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);   // ou StatusPedido.PAGAMENTO_APROVADO
 
-        // (Sprint 6: histórico de status aqui, se tiver)
+        // 🟢 status PAGO
+        pedido.setStatus(StatusPedido.PAGO);   
 
         pedido = pedidoRepo.save(pedido);
 
@@ -249,7 +249,7 @@ public class PedidoService {
         );
     }
 
-    // ===================== DETALHES DO PEDIDO (Sprint 5) =====================
+    // ===================== DETALHES DO PEDIDO (SPRINT 5 - CORRIGIDO) =====================
 
     public PedidoDetalheDTO buscarDetalhesPedido(Long userIdSessao, Long pedidoId) {
         if (userIdSessao == null) {
@@ -259,14 +259,28 @@ public class PedidoService {
         Pedido pedido = pedidoRepo.findById(pedidoId)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
 
-        if (!pedido.getCliente().getId().equals(userIdSessao)) {
-            throw new SecurityException("Você não tem permissão para ver este pedido.");
+        // 1. CARREGA O PERFIL DO USUÁRIO LOGADO (para correção da segurança)
+        Optional<Usuario> usuarioOpt = usuarioRepo.findById(userIdSessao);
+        
+        if (usuarioOpt.isEmpty()) {
+             throw new SecurityException("Usuário logado não encontrado no sistema.");
         }
         
-        // ADIÇÃO: Mapeia o endereço para o DTO
+        Usuario usuarioLogado = usuarioOpt.get();
+        String perfil = usuarioLogado.getPerfil();
+
+        // 2. REGRA DE ACESSO: SE NÃO FOR ADMIN/ESTOQUE, SÓ PODE VER SEUS PRÓPRIOS PEDIDOS
+        if (!perfil.equals("Administrador") && !perfil.equals("Estoquista")) {
+            if (!pedido.getCliente().getId().equals(userIdSessao)) {
+                 // Bloqueia o CLIENTE que tenta ver o pedido de OUTRO cliente
+                 throw new SecurityException("Você não tem permissão para ver este pedido.");
+            }
+        }
+        // SE FOR ADMIN/ESTOQUE, PASSA DIRETO.
+
+        // 3. Mapeia Endereço (para exibir no Front-end)
         Endereco enderecoModel = pedido.getEnderecoEntrega(); 
         EnderecoDetalheDTO enderecoDTO = mapEndereco(enderecoModel); 
-        // FIM ADIÇÃO
 
         List<PedidoItem> itens = pedidoItemRepo.findByPedidoId(pedidoId);
 
@@ -290,7 +304,7 @@ public class PedidoService {
                 pedido.getValorItens(),
                 pedido.getValorTotal(),
                 itensDTO,
-                enderecoDTO // <-- AGORA COMPILA E ENVIA O ENDEREÇO
+                enderecoDTO 
         );
     }
 
