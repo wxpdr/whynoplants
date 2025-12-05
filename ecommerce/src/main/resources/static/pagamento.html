@@ -7,125 +7,123 @@
   <link rel="stylesheet" href="css/pagamento.css"/>
 </head>
 <body>
+  
   <header class="site-header">
-    <a class="brand" href="index.html">WN<span>Plants</span></a>
-    <nav class="actions">
-      <a href="login.html">Minha Conta</a>
-      <a href="carrinho.html">🛒 <span id="cartCount" class="badge"></span></a>
-    </nav>
+    <div class="header-container">
+      <a href="index.html" class="brand">WN<span>Plants</span></a>
+      <div class="checkout-steps">
+        <span class="step done">Carrinho</span>
+        <span class="step active">Pagamento</span>
+        <span class="step">Confirmação</span>
+      </div>
+    </div>
   </header>
 
   <main class="container">
-    <h1>Pagamento</h1>
+    <h1>Finalizar Compra</h1>
 
-    <!-- Resumo do pedido -->
-    <section class="card">
-      <h2>Resumo do pedido</h2>
-
-      <div id="itensResumo" class="itens-resumo">
-        <!-- Itens do carrinho serão renderizados aqui -->
-      </div>
-
-      <div class="resumo-row">
-        <div><strong>Subtotal:</strong> <span id="subtotal">R$ 0,00</span></div>
-        <div>
-          <strong>Frete:</strong>
-          <span id="frete">R$ 0,00</span>
-          <small id="freteInfo" class="muted"></small>
-        </div>
-        <div class="grand"><strong>Total:</strong> <span id="total">R$ 0,00</span></div>
-      </div>
-    </section>
-
-    <!-- Forma de pagamento -->
-    <section class="card">
-      <h2>Forma de pagamento</h2>
-
-      <div class="pagamento-opcoes">
-        <label>
-          <input type="radio" name="formaPagamento" value="PIX" checked>
-          Pix
-        </label>
-        <label>
-          <input type="radio" name="formaPagamento" value="CARTAO">
-          Cartão de crédito
-        </label>
-        <label>
-          <input type="radio" name="formaPagamento" value="BOLETO">
-          Boleto
-        </label>
-      </div>
-
-      <!-- PIX -->
-      <div id="campos-pix" class="pagamento-campos">
-        <p class="muted">
-          Use o código abaixo no seu app do banco para pagar via Pix (cópia e cola).
-        </p>
-        <label for="pix-codigo">Código Pix</label>
-        <textarea id="pix-codigo" rows="3" readonly></textarea>
-      </div>
-
-      <!-- Cartão -->
-      <div id="campos-cartao" class="pagamento-campos hidden">
-        <p class="muted">Preencha os dados do cartão. Não validamos com operadora, é apenas para simulação.</p>
-        <label for="cartao-numero">Número do cartão</label>
-        <input id="cartao-numero" type="text" placeholder="0000 0000 0000 0000"/>
-
-        <div class="row">
-          <div>
-            <label for="cartao-validade">Validade</label>
-            <input id="cartao-validade" type="text" placeholder="MM/AA"/>
+    <div class="grid-payment">
+      
+      <section class="col-left">
+        
+        <div class="card summary-card">
+          <h2>Resumo do Pedido</h2>
+          
+          <div id="itensResumo" class="itens-list">
+            <p class="muted">Carregando itens...</p>
           </div>
-          <div>
-            <label for="cartao-cvc">CVC</label>
-            <input id="cartao-cvc" type="text" placeholder="123"/>
+
+          <div class="pricing">
+            <div class="row">
+              <span>Subtotal</span>
+              <span id="subtotal">R$ 0,00</span>
+            </div>
+            <div class="row">
+              <span>Frete <small id="freteInfo" class="muted"></small></span>
+              <span id="frete">R$ 0,00</span>
+            </div>
+            <div class="row grand">
+              <span>Total</span>
+              <span id="total">R$ 0,00</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Boleto -->
-      <div id="campos-boleto" class="pagamento-campos hidden">
-        <p class="muted">
-          Informe o e-mail para envio e utilize a linha digitável abaixo para simulação do pagamento.
-        </p>
-        <label for="boleto-email">E-mail para envio do boleto</label>
-        <input id="boleto-email" type="email" placeholder="seuemail@exemplo.com"/>
-
-        <label for="boleto-linha">Linha digitável</label>
-        <textarea id="boleto-linha" rows="2" readonly></textarea>
-      </div>
-    </section>
-
-    <!-- Confirmação final -->
-    <section class="card">
-      <h2>Confirme os dados antes de finalizar</h2>
-      <div class="resumo-row">
-        <div>
-          <strong>Forma de pagamento:</strong>
-          <span id="resumoFormaPagamento">Pix</span>
+        <div class="card">
+          <h2>Endereço de Entrega</h2>
+          <div id="listaEnderecos" class="address-options">
+            <p class="muted">Carregando endereços...</p>
+          </div>
+          <a href="cliente-editar.html" class="btn-link small" target="_blank">+ Gerenciar endereços</a>
         </div>
-        <div>
-          <strong>Endereço de entrega:</strong>
-          <span id="resumoEndereco">
-            Será utilizado o endereço de ENTREGA padrão cadastrado na sua conta.
-          </span>
+
+      </section>
+
+      <section class="col-right">
+        
+        <div class="card">
+          <h2>Pagamento</h2>
+          
+          <div class="payment-methods">
+            <label class="method-option">
+              <input type="radio" name="formaPagamento" value="PIX" checked>
+              <span class="method-box">Pix</span>
+            </label>
+            <label class="method-option">
+              <input type="radio" name="formaPagamento" value="CARTAO">
+              <span class="method-box">Cartão</span>
+            </label>
+            <label class="method-option">
+              <input type="radio" name="formaPagamento" value="BOLETO">
+              <span class="method-box">Boleto</span>
+            </label>
+          </div>
+
+          <div id="campos-pix" class="payment-details">
+            <p class="muted">Pague com o código abaixo (liberação imediata).</p>
+            <div class="copy-box">
+              <input id="pix-codigo" readonly value="Carregando...">
+              <button id="btnCopyPix" class="btn ghost small">Copiar</button>
+            </div>
+          </div>
+
+          <div id="campos-cartao" class="payment-details hidden">
+            <label>Nome no Cartão</label>
+            <input id="card-name" placeholder="Como impresso no cartão">
+            
+            <label>Número do Cartão</label>
+            <input id="cartao-numero" maxlength="16" placeholder="0000 0000 0000 0000">
+            
+            <div class="row-inputs">
+              <div>
+                <label>Validade</label>
+                <input id="cartao-validade" maxlength="5" placeholder="MM/AA">
+              </div>
+              <div>
+                <label>CVV</label>
+                <input id="cartao-cvc" maxlength="3" placeholder="123">
+              </div>
+            </div>
+          </div>
+
+          <div id="campos-boleto" class="payment-details hidden">
+            <p class="muted">O boleto será enviado para o seu e-mail.</p>
+            <label>E-mail para envio</label>
+            <input id="boleto-email" type="email">
+          </div>
+
+          <div class="actions-final">
+            <button id="btnFinalizar" class="btn primary full">Confirmar Pagamento</button>
+            <a href="carrinho.html" class="btn ghost full">Voltar ao Carrinho</a>
+          </div>
+
         </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="acoes">
-      <button id="btnVoltar" class="btn ghost">← Voltar ao carrinho</button>
-      <button id="btnFinalizar" class="btn primary">Finalizar pedido</button>
     </div>
-
-    <div id="payment-loading" class="modal-loading hidden">
-      <div class="modal-box">
-        <p>Processando pagamento...</p>
-      </div>
-    </div>
-
   </main>
 
+  <script>window.API = "http://localhost:8080";</script>
   <script src="js/pagamento.js"></script>
 </body>
 </html>
