@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import projeto.ecommerce.dto.CheckoutItemDTO;
 import projeto.ecommerce.dto.CheckoutRequestDTO;
+import projeto.ecommerce.dto.EnderecoDetalheDTO; // ADIÇÃO: Importa o novo DTO
 import projeto.ecommerce.dto.PedidoConfirmacaoDTO;
 import projeto.ecommerce.dto.PedidoDetalheDTO;
 import projeto.ecommerce.dto.PedidoFinalizacaoDTO;
@@ -28,16 +29,24 @@ public class PedidoService {
     private final ProdutoRepository produtoRepo;
     private final EnderecoRepository enderecoRepo;
 
+    // ADIÇÃO 1: Método Helper para mapear a entidade Endereco
+    private EnderecoDetalheDTO mapEndereco(Endereco endereco) {
+        if (endereco == null) return null;
+        // Usa o construtor do EnderecoDetalheDTO que acabamos de criar
+        return new EnderecoDetalheDTO(
+            endereco.getCep(),
+            endereco.getLogradouro(),
+            endereco.getNumero(),
+            endereco.getComplemento(),
+            endereco.getBairro(),
+            endereco.getCidade(),
+            endereco.getUf()
+        );
+    }
+    // FIM ADIÇÃO 1
+
     /**
      * Finaliza a compra do cliente logado (fluxo direto).
-     *
-     * Regras:
-     * - Cliente deve estar logado (id sessão obrigatório)
-     * - Deve haver ao menos 1 item no carrinho
-     * - Usa endereço de ENTREGA padrão; se não tiver, usa o primeiro
-     * - Calcula valor dos itens a partir do valor atual do produto no banco
-     * - Salva frete e valor total
-     * - Cria pedido com status PAGO (pagamento automático)
      */
     @Transactional
     public PedidoResumoDTO finalizarPedido(Long userIdSessao, CheckoutRequestDTO dto) {
@@ -129,7 +138,7 @@ public class PedidoService {
         Pedido pedido = Pedido.builder()
                 .cliente(cliente)
                 .enderecoEntrega(enderecoEntrega)
-                .status(StatusPedido.AGUARDANDO_PAGAMENTO)               
+                .status(StatusPedido.AGUARDANDO_PAGAMENTO)      
                 .formaPagamento(dto.formaPagamento())
                 .freteOpcao(dto.freteOpcao())
                 .freteValor(freteValor)
@@ -175,8 +184,8 @@ public class PedidoService {
 
     @Transactional
     public PedidoConfirmacaoDTO finalizarCarrinho(Long clienteId,
-                                                  PedidoFinalizacaoDTO dto,
-                                                  Long userIdSessao) {
+                                                 PedidoFinalizacaoDTO dto,
+                                                 Long userIdSessao) {
         if (userIdSessao == null) {
             throw new SecurityException("Usuário não autenticado.");
         }
@@ -225,21 +234,18 @@ public class PedidoService {
             pedido.setValorItens(BigDecimal.ZERO);
         }
         pedido.setValorTotal(pedido.getValorItens().add(frete));
-
-        // 🔴 ANTES: status AGUARDANDO_PAGAMENTO
-        // 🟢 AGORA: pagamento automático ao finalizar
-        pedido.setStatus(StatusPedido.PAGO);   // ou StatusPedido.PAGAMENTO_APROVADO
+        pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);   // ou StatusPedido.PAGAMENTO_APROVADO
 
         // (Sprint 6: histórico de status aqui, se tiver)
 
         pedido = pedidoRepo.save(pedido);
 
         return new PedidoConfirmacaoDTO(
-            pedido.getId(),
-            pedido.getValorItens(),
-            pedido.getFreteValor(),
-            pedido.getValorTotal(),
-            pedido.getStatus().name()
+                pedido.getId(),
+                pedido.getValorItens(),
+                pedido.getFreteValor(),
+                pedido.getValorTotal(),
+                pedido.getStatus().name()
         );
     }
 
@@ -256,6 +262,11 @@ public class PedidoService {
         if (!pedido.getCliente().getId().equals(userIdSessao)) {
             throw new SecurityException("Você não tem permissão para ver este pedido.");
         }
+        
+        // ADIÇÃO: Mapeia o endereço para o DTO
+        Endereco enderecoModel = pedido.getEnderecoEntrega(); 
+        EnderecoDetalheDTO enderecoDTO = mapEndereco(enderecoModel); 
+        // FIM ADIÇÃO
 
         List<PedidoItem> itens = pedidoItemRepo.findByPedidoId(pedidoId);
 
@@ -278,7 +289,8 @@ public class PedidoService {
                 pedido.getFreteValor(),
                 pedido.getValorItens(),
                 pedido.getValorTotal(),
-                itensDTO
+                itensDTO,
+                enderecoDTO // <-- AGORA COMPILA E ENVIA O ENDEREÇO
         );
     }
 

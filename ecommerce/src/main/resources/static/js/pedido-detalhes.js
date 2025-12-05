@@ -17,7 +17,7 @@
   function money(v) {
     return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
-  
+
   // --- Funções de formatação (mantidas) ---
   function labelStatus(st) { /* ... */
     switch (st) {
@@ -46,7 +46,7 @@
       if (!box) return;
 
       if (!endereco || !endereco.logradouro) {
-          box.innerHTML = '<p class="muted">Endereço de entrega não detalhado.</p>';
+          box.innerHTML = '<p class="muted" style="color:red; font-weight:bold;">Falha: Endereço do pedido não encontrado no DTO do Back-end.</p>';
           return;
       }
 
@@ -64,15 +64,6 @@
   function buildStatusTimeline(status) { 
       const container = document.createElement('div');
       container.className = 'status-timeline';
-      
-      // [Timeline rendering logic is extensive and unchanged, omitted for brevity]
-      
-      const steps = [
-        { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando' },
-        { code: 'PAGO',                 label: 'Aprovado' },
-        { code: 'ENVIADO',              label: 'Enviado' },
-        { code: 'ENTREGUE',             label: 'Entregue' }
-      ];
 
       if (status === 'CANCELADO') {
           container.innerHTML = `
@@ -84,6 +75,13 @@
           container.style.justifyContent = 'center';  
           return container;
       }
+
+      const steps = [
+        { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando' },
+        { code: 'PAGO',                 label: 'Aprovado' },
+        { code: 'ENVIADO',              label: 'Enviado' },
+        { code: 'ENTREGUE',             label: 'Entregue' }
+      ];
 
       let reachedIndex = steps.findIndex(s => s.code === status);
       if (reachedIndex === -1 && status === 'CARRINHO') reachedIndex = -1;
@@ -107,18 +105,19 @@
   function renderPedido(dto) {
     const resumoBox = $('#pedido-resumo');
     const itensBox  = $('#pedido-itens');
-    // Adicionado: Puxa o objeto de endereço do DTO do pedido
+    
+    // Tenta acessar o endereço. Assume que o campo deve se chamar enderecoEntrega ou endereco
     const enderecoEntrega = dto.enderecoEntrega || dto.endereco || null; 
+
+    // --- Renderiza Endereço ---
+    renderEndereco(enderecoEntrega);
+
 
     if (!dto) {
       resumoBox.innerHTML = '<p class="muted">Pedido não encontrado.</p>';
       if (itensBox) itensBox.textContent = '';
       return;
     }
-
-    // --- Renderiza Endereço ---
-    renderEndereco(enderecoEntrega);
-
 
     const data = dto.dataCriacao
       ? new Date(dto.dataCriacao).toLocaleString('pt-BR')
@@ -198,6 +197,8 @@
 
     try {
       const dto = await api(`/pedidos/${id}`);
+      // Loga o DTO para debug se o endereço não aparecer
+      console.log("DTO do Pedido recebido (verifique se 'endereco' está aqui):", dto); 
       renderPedido(dto);
     } catch (e) {
       console.error(e);

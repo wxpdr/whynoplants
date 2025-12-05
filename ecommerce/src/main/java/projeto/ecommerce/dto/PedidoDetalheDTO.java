@@ -16,5 +16,6 @@ public record PedidoDetalheDTO(
         BigDecimal freteValor,
         BigDecimal valorItens,
         BigDecimal valorTotal,
-        List<PedidoItemDetalheDTO> itens
+        List<PedidoItemDetalheDTO> itens,
+        EnderecoDetalheDTO enderecoEntrega
 ) {}
