@@ -1,232 +1,271 @@
-/* ===== Loja pública (Sprint 3) - ESTILIZAÇÃO FINAL ORGÂNICA/CLEAN ===== */
+/* static/css/index.css - LOJA PÚBLICA (VISUAL PADRONIZADO) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR (VERDE ORGÂNICO E CLEAN)              */
+/* 1. VARIÁVEIS E TEMA (IDENTIDADE VISUAL DO SISTEMA)        */
 /* ========================================================= */
 :root {
-  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
-  --fg: #212121;      /* Texto Principal */
-  --bg: #FFFFFF;     /* Fundo Geral (Branco Puro) */
-  --card-bg: #FFFFFF;
-  --border: #E5E7EB;  /* Borda sutil */
-  --shop-header-bg: #F0F8F0; /* Fundo claro (igual ao backoffice header) */
-  --accent-green: #74B274; /* Para acentuação (logo) */
-
-  --on-bg: #E8F5E9; /* Para destaques em hover de botões */
+  --primary: #4CAF50;       /* Verde Padrão (Igual Admin) */
+  --primary-dark: #388E3C;  /* Verde Escuro (Hover) */
+  --bg: #f5f5f5;           /* Fundo Cinza Claro */
+  --card-bg: #FFFFFF;      /* Fundo dos Cards/Header */
+  --fg: #333333;           /* Texto Principal */
+  --muted: #666666;        /* Texto Secundário */
+  --border: #e0e0e0;       /* Bordas Suaves */
+  
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
 }
 
-/* ========================================================= */
-/* 2. RESET E ESTRUTURA GLOBAL (FONTE PADRONIZADA)           */
-/* ========================================================= */
 * { box-sizing: border-box; }
-html, body { height: 100%; }
+
 body {
   margin: 0;
-  font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
-  color: var(--fg); 
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg);
+  color: var(--fg);
+  padding-bottom: 60px;
+  line-height: 1.5;
 }
 
+/* Utilitário para acessibilidade (mantido do seu original) */
 .visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  border: 0;
-  padding: 0;
-  clip: rect(0 0 0 0);
-  overflow: hidden;
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  border: 0; padding: 0; clip: rect(0 0 0 0); overflow: hidden;
 }
 
 /* ========================================================= */
-/* 3. HEADER - site-header (Estilo do Backoffice aplicado)   */
+/* 2. HEADER (MENU SUPERIOR)                                 */
 /* ========================================================= */
 .site-header {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 15px 40px; /* Espaçamento lateral bom */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 155px; /* CORREÇÃO: Padding horizontal aumentado para 40px */
-  background: var(--shop-header-bg); 
-  color: var(--fg); /* Texto escuro */
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Logo - Agora em Dark Text */
+/* Logo */
 .logo .brand {
   text-decoration: none;
+  font-size: 1.8rem;
   font-weight: 800;
-  font-size: 24px; 
-  letter-spacing: .4px;
-  color: var(--fg); 
-  transition: opacity .2s;
+  color: var(--fg);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
 }
-.logo .brand:hover { opacity: 0.8; }
-.logo .brand span { color: var(--primary); font-weight: 900; } 
+.logo .brand span { color: var(--primary); }
 
+/* Navegação e Botões do Header */
+.top-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
 
-/* Ações do Topo (Botões Estilo Backoffice) */
-.top-actions { display: flex; align-items: center; gap: 10px; } 
-
+/* Links do Header (Minha Conta / Carrinho) */
 .top-actions .link-identificacao, 
-.top-actions .icon-btn {
-    color: var(--fg);
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all .2s;
-    background: var(--card-bg);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.top-actions .link-identificacao:hover, 
-.top-actions .icon-btn:hover {
-    background: var(--on-bg);
-    border-color: var(--primary);
-    color: var(--primary);
-    box-shadow: none;
-}
-
-.top-actions .icon-btn {
-  padding: 8px 10px;
-  width: auto;
-  height: auto;
-  font-size: 16px; 
+.top-actions a {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
   display: inline-flex;
-}
-.top-actions a span { font-weight: 500; }
-
-
-.content { 
-    padding: 30px 22px; 
-    max-width: 1200px; 
-    margin: 0 auto; 
+  align-items: center;
+  gap: 8px;
 }
 
-.grid-toolbar { 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    margin-bottom: 20px; 
+.top-actions .link-identificacao:hover,
+.top-actions a:hover {
+  background: #f0fdf4; /* Verde muito claro */
+  color: var(--primary-dark);
+  border-color: #bbf7d0;
 }
-.grid-toolbar .note { color: #888; font-size: 14px; } 
+
+/* Badge do Carrinho */
+.badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
 
 /* ========================================================= */
-/* 4. GRID E CARDS - produtos-grid                           */
+/* 3. LAYOUT PRINCIPAL (GRID)                                */
 /* ========================================================= */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.grid-toolbar {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+.grid-toolbar .note {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Grid de Produtos */
 .produtos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
-  gap: 20px; 
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
 }
+
+/* ========================================================= */
+/* 4. CARD DE PRODUTO                                        */
+/* ========================================================= */
 .card {
-  display: grid;
-  grid-template-rows: auto 1fr;
   background: var(--card-bg);
-  border: 1px solid var(--border); 
-  border-radius: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,.08); 
-  transition: transform .15s ease, box-shadow .15s ease;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
+
 .card:hover {
-  transform: translateY(-4px); 
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
 }
+
+/* Área da Imagem */
 .img-wrap {
   display: block;
-  background: #f0f2f1;
-  aspect-ratio: 4/3;
+  width: 100%;
+  aspect-ratio: 4/3; /* Mantém formato retangular padrão */
+  background: #f0f0f0;
   overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
-.img-wrap img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.3s ease;
-}
-.card:hover .img-wrap img {
-    transform: scale(1.03); 
+  position: relative;
+  cursor: pointer;
 }
 
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem preencha sem distorcer */
+  transition: transform 0.5s ease;
+}
+
+.card:hover .img-wrap img {
+  transform: scale(1.08); /* Zoom suave ao passar o mouse */
+}
+
+/* Corpo do Card */
 .card-body {
-  display: grid; gap: 8px; 
-  padding: 16px; 
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Ocupa o resto da altura */
+  gap: 10px;
 }
-.titulo { 
-    margin: 0; 
-    font-size: 17px; 
-    font-weight: 700; 
-    color: var(--fg); 
-    min-height: 40px; 
-}
-.preco { 
-    font-weight: 800; 
-    font-size: 18px; 
-    color: var(--primary); 
-    margin-top: 4px;
-}
-.btn {
-  display: inline-block;
-  padding: 10px 10px;
-  border-radius: 10px;
-  border: 0;
-  background: var(--primary); 
-  color: #fff;
-  cursor: pointer;
+
+/* Título do Produto */
+.titulo {
+  margin: 0;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-top: 8px;
-  transition: all .15s ease; 
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
+  color: var(--fg);
+  line-height: 1.4;
+  height: 2.8em; /* Limita a 2 linhas */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
-.btn:hover { 
-    background: #517451; 
-    filter: none;
+
+/* Preço */
+.preco {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: auto; /* Empurra o preço para baixo do texto */
+  margin-bottom: 5px;
 }
-.btn:active {
-    transform: translateY(1px); 
-    box-shadow: none;
+
+/* Botão "Ver Detalhes" */
+.btn.detalhes {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
 }
-.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn.detalhes:hover {
+  background: var(--primary-dark);
+}
 
 /* ========================================================= */
-/* 5. SKELETON (Estilos para o Carregamento)                 */
+/* 5. LOADING SKELETON (CARREGAMENTO)                        */
 /* ========================================================= */
 .card.skeleton {
-    cursor: default;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
-    transform: none;
+  pointer-events: none;
+  box-shadow: none;
+  border-color: transparent;
 }
-.card.skeleton:hover {
-    transform: none;
-    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+
+.card.skeleton .img-wrap,
+.card.skeleton .sk-line,
+.card.skeleton .sk-btn {
+  background: #e0e0e0;
+  animation: pulse 1.5s infinite ease-in-out;
 }
-.card.skeleton .img-wrap {
-    background: #E5E7EB;
-} 
-.card.skeleton .card-body {
-    background: #F9FAFB;
-}
+
+.card.skeleton .card-body { background: #fff; }
+
 .sk-line {
-    background: #E5E7EB;
-    height: 14px;
-    border-radius: 4px;
-    margin-bottom: 6px;
-    animation: pulse 1.5s infinite ease-in-out;
+  height: 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
 }
+
 .sk-btn {
-    background: #E5E7EB;
-    height: 38px;
-    border-radius: 10px;
-    margin-top: 8px;
-    animation: pulse 1.5s infinite ease-in-out;
+  height: 40px;
+  border-radius: 8px;
+  margin-top: 15px;
 }
+
 @keyframes pulse {
-    0% { opacity: 0.7; }
-    50% { opacity: 1; }
-    100% { opacity: 0.7; }
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* ========================================================= */
+/* 6. RESPONSIVIDADE                                         */
+/* ========================================================= */
+@media (max-width: 768px) {
+  .site-header { padding: 15px 20px; }
+  .produtos-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+  .titulo { font-size: 1rem; }
+  .preco { font-size: 1.2rem; }
+  .btn.detalhes { padding: 10px; font-size: 0.85rem; }
 }
