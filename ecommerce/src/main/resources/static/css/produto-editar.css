@@ -1,204 +1,204 @@
-/* static/css/produto-editar.css */
-
-/* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
-/* ========================================================= */
-:root{
-    --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
-    --border:#E5E7EB; 
-    --muted:#6B7280; 
-    --fg:#212121; /* Texto Principal */
-    --card-bg: #FFFFFF;
+:root {
+  --primary: #4CAF50;
+  --bg: #f5f5f5;
+  --text: #333;
+  --border: #ccc;
+  --danger: #e74c3c;
+  --star-off: #ccc;
+  --star-on: #ffc107; /* Amarelo ouro */
 }
 
-/* ========================================================= */
-/* 1.1. MODO ESCURO (DARK MODE)                              */
-/* ========================================================= */
-.dark-mode{
-    --primary: #74B274;
-    --border:#4A6568;
-    --muted:#9CA3AF;
-    --fg:#ECEFF1;
-    --card-bg: #2B3E42;
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 20px;
 }
 
-/* ========================================================= */
-/* 2. RESET E ESTRUTURA GERAL                                */
-/* ========================================================= */
-*{box-sizing:border-box} 
-body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto; 
-    color:var(--fg); 
-    background:var(--card-bg);
-    transition: all 0.3s;
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.container{
-    max-width:1100px;
-    margin:24px auto;
-    padding:0 12px
+h1, h2 { margin-top: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
 }
 
-h1{
-    margin:0 0 16px
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
 }
 
-/* ========================================================= */
-/* 3. FORMULÁRIO E INPUTS                                    */
-/* ========================================================= */
-label{
-    display:block;
-    margin:12px 0 6px;
-    font-weight:600
+.col { display: flex; flex-direction: column; gap: 15px; }
+
+label { font-weight: 500; font-size: 0.9rem; margin-bottom: 4px; display: block; }
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-input,textarea,select{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:10px;
-    background:var(--card-bg);
-    color:var(--fg);
-    transition: all 0.3s;
-}
-.dark-mode input, .dark-mode textarea, .dark-mode select {
-    background: #1F2937;
-    border-color: var(--border);
+textarea { resize: vertical; }
+
+.gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:24px
+.grid-imgs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* ========================================================= */
-/* 4. GALERIA ATUAL E AÇÕES                                  */
-/* ========================================================= */
-.gallery-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:8px
+.card-img {
+  width: 100px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
-.grid-imgs{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-    gap:12px
+.card-img .thumb {
+  height: 80px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card-img{
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:8px;
-    transition: all 0.3s;
+.card-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
 }
 
-.card-img .thumb{
-    height:120px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    background:#fafafa;
-    border-radius:8px;
-    transition: all 0.3s;
-}
-.dark-mode .card-img .thumb {
-    background: #374151;
+/* Rodapé do card: Botão Remover + Estrela */
+.card-img .row {
+  display: flex;
+  justify-content: space-between; /* Espalha os itens */
+  align-items: center;
+  padding: 5px 8px;
+  background: #f9f9f9;
+  border-top: 1px solid #eee;
 }
 
-.card-img img{
-    max-width:100%;
-    max-height:100%
+/* Botões */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.btn.primary { background: var(--primary); color: #fff; }
+.btn.ghost { background: transparent; color: #666; border: 1px solid #ddd; }
+.btn.ghost:hover { background: #eee; }
+
+.btn-remove {
+  font-size: 0.75rem;
+  color: var(--danger);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.btn-remove:hover {
+  background: #ffebeb;
+  border-color: var(--danger);
 }
 
-.card-img .row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:6px
+/* Estrela (Principal) */
+.star {
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--star-off);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.star:hover { transform: scale(1.1); }
+.star.on { color: var(--star-on); }
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
 }
 
-.star{
-    cursor:pointer;
-    font-size:18px
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal[hidden] { display: none; }
+
+.modal-card {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
 }
 
-.star.on{
-    color:var(--primary); /* Aplica o verde */
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* ========================================================= */
-/* 5. BOTÕES E AÇÕES (Efeito de Press)                       */
-/* ========================================================= */
-.btn{
-    border:1px solid var(--border);
-    padding:8px 14px;
-    border-radius:10px;
-    background:var(--card-bg);
-    color:var(--fg);
-    cursor:pointer;
-    transition:all .15s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-.dark-mode .btn {
-    background: #1F2937;
-    border-color: var(--border);
-    color: var(--fg);
-    box-shadow: none;
-}
-.btn:active {
-    box-shadow: none;
-    transform: translateY(1px);
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
 }
 
-.btn.primary{
-    background:var(--primary);
-    color:#fff;
-    border-color:var(--primary);
-    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);
-}
-.dark-mode .btn.primary {
-    background: var(--primary);
-    color: #111827;
-    border-color: var(--primary);
-}
-
-.btn.ghost{
-    background:transparent;
-    box-shadow: none;
-}
-.dark-mode .btn.ghost {
-    background:transparent;
-    border-color: var(--border);
-}
-.btn.ghost:active {
-    background: #E5E7EB;
-    transform: translateY(1px);
-}
-.dark-mode .btn.ghost:active {
-    background: #374151;
-    transform: translateY(1px);
+#gridNovas {
+  margin-top: 15px;
+  min-height: 200px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  transition: all 0.2s;
 }
 
-
-.form-actions{
-    display:flex;
-    gap:12px;
-    justify-content:flex-end;
-    margin-top:16px
+.empty-msg {
+  color: #888;
+  font-size: 0.95rem;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  align-self: center;
 }
-
-/* ========================================================= */
-/* 6. MODAL (GALERIA DE IMAGENS)                             */
-/* ========================================================= */
-.modal[hidden]{display:none !important}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
-.modal-card{background:var(--card-bg);border-radius:12px;max-width:900px;width:95%;padding:12px 12px 18px; transition: all 0.3s}
-.dark-mode .modal-card { background: #2B3E42; }
-
-.modal-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:8px}
-.modal-body{padding-top:12px}

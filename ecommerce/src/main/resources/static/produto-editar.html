@@ -30,8 +30,13 @@
 
           <label for="avaliacao">Avaliação (1 a 5, passo 0.5)</label>
           <input id="avaliacao" type="number" min="1" max="5" step="0.5">
-
-        </div> <!-- FIX: fechar a primeira coluna -->
+          
+          <label for="ativo">Produto Ativo?</label>
+          <select id="ativo" required>
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+          </select>
+        </div> 
 
         <div class="col">
           <div class="gallery-header">
@@ -59,7 +64,7 @@
       <div class="modal-body">
         <input id="inputImgsNovas" type="file" accept="image/*" multiple hidden>
         <button type="button" id="addNova" class="btn">Escolher arquivos</button>
-        <div id="gridNovas" class="grid-imgs"></div>
+        <div id="gridNovas"></div>
       </div>
     </div>
   </div>

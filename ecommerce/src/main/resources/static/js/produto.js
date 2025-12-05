@@ -1,19 +1,19 @@
-/* Produto - Listagem, busca, paginação e (des)ativação com confirmação */
+/* Produto - Listagem Geral (Sem filtro de status) */
 
 const API = (window.API_BASE ?? (location.origin + "/api"));
 
 let pagina = 0;
 const tamanho = 10;
 let termo = "";
-let apenasAtivos = true;
+// Removido: let apenasAtivos = true;
 
-// NOVO: refs do modal de confirmação
+// Modal refs
 const confirmModal = document.getElementById("confirmModal");
 const confirmTitulo = document.getElementById("confirmTitulo");
 const confirmMensagem = document.getElementById("confirmMensagem");
 const btnCancelarConfirm = document.getElementById("btnCancelarConfirm");
 const btnConfirmar = document.getElementById("btnConfirmar");
-let _acaoPendente = null; // { id, vaiAtivar }
+let _acaoPendente = null; 
 
 (async function guard(){
   try{
@@ -36,9 +36,10 @@ function ligarEventos(){
   $("#busca").addEventListener("keydown", (e)=>{ if(e.key==="Enter") onBuscar(); });
   $("#prev").addEventListener("click", ()=>{ pagina = Math.max(0, pagina-1); listar(); });
   $("#next").addEventListener("click", ()=>{ pagina = pagina+1; listar(); });
-  $("#filtroAtivos").addEventListener("change", (e)=>{ apenasAtivos = e.target.checked; pagina=0; listar(); });
+  
+  // Removido listener do filtroAtivos
 
-  // eventos do modal
+  // Eventos do modal
   btnCancelarConfirm?.addEventListener("click", fecharConfirmacao);
   confirmModal?.addEventListener("click", (e)=>{ if (e.target === confirmModal) fecharConfirmacao(); });
   btnConfirmar?.addEventListener("click", async ()=>{
@@ -58,7 +59,9 @@ function onBuscar(){
 async function listar(){
   const params = new URLSearchParams({ page: pagina, size: tamanho });
   if (termo) params.set("q", termo);
-  if (apenasAtivos) params.set("ativo", true);
+  
+  // Removido: if (apenasAtivos) params.set("ativo", true);
+  // Ao não enviar o param "ativo", o backend deve retornar todos.
 
   const r = await fetch(`${API}/produtos?${params.toString()}`, { credentials:"include" });
   if (!r.ok) { alert("Falha ao carregar produtos"); return; }
@@ -90,7 +93,6 @@ function renderTabela(items){
     tbody.appendChild(tr);
   }
 
-  // abrir modal de confirmação ao clicar
   tbody.querySelectorAll("button[data-toggle]").forEach(btn=>{
     btn.addEventListener("click", (e)=>{
       const id = Number(e.currentTarget.getAttribute("data-toggle"));
@@ -110,7 +112,7 @@ function renderPaginacao(page){
   document.getElementById("next").disabled = !!page.last;
 }
 
-// ===== confirmação =====
+// ===== Confirmação =====
 function abrirConfirmacao({ id, vaiAtivar, nome }) {
   _acaoPendente = { id, vaiAtivar };
   confirmTitulo.textContent = vaiAtivar ? "Ativar produto" : "Inativar produto";
@@ -122,7 +124,6 @@ function fecharConfirmacao() {
   _acaoPendente = null;
 }
 
-// efetiva chamada no backend
 async function efetivarToggle(id, vaiAtivar){
   const url = `${API}/produtos/${id}/${vaiAtivar ? 'ativar' : 'inativar'}`;
   const r = await fetch(url, { method:"PATCH", credentials:"include" });
@@ -130,28 +131,25 @@ async function efetivarToggle(id, vaiAtivar){
     alert("Falha ao alterar status do produto");
     return;
   }
-  listar(); // reflete no front
+  listar(); 
 }
 
-// util
 function escapeHtml(s){
   return String(s).replace(/[&<>"'`=\/]/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'
   }[c]));
 }
 
-// GUARDA DE PERFIL para a lista do ADMIN
+// Guarda admin
 (async function guardaAdmin(){
   try{
     const r = await fetch("/api/whoami", { credentials:"include" });
     if (r.ok){
       const me = await r.json();
       if (me && me.perfil === "Estoquista") {
-        // Estoquista não usa produto.html -> manda para a tela dele
         location.href = "estoque-produto.html";
         return;
       }
     }
   }catch(_){}
 })();
-

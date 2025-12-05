@@ -1,130 +1,232 @@
-/* static/css/produto.css - LISTAGEM E MODAL (ADMIN/ESTOQUE) */
-
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
+/* 1. VARIÁVEIS E TEMA (Igual ao produto-editar.css)         */
 /* ========================================================= */
-:root{
-  --primary: #5F865F; 
-  --bg:#FFFFFF; 
-  --fg:#212121; 
-  --muted:#6b7280; 
-  --border:#E5E7EB; 
+:root {
+  --primary: #4CAF50;       /* Verde padrão do sistema */
+  --bg: #f5f5f5;           /* Fundo cinza claro */
+  --text: #333;            /* Texto principal */
+  --border: #ccc;          /* Bordas padrão */
+  --danger: #e74c3c;       /* Vermelho para ações destrutivas */
   
-  --on-bg: #E8F5E9; 
-  --on-fg: #5F865F;
-  --off-bg:#FEF2F2;
-  --off-fg:#B91C1C;
-  --card-bg: #FFFFFF;
+  /* Cores específicas para Badges de Status */
+  --badge-active-bg: #e8f5e9;
+  --badge-active-fg: #2e7d32;
+  --badge-inactive-bg: #ffebee;
+  --badge-inactive-fg: #c62828;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 20px;
 }
 
 /* ========================================================= */
-/* 1.1. MODO ESCURO (DARK MODE)                              */
+/* 2. CONTAINER (Cartão Branco Centralizado)                 */
 /* ========================================================= */
-.dark-mode {
-  --primary: #74B274;
-  --bg: #1D2B2E;
-  --fg: #ECEFF1;
-  --card-bg: #2B3E42;
-  --border: #4A6568;
-  --muted: #9CA3AF;
-
-  --on-bg: #15803D;
-  --on-fg: #A7F3D0;
-  --off-bg:#7F1D1D;
-  --off-fg:#FECACA;
+.container {
+  max-width: 1100px; /* Um pouco mais largo que a edição para caber a tabela */
+  margin: 0 auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
-
-/* ========================================================= */
-/* 2. RESET E ESTRUTURA GLOBAL (FONTE PADRONIZADA)           */
-/* ========================================================= */
-*{box-sizing:border-box}
-html,body{
-    margin:0;padding:0;
-    background:var(--bg);
-    color:var(--fg);
-    font-family: Roboto, 'Open Sans', system-ui, -apple-system, Segoe UI, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
-}
-.dark-mode body { background: var(--bg); color: var(--fg); }
-
-.container{max-width:1100px;margin:24px auto;padding:0 12px}
 
 /* ========================================================= */
 /* 3. HEADER E TOOLBAR                                       */
 /* ========================================================= */
-.header{display:flex;align-items:center;justify-content:space-between;margin:8px 0 12px}
-.header h1{font-size:1.6rem;margin:0}
-.nav{display:flex;gap:8px}
-
-.toolbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin:12px 0}
-.search{display:flex;gap:8px;align-items:center}
-.filters{display:flex;gap:12px;align-items:center}
-.switch span{margin-left:6px;color:var(--muted);font-size:.95rem}
-
-/* ========================================================= */
-/* 4. BOTÕES E INPUTS (Efeitos de Press e Hover)             */
-/* ========================================================= */
-.btn{
-    border:1px solid var(--border);padding:8px 12px;border-radius:8px;
-    cursor:pointer;text-decoration:none;display:inline-block;
-    background:var(--card-bg);color:var(--fg);
-    transition:all .15s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
 }
-.dark-mode .btn { background: var(--card-bg); color: var(--fg); border-color: var(--border); box-shadow: none; }
-.btn:active { box-shadow: none; transform: translateY(1px); }
 
-.btn.ghost{background:transparent;box-shadow: none; color: var(--fg);}
-.dark-mode .btn.ghost { background:transparent; border-color: var(--border); }
-.btn.ghost:hover {background: var(--on-bg); border-color: var(--primary); color: var(--primary); }
-.dark-mode .btn.ghost:hover {background: #374151; border-color: var(--primary); color: var(--primary); }
-.btn.ghost:active { background: #E5E7EB; transform: translateY(1px); }
-.dark-mode .btn.ghost:active { background: #374151; transform: translateY(1px); }
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
 
-.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff; box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);}
-.dark-mode .btn.primary { background: var(--primary); border-color: var(--primary); color: #111827; }
-.btn.primary:hover{ background:#517451; border-color:#517451}
+.nav {
+  display: flex;
+  gap: 10px;
+}
 
-input[type="search"]{padding:8px 10px;border:1px solid var(--border);border-radius:8px;min-width:280px}
-.dark-mode input[type="search"] { background: var(--card-bg); color: var(--fg); border-color: var(--border); }
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
+/* Campo de busca igual aos inputs de edição */
+.search {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+input[type="search"] {
+  flex: 1;
+  max-width: 400px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1rem;
+}
 
 /* ========================================================= */
-/* 5. TABELA E AÇÕES                                         */
+/* 4. TABELA                                                 */
 /* ========================================================= */
-.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table th, 
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table th {
+  font-weight: 600;
+  color: #555;
+  background-color: #fafafa; /* Cabeçalho sutil */
+}
 
 .table tbody tr:hover {
-    background-color: #F3F4F6;
-    cursor: default;
-    transition: background-color 0.3s ease;
+  background-color: #f9f9f9; /* Mesmo tom do hover de imagens */
 }
-.dark-mode .table tbody tr:hover { background-color: #2B3E42; }
 
-.table th,.table td{border-bottom:1px solid var(--border);padding:12px 10px;text-align:left}
-.dark-mode .table th, .dark-mode .table td { border-bottom-color: var(--border); }
+/* Coluna de ações */
+.col-acoes {
+  width: 180px;
+  text-align: right;
+}
 
-.table th{font-weight:600}
-.col-acoes{width:140px}
+.row-actions {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-start;
+}
 
-/* Badges */
-.badge{padding:3px 8px;border-radius:12px;font-size:.85rem;border:1px solid var(--border)}
-.badge.on{background:var(--on-bg);color:var(--on-fg);border-color:var(--on-fg)}
-.badge.off{background:var(--off-bg);color:var(--off-fg);border-color:var(--off-fg)}
+/* Badges de Status (Ativo/Inativo) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
 
-.row-actions{display:flex;flex-direction:column;gap:4px;flex-wrap:nowrap}
-.row-actions .btn{padding:6px 10px;font-size: 0.85rem;text-align: center;width: 100px;}
+.badge.on {
+  background-color: var(--badge-active-bg);
+  color: var(--badge-active-fg);
+}
 
-.pagination{display:flex;gap:8px;align-items:center;justify-content:center;margin:14px 0}
-.pagination .info{color:var(--muted)}
+.badge.off {
+  background-color: var(--badge-inactive-bg);
+  color: var(--badge-inactive-fg);
+}
 
 /* ========================================================= */
-/* 6. MODAL DE CONFIRMAÇÃO                                   */
+/* 5. BOTÕES (Estilo Unificado)                              */
 /* ========================================================= */
-.modal[hidden]{display:none !important}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
-.modal-card{background:var(--card-bg);width:min(520px,92%);border-radius:12px;padding:14px; transition: background-color 0.3s}
-.dark-mode .modal-card { background: var(--card-bg); }
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
 
-.modal-header{padding:6px 4px 10px;border-bottom:1px solid var(--border)}
-.modal-body{padding:12px 4px}
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);padding-top:10px}
+.btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn.primary:hover {
+  filter: brightness(0.9);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+}
+.btn.ghost:hover {
+  background: #eee;
+}
+
+/* ========================================================= */
+/* 6. PAGINAÇÃO                                              */
+/* ========================================================= */
+.pagination {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.pagination .info {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* ========================================================= */
+/* 7. MODAL DE CONFIRMAÇÃO (Igual ao de Edição)              */
+/* ========================================================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal[hidden] { display: none; }
+
+.modal-card {
+  background: #fff;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+.modal-header h2 { margin: 0; font-size: 1.2rem; }
+
+.modal-body {
+  padding: 20px;
+  color: var(--text);
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
