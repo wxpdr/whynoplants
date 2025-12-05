@@ -4,28 +4,34 @@
   <meta charset="utf-8"/>
   <title>Detalhes do Pedido</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="stylesheet" href="css/principal-cliente.css"/>
+  <link rel="stylesheet" href="css/pedido-detalhes.css"/>
 </head>
 <body>
-  <header class="header">
-    <div class="who">
-      <button class="btn ghost" onclick="history.back()">← Voltar</button>
-      <strong>Detalhes do Pedido</strong>
+
+  <div class="container-main">
+    <div class="card">
+      
+      <div class="topbar">
+        <h1>Detalhes do Pedido</h1>
+        <button class="btn ghost" onclick="history.back()">← Voltar</button>
+      </div>
+
+      <section class="section-block">
+        <h2 class="section-title">Resumo</h2>
+        <div id="pedido-resumo">Carregando informações...</div>
+      </section>
+
+      <hr class="divider">
+
+      <section class="section-block">
+        <h2 class="section-title">Itens do Pedido</h2>
+        <div id="pedido-itens">Carregando itens...</div>
+      </section>
+
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <section class="card">
-      <h2>Resumo</h2>
-      <div id="pedido-resumo">Carregando...</div>
-    </section>
-
-    <section class="card">
-      <h2>Itens</h2>
-      <div id="pedido-itens">Carregando...</div>
-    </section>
-  </main>
-
+  <script>window.API = "http://localhost:8080";</script>
   <script src="js/pedido-detalhes.js"></script>
 </body>
 </html>

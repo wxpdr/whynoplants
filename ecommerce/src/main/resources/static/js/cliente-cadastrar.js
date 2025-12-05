@@ -1,7 +1,6 @@
 // static/js/cliente-cadastrar.js
 (() => {
-  // ---------------- utils ----------------
-  const $  = (sel, ctx = document) => ctx.querySelector(sel);
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
   const onlyDigits = (s) => (s || "").replace(/\D/g, "");
@@ -17,12 +16,12 @@
   async function viaCep(cepStr) {
     const cep = onlyDigits(cepStr);
     if (cep.length !== 8) return null;
-    const r = await fetch(`/clientes/viacep/${cep}`);
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
     if (!r.ok) return null;
     return r.json();
   }
 
-  // --------------- coleta dados ---------------
+  // --- COLETA DADOS ---
   function getFat() {
     return {
       cep: $("#fat_cep").value,
@@ -55,7 +54,7 @@
 
   function montarPayload() {
     const { primeiro, sobrenome } = splitNome($("#nome").value);
-    const generoEnum = $("#genero").value || "NAO_INFORMAR"; // value já vem correto do HTML
+    const generoEnum = $("#genero").value || "NAO_INFORMAR";
 
     const faturamento = getFat();
     const entregas = getEntregas();
@@ -65,15 +64,15 @@
       sobrenome: sobrenome,
       email: $("#email").value.trim(),
       senha: $("#senha").value,
-      cpf: onlyDigits($("#cpf").value), // <<< AQUI: envia só dígitos
+      cpf: onlyDigits($("#cpf").value),
       dataNascimento: $("#nascimento").value || null,
-      genero: generoEnum, // FEMININO | MASCULINO | NAO_INFORMAR | OUTRO
+      genero: generoEnum,
       enderecos: [faturamento, ...entregas],
-      copiarEnderecoEntrega: entregas.length === 0, // se não houver entrega, copiar do faturamento
+      copiarEnderecoEntrega: entregas.length === 0,
     };
   }
 
-  // --------------- UI / comportamento ---------------
+  // --- COMPORTAMENTO ---
   async function bindCepAutoFillFat() {
     $("#fat_cep").addEventListener("blur", async () => {
       const data = await viaCep($("#fat_cep").value);
@@ -105,7 +104,7 @@
       card.remove();
     });
 
-    // Preenchimento inicial (quando copiar do faturamento)
+    // Preenchimento
     if (prefill) {
       $(".ent_cep", card).value = prefill.cep || "";
       $(".ent_logradouro", card).value = prefill.logradouro || "";
@@ -120,12 +119,10 @@
   }
 
   function bindButtons() {
-    // copiar faturamento → adiciona uma entrega pré-preenchida
     $("#copiarFaturamento").addEventListener("click", () => {
       addEntregaCard(getFat());
     });
 
-    // adicionar entrega em branco
     $("#novoEndereco").addEventListener("click", () => {
       addEntregaCard(null);
     });
@@ -133,37 +130,27 @@
 
   function formatValidationMessage(msg) {
     if (!msg) return "Erro no cadastro. Verifique os campos.";
-
-    // tira colchetes [ ... ]
     msg = String(msg);
     if (msg.startsWith("[") && msg.endsWith("]")) {
       msg = msg.slice(1, -1);
     }
-
-    // quebra em itens se tiver vários campos
-    const parts = msg.split(",").map(s => s.trim()).filter(Boolean);
-
+    const parts = msg
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     if (parts.length > 1) {
-      // vira lista bonitinha:
       return "Corrija os seguintes campos:\n- " + parts.join("\n- ");
     }
-
     const lower = msg.toLowerCase();
-
-    if (lower.includes("cpf")) {
+    if (lower.includes("cpf"))
       return "CPF inválido. Verifique os números digitados.";
-    }
-    if (lower.includes("cep")) {
+    if (lower.includes("cep"))
       return "CEP inválido. Verifique o endereço informado.";
-    }
-    if (lower.includes("e-mail") || lower.includes("email")) {
-      return "E-mail inválido. Verifique o endereço informado.";
-    }
-
+    if (lower.includes("e-mail") || lower.includes("email"))
+      return "E-mail inválido.";
     return msg;
   }
 
-  // --------------- submissão ---------------
   async function cadastrarCliente(payload) {
     let msg = "Erro no cadastro. Verifique os campos.";
 
@@ -175,8 +162,8 @@
       });
 
       if (res.status === 201 || res.ok) {
-        alert('Conta criada com sucesso! 🎉');
-        window.location.href = '/login.html';
+        alert("Conta criada com sucesso! 🎉");
+        window.location.href = "/login.html";
         return;
       }
 
@@ -190,7 +177,6 @@
       }
     } catch (e) {
       console.error(e);
-      // mantém msg padrão se der erro inesperado
     }
 
     msg = formatValidationMessage(msg);
@@ -198,12 +184,13 @@
   }
 
   function validateFront(payload) {
-    if (!$("#aceite").checked) {
-      alert("Confirme que os dados estão corretos.");
-      return false;
-    }
-    if (!payload.primeiroNome || payload.primeiroNome.length < 3 ||
-        !payload.sobrenome || payload.sobrenome.length < 3) {
+    // Verificações básicas
+    if (
+      !payload.primeiroNome ||
+      payload.primeiroNome.length < 3 ||
+      !payload.sobrenome ||
+      payload.sobrenome.length < 3
+    ) {
       alert("Informe nome e sobrenome (mínimo 3 letras cada).");
       return false;
     }
@@ -211,12 +198,10 @@
       alert("Preencha e-mail, senha e CPF.");
       return false;
     }
-    // UF com 2 letras quando preenchido
     if ($("#fat_uf").value && up($("#fat_uf").value).length !== 2) {
       alert("UF do faturamento deve ter 2 letras.");
       return false;
     }
-    // CEP com 8 dígitos (backend valida também)
     const cepFat = onlyDigits($("#fat_cep").value);
     if (cepFat.length !== 8) {
       alert("CEP do faturamento deve ter 8 dígitos.");
@@ -236,7 +221,7 @@
     });
   }
 
-  // --------------- init ---------------
+  // --- INIT ---
   document.addEventListener("DOMContentLoaded", () => {
     bindCepAutoFillFat();
     bindButtons();

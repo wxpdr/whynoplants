@@ -11,106 +11,101 @@
     <h1>Criar nova conta</h1>
 
     <form id="formCadastro" novalidate>
-      <fieldset class="grid-2">
-        <legend>Dados pessoais</legend>
-
-        <label>Nome completo
-          <input id="nome" type="text" maxlength="120" required placeholder="Ex.: Maria Silva Souza">
-        </label>
-
-        <label>Gênero
-          <select id="genero" required>
-            <option value="">Selecione…</option>
-            <option value="FEMININO">Feminino</option>
-            <option value="MASCULINO">Masculino</option>
-            <option value="OUTRO">Não-binário</option>
-            <option value="NAO_INFORMAR">Prefiro não informar</option>
-            <option value="OUTRO">Outro</option>
-          </select>
-        </label>
-
-
-        <label>Data de nascimento
-          <input id="nascimento" type="date" required>
-        </label>
-
-        <label>CPF
-          <input id="cpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required>
-        </label>
-
-        <label>E-mail
-          <input id="email" type="email" maxlength="150" required placeholder="seuemail@exemplo.com">
-        </label>
-
-        <label>Senha
-          <input id="senha" type="password" minlength="8" maxlength="72" required placeholder="mín. 8 caracteres">
-        </label>
-      </fieldset>
-
+      
       <fieldset>
-        <legend>Endereço de faturamento (obrigatório)</legend>
-
-        <div class="grid-4">
-          <label>CEP
-            <input id="fat_cep" type="text" inputmode="numeric" maxlength="9" placeholder="00000-000" required>
+        <legend>Dados pessoais</legend>
+        <div class="grid-3"> <label>Nome completo
+            <input id="nome" type="text" maxlength="120" required placeholder="Nome e Sobrenome">
           </label>
 
-          <label>Logradouro
-            <input id="fat_logradouro" type="text" required>
+          <label>CPF
+            <input id="cpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required>
           </label>
 
-          <label>Número
-            <input id="fat_numero" type="text" required>
+          <label>Data de nascimento
+            <input id="nascimento" type="date" required>
           </label>
 
-          <label>Complemento
-            <input id="fat_complemento" type="text">
+          <label>Gênero
+            <select id="genero" required>
+              <option value="">Selecione…</option>
+              <option value="FEMININO">Feminino</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="OUTRO">Outro</option>
+              <option value="NAO_INFORMAR">Prefiro não informar</option>
+            </select>
           </label>
 
-          <label>Bairro
-            <input id="fat_bairro" type="text" required>
+          <label>E-mail
+            <input id="email" type="email" maxlength="150" required placeholder="seuemail@exemplo.com">
           </label>
 
-          <label>Cidade
-            <input id="fat_cidade" type="text" required>
-          </label>
-
-          <label>UF
-            <input id="fat_uf" type="text" maxlength="2" required>
+          <label>Senha
+            <input id="senha" type="password" minlength="8" maxlength="72" required placeholder="Mínimo 8 caracteres">
           </label>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>Endereços de entrega (obrigatório, pode ter vários)</legend>
+        <legend>Endereço de faturamento (Principal)</legend>
+        
+        <div class="address-card billing">
+          <div class="grid-4">
+            <label>CEP
+              <input id="fat_cep" type="text" inputmode="numeric" maxlength="9" placeholder="00000-000" required>
+            </label>
+
+            <label>Logradouro
+              <input id="fat_logradouro" type="text" required>
+            </label>
+
+            <label>Número
+              <input id="fat_numero" type="text" required>
+            </label>
+
+            <label>Complemento
+              <input id="fat_complemento" type="text">
+            </label>
+
+            <label>Bairro
+              <input id="fat_bairro" type="text" required>
+            </label>
+
+            <label>Cidade
+              <input id="fat_cidade" type="text" required>
+            </label>
+
+            <label>UF
+              <input id="fat_uf" type="text" maxlength="2" required>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Endereços de entrega</legend>
 
         <div class="copy-line">
           <button type="button" id="copiarFaturamento" class="btn">Copiar do faturamento</button>
-          <button type="button" id="novoEndereco" class="btn ghost">Adicionar endereço</button>
+          <button type="button" id="novoEndereco" class="btn primary">Adicionar novo endereço</button>
         </div>
 
-        <div id="listaEntrega" class="enderecos"></div>
+        <div id="listaEntrega" class="enderecos">
+          </div>
       </fieldset>
 
-      <div class="terms">
-        <label class="chk">
-          <input id="aceite" type="checkbox" required>
-          Confirmo que os dados estão corretos.
-        </label>
-      </div>
-
       <div class="actions">
-        <button type="submit" class="btn primary">Criar conta</button>
         <a href="login.html" class="btn ghost">Cancelar</a>
+        <button type="submit" class="btn primary" style="min-width: 200px;">Criar conta</button>
       </div>
     </form>
   </div>
 
   <template id="tplEndereco">
-    <div class="endereco">
+    <div class="address-card shipping endereco">
       <div class="grid-4">
-        <label>Apelido (ex.: Casa, Trabalho)
-          <input class="ent_apelido" type="text" maxlength="40" required>
+        <label>Apelido (ex.: Trabalho)
+          <input class="ent_apelido" type="text" maxlength="40" required placeholder="Nome do local">
         </label>
 
         <label>CEP
@@ -143,7 +138,7 @@
       </div>
 
       <div class="end-actions">
-        <button type="button" class="btn danger removerEndereco">Remover</button>
+        <button type="button" class="btn danger removerEndereco">Remover endereço</button>
       </div>
     </div>
   </template>

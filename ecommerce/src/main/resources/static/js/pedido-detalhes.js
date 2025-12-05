@@ -1,8 +1,9 @@
 (() => {
   const $ = s => document.querySelector(s);
+  const API_BASE = window.API || "http://localhost:8080"; // Fallback seguro
 
   async function api(path, opts = {}) {
-    const r = await fetch(path, { credentials: 'include', ...opts });
+    const r = await fetch(`${API_BASE}${path}`, { credentials: 'include', ...opts });
     if (!r.ok) throw new Error(await r.text());
     const ct = r.headers.get('content-type') || '';
     return ct.includes('json') ? r.json() : r.text();
@@ -14,10 +15,7 @@
   }
 
   function money(v) {
-    return Number(v || 0).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    });
+    return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
   function labelStatus(st) {
@@ -41,7 +39,7 @@
     }
   }
 
-  // ---------- monta HTML da linha do tempo com base no status ----------
+  // --- Linha do Tempo Visual ---
   function buildStatusTimeline(status) {
     const container = document.createElement('div');
     container.className = 'status-timeline';
@@ -53,29 +51,30 @@
           <div class="status-label">Cancelado</div>
         </div>
       `;
+      // Centraliza visualmente se estiver cancelado
+      container.style.justifyContent = 'center'; 
       return container;
     }
 
     const steps = [
-      { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando pagamento' },
-      { code: 'PAGO',                 label: 'Pagamento aprovado' },
+      { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando' },
+      { code: 'PAGO',                 label: 'Aprovado' },
       { code: 'ENVIADO',              label: 'Enviado' },
       { code: 'ENTREGUE',             label: 'Entregue' }
     ];
 
     let reachedIndex = steps.findIndex(s => s.code === status);
-    if (reachedIndex === -1) {
-      reachedIndex = -1;
-    }
+    // Se o status atual não estiver na lista (ex: CARRINHO), assume índice -1
+    if (reachedIndex === -1 && status === 'CARRINHO') reachedIndex = -1;
 
     steps.forEach((step, index) => {
       const stepDiv = document.createElement('div');
       stepDiv.className = 'status-step';
 
       if (reachedIndex > index) {
-        stepDiv.classList.add('done');
+        stepDiv.classList.add('done'); // Já passou
       } else if (reachedIndex === index) {
-        stepDiv.classList.add('current');
+        stepDiv.classList.add('current'); // Atual
       }
 
       stepDiv.innerHTML = `
@@ -94,7 +93,7 @@
     const itensBox  = $('#pedido-itens');
 
     if (!dto) {
-      resumoBox.textContent = 'Pedido não encontrado.';
+      resumoBox.innerHTML = '<p class="muted">Pedido não encontrado.</p>';
       if (itensBox) itensBox.textContent = '';
       return;
     }
@@ -107,34 +106,46 @@
     const valorItens = dto.valorItens  != null ? money(dto.valorItens)  : 'R$ 0,00';
     const freteValor = dto.freteValor != null ? money(dto.freteValor) : 'R$ 0,00';
     const status     = dto.status || 'AGUARDANDO_PAGAMENTO';
-    const forma      = dto.formaPagamento || null;
+    const forma      = dto.formaPagamento || '-';
 
+    // Bloco Superior (Dados)
     resumoBox.innerHTML = `
       <div class="pedido-resumo-top">
         <div>
-          <div><strong>Pedido #${dto.id}</strong></div>
-          <div class="muted">${data}</div>
+          <div style="font-size:1.2rem; color:#333;"><strong>Pedido #${dto.id}</strong></div>
+          <div class="muted">Data: ${data}</div>
         </div>
         <div class="pedido-resumo-valores">
-          <div><b>Produtos:</b> ${valorItens}</div>
-          <div><b>Frete:</b> ${freteValor}</div>
-          <div><b>Total:</b> ${total}</div>
+          <div>Itens: ${valorItens}</div>
+          <div>Frete: ${freteValor}</div>
+          <div style="font-size:1.2rem; color:#4CAF50; margin-top:5px;"><strong>Total: ${total}</strong></div>
         </div>
       </div>
 
       <div class="pedido-resumo-extra">
-        <div><b>Status atual:</b> ${labelStatus(status)}</div>
-        <div><b>Forma de pagamento:</b> ${labelFormaPagamento(forma)}</div>
-        <div><b>Frete:</b> ${dto.freteOpcao || '-'}</div>
+        <div>
+            <small class="muted">Status</small><br>
+            <strong>${labelStatus(status)}</strong>
+        </div>
+        <div>
+            <small class="muted">Pagamento</small><br>
+            <strong>${labelFormaPagamento(forma)}</strong>
+        </div>
+        <div>
+            <small class="muted">Tipo Frete</small><br>
+            <strong>${dto.freteOpcao || '-'}</strong>
+        </div>
       </div>
     `;
 
+    // Adiciona Timeline
     const timeline = buildStatusTimeline(status);
     resumoBox.appendChild(timeline);
 
+    // Bloco Itens
     if (itensBox) {
       if (!dto.itens || dto.itens.length === 0) {
-        itensBox.textContent = 'Nenhum item encontrado neste pedido.';
+        itensBox.innerHTML = '<p class="muted">Nenhum item encontrado.</p>';
       } else {
         itensBox.innerHTML = '';
         dto.itens.forEach(item => {
@@ -144,10 +155,9 @@
           div.innerHTML = `
             <div class="pi-nome">
               <strong>${item.produtoNome}</strong>
-              <span class="muted">Qtd: ${item.quantidade}</span>
+              <span class="muted">Qtd: ${item.quantidade} x ${money(item.valorUnitario)}</span>
             </div>
             <div class="pi-valores">
-              <span>${money(item.valorUnitario)}</span>
               <span><b>${money(sub)}</b></span>
             </div>
           `;
@@ -169,18 +179,8 @@
       renderPedido(dto);
     } catch (e) {
       console.error(e);
-      $('#pedido-resumo').textContent = 'Erro ao carregar detalhes do pedido.';
+      $('#pedido-resumo').textContent = 'Erro ao carregar detalhes do pedido. Tente novamente.';
       $('#pedido-itens').textContent  = '';
-    }
-
-    // 👉 handler do botão Voltar: manda para o cadastro do cliente
-    const btnVoltar = $('#btnVoltar');
-    if (btnVoltar) {
-      btnVoltar.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        // Se preferir a home, troque para 'index.html'
-        window.location.href = 'index.html';
-      });
     }
   }
 
