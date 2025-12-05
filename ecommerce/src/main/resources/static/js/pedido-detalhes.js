@@ -17,8 +17,9 @@
   function money(v) {
     return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
-
-  function labelStatus(st) {
+  
+  // --- Funções de formatação (mantidas) ---
+  function labelStatus(st) { /* ... */
     switch (st) {
       case 'CARRINHO':             return 'Carrinho aberto';
       case 'AGUARDANDO_PAGAMENTO': return 'Aguardando pagamento';
@@ -39,58 +40,75 @@
     }
   }
 
-  // --- Linha do Tempo Visual ---
-  function buildStatusTimeline(status) {
-    const container = document.createElement('div');
-    container.className = 'status-timeline';
+  // --- Renderiza Endereço ---
+  function renderEndereco(endereco) {
+      const box = $('#endereco-entrega');
+      if (!box) return;
 
-    if (status === 'CANCELADO') {
-      container.innerHTML = `
-        <div class="status-step status-cancelado">
-          <div class="status-dot"></div>
-          <div class="status-label">Cancelado</div>
-        </div>
-      `;
-      // Centraliza visualmente se estiver cancelado
-      container.style.justifyContent = 'center'; 
-      return container;
-    }
-
-    const steps = [
-      { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando' },
-      { code: 'PAGO',                 label: 'Aprovado' },
-      { code: 'ENVIADO',              label: 'Enviado' },
-      { code: 'ENTREGUE',             label: 'Entregue' }
-    ];
-
-    let reachedIndex = steps.findIndex(s => s.code === status);
-    // Se o status atual não estiver na lista (ex: CARRINHO), assume índice -1
-    if (reachedIndex === -1 && status === 'CARRINHO') reachedIndex = -1;
-
-    steps.forEach((step, index) => {
-      const stepDiv = document.createElement('div');
-      stepDiv.className = 'status-step';
-
-      if (reachedIndex > index) {
-        stepDiv.classList.add('done'); // Já passou
-      } else if (reachedIndex === index) {
-        stepDiv.classList.add('current'); // Atual
+      if (!endereco || !endereco.logradouro) {
+          box.innerHTML = '<p class="muted">Endereço de entrega não detalhado.</p>';
+          return;
       }
 
-      stepDiv.innerHTML = `
-        <div class="status-dot"></div>
-        <div class="status-label">${step.label}</div>
+      const end = endereco; // Simplificação
+      box.innerHTML = `
+          <p>
+              <strong>${end.logradouro}, ${end.numero}</strong><br>
+              ${end.complemento ? end.complemento + ' • ' : ''}${end.bairro}<br>
+              ${end.cidade}/${end.uf} • CEP ${end.cep}
+          </p>
       `;
+  }
+  
+  // --- Linha do Tempo Visual (mantida) ---
+  function buildStatusTimeline(status) { 
+      const container = document.createElement('div');
+      container.className = 'status-timeline';
+      
+      // [Timeline rendering logic is extensive and unchanged, omitted for brevity]
+      
+      const steps = [
+        { code: 'AGUARDANDO_PAGAMENTO', label: 'Aguardando' },
+        { code: 'PAGO',                 label: 'Aprovado' },
+        { code: 'ENVIADO',              label: 'Enviado' },
+        { code: 'ENTREGUE',             label: 'Entregue' }
+      ];
 
-      container.appendChild(stepDiv);
-    });
+      if (status === 'CANCELADO') {
+          container.innerHTML = `
+              <div class="status-step status-cancelado">
+                  <div class="status-dot"></div>
+                  <div class="status-label">Cancelado</div>
+              </div>
+          `;
+          container.style.justifyContent = 'center';  
+          return container;
+      }
 
-    return container;
+      let reachedIndex = steps.findIndex(s => s.code === status);
+      if (reachedIndex === -1 && status === 'CARRINHO') reachedIndex = -1;
+
+      steps.forEach((step, index) => {
+          const stepDiv = document.createElement('div');
+          stepDiv.className = 'status-step';
+
+          if (reachedIndex > index) stepDiv.classList.add('done'); 
+          else if (reachedIndex === index) stepDiv.classList.add('current'); 
+
+          stepDiv.innerHTML = `
+              <div class="status-dot"></div>
+              <div class="status-label">${step.label}</div>
+          `;
+          container.appendChild(stepDiv);
+      });
+      return container;
   }
 
   function renderPedido(dto) {
     const resumoBox = $('#pedido-resumo');
-    const itensBox  = $('#pedido-itens');
+    const itensBox  = $('#pedido-itens');
+    // Adicionado: Puxa o objeto de endereço do DTO do pedido
+    const enderecoEntrega = dto.enderecoEntrega || dto.endereco || null; 
 
     if (!dto) {
       resumoBox.innerHTML = '<p class="muted">Pedido não encontrado.</p>';
@@ -98,17 +116,21 @@
       return;
     }
 
+    // --- Renderiza Endereço ---
+    renderEndereco(enderecoEntrega);
+
+
     const data = dto.dataCriacao
       ? new Date(dto.dataCriacao).toLocaleString('pt-BR')
       : '-';
 
-    const total      = dto.valorTotal  != null ? money(dto.valorTotal)  : 'R$ 0,00';
-    const valorItens = dto.valorItens  != null ? money(dto.valorItens)  : 'R$ 0,00';
+    const total      = dto.valorTotal  != null ? money(dto.valorTotal)  : 'R$ 0,00';
+    const valorItens = dto.valorItens  != null ? money(dto.valorItens)  : 'R$ 0,00';
     const freteValor = dto.freteValor != null ? money(dto.freteValor) : 'R$ 0,00';
-    const status     = dto.status || 'AGUARDANDO_PAGAMENTO';
-    const forma      = dto.formaPagamento || '-';
+    const status     = dto.status || 'AGUARDANDO_PAGAMENTO';
+    const forma      = dto.formaPagamento || '-';
 
-    // Bloco Superior (Dados)
+    // Bloco Superior (Resumo)
     resumoBox.innerHTML = `
       <div class="pedido-resumo-top">
         <div>
@@ -124,21 +146,20 @@
 
       <div class="pedido-resumo-extra">
         <div>
-            <small class="muted">Status</small><br>
-            <strong>${labelStatus(status)}</strong>
+            <small class="muted">Status</small><br>
+            <strong>${labelStatus(status)}</strong>
         </div>
         <div>
-            <small class="muted">Pagamento</small><br>
-            <strong>${labelFormaPagamento(forma)}</strong>
+            <small class="muted">Pagamento</small><br>
+            <strong>${labelFormaPagamento(forma)}</strong>
         </div>
         <div>
-            <small class="muted">Tipo Frete</small><br>
-            <strong>${dto.freteOpcao || '-'}</strong>
+            <small class="muted">Tipo Frete</small><br>
+            <strong>${dto.freteOpcao || '-'}</strong>
         </div>
       </div>
     `;
 
-    // Adiciona Timeline
     const timeline = buildStatusTimeline(status);
     resumoBox.appendChild(timeline);
 
@@ -170,7 +191,8 @@
   async function boot() {
     const id = getPedidoId();
     if (!id) {
-      $('#pedido-resumo').textContent = 'ID do pedido não informado.';
+      alert('ID do pedido não informado.');
+      history.back();
       return;
     }
 
@@ -179,8 +201,11 @@
       renderPedido(dto);
     } catch (e) {
       console.error(e);
-      $('#pedido-resumo').textContent = 'Erro ao carregar detalhes do pedido. Tente novamente.';
-      $('#pedido-itens').textContent  = '';
+      alert('Erro ao carregar detalhes do pedido.');
+      // Oculta blocos de carregamento em caso de falha
+      $('#pedido-resumo').textContent = 'Erro ao carregar detalhes do pedido.';
+      $('#pedido-itens').textContent  = '';
+      $('#endereco-entrega').textContent = '—';
     }
   }
 
