@@ -4,30 +4,20 @@
   <meta charset="utf-8" />
   <title>Pedidos (Admin/Estoque)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/principal.css" />
+  <link rel="stylesheet" href="css/pedidos.css" />
 </head>
 <body>
-  <header class="header-bar">
-    <div class="header-content">
-      <h1>WNPlants</h1>
-      <nav>
-        <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
-        <button class="btn ghost" id="logout-btn">Sair</button>
-      </nav>
-    </div>
-  </header>
-
+  
   <main class="main-content">
     <div class="card">
       <div class="topbar">
         <h2>Pedidos</h2>
         <div class="spacer"></div>
-        <button class="btn" onclick="location.href='principal.html'">Voltar</button>
+        <button class="btn ghost" onclick="Auth.redirectHomeByPerfil()">Início</button>
       </div>
 
       <p class="muted">
-        Aqui você visualiza todos os pedidos e pode atualizar o status deles
-        (Sprint 6).
+        Gerenciamento de status de pedidos.
       </p>
 
       <div id="pedidos-container">
@@ -38,12 +28,12 @@
               <th>Data</th>
               <th>Status</th>
               <th>Total</th>
-              <th>Ações</th>
+              <th style="text-align: right;">Ações</th>
             </tr>
           </thead>
           <tbody id="pedidos-body">
             <tr>
-              <td colspan="5" class="muted">Carregando pedidos...</td>
+              <td colspan="5" class="muted" style="text-align: center; padding: 20px;">Carregando pedidos...</td>
             </tr>
           </tbody>
         </table>
@@ -51,18 +41,15 @@
     </div>
   </main>
 
-  <script>window.API="http://localhost:8080";</script>
+  <script>window.API = "http://localhost:8080";</script>
+  
   <script src="js/auth.js"></script>
   <script src="js/pedidos.js"></script>
   <script>
-    Auth.preventBfcache();
-    Auth.ensureLoggedIn(); // expulsa quem não estiver logado
-    // o próprio js/pedidos.js valida se é Admin/Estoquista
-    document.getElementById("logout-btn")?.addEventListener("click", async (e)=>{
-      e.preventDefault();
-      try{ await fetch(`${API}/logout`, { method:"POST", credentials:"include" }); }catch{}
-      location.href="login.html";
-    });
+    if(window.Auth) {
+        Auth.preventBfcache();
+        Auth.ensureLoggedIn(); 
+    }
   </script>
 </body>
 </html>

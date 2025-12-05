@@ -1,0 +1,164 @@
+/* static/css/pedidos.css - LISTAGEM DE PEDIDOS */
+
+/* ========================================================= */
+/* 1. VARIÁVEIS E TEMA (PADRONIZADO)                         */
+/* ========================================================= */
+:root {
+  --primary: #4CAF50;       /* Verde padrão do sistema */
+  --bg: #f5f5f5;           /* Fundo cinza claro */
+  --fg: #333333;           /* Texto Principal */
+  --card-bg: #FFFFFF;      /* Fundo dos cartões */
+  --border: #cccccc;       /* Bordas */
+  --muted: #666666;
+  --hover-bg: #f0f0f0;
+}
+
+/* Modo Escuro */
+.dark-mode {
+  --primary: #81C784;
+  --bg: #1D2B2E;
+  --fg: #ECEFF1;
+  --card-bg: #2B3E42;
+  --border: #4A6568;
+  --muted: #9CA3AF;
+  --hover-bg: #374151;
+}
+
+/* ========================================================= */
+/* 2. ESTRUTURA GERAL                                        */
+/* ========================================================= */
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  padding: 0;
+  padding-bottom: 40px;
+}
+
+/* Header removido do CSS também */
+
+/* ========================================================= */
+/* 4. CARTÃO CENTRAL                                         */
+/* ========================================================= */
+.main-content {
+  padding: 0 15px;
+}
+
+.card {
+  max-width: 1100px;
+  margin: 40px auto; /* Adicionado margem superior para compensar a falta do header */
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--fg);
+}
+
+.spacer { flex: 1; }
+
+p.muted {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+/* ========================================================= */
+/* 5. TABELA DE PEDIDOS                                      */
+/* ========================================================= */
+#pedidos-container {
+  overflow-x: auto;
+}
+
+.tabela-pedidos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabela-pedidos th,
+.tabela-pedidos td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.tabela-pedidos th {
+  font-weight: 600;
+  color: var(--muted);
+  background-color: #fafafa;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.tabela-pedidos tbody tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.tabela-pedidos td:nth-child(4) {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Select de Status */
+.status-select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 100%;
+  max-width: 180px;
+}
+.status-select:hover {
+  border-color: var(--primary);
+}
+
+/* ========================================================= */
+/* 6. BOTÕES                                                 */
+/* ========================================================= */
+.btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn:hover { background: #eee; }
+
+.btn.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn.ghost:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--fg);
+}
+
+.btn.small {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
