@@ -1,125 +1,183 @@
-/* static/css/produto-cadastrar.css - CADASTRO DE PRODUTO */
+/* static/css/produto-cadastrar.css - CADASTRO DE PRODUTO (PADRONIZADO) */
 
 /* ========================================================= */
-/* 1. VARIÁVEIS DE COR E TEMA (NOVO VERDE ORGÂNICO E CLEAN)  */
+/* 1. VARIÁVEIS E TEMA (UNIFICADO COM #4CAF50)               */
 /* ========================================================= */
-:root{
-  --primary: #5F865F; /* Verde Principal (Orgânico/Muted) */
-  --border:#E5E7EB; 
-  --muted:#6B7280; 
-  --fg: #212121; /* Texto Principal */
-  --card-bg: #FFFFFF;
-}
-
-/* ========================================================= */
-/* 1.1. MODO ESCURO (DARK MODE)                              */
-/* ========================================================= */
-.dark-mode{
-    --primary: #74B274;
-    --border:#4A6568;
-    --muted:#9CA3AF;
-    --fg:#ECEFF1;
-    --card-bg: #2B3E42;
+:root {
+  --primary: #4CAF50;       /* Verde Padrão (Vibrante) */
+  --primary-dark: #388E3C;
+  --bg: #f5f5f5;           /* Fundo da página */
+  --fg: #333333;           /* Texto Principal */
+  --card-bg: #FFFFFF;      /* Fundo do formulário */
+  --border: #e0e0e0;       /* Borda Sutil */
+  --muted: #666666;        /* Texto de Ajuda */
+  --star-on: gold;
+  --danger: #e74c3c;
+  
+  --shadow-card: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 /* ========================================================= */
 /* 2. RESET E ESTRUTURA GERAL                                */
 /* ========================================================= */
-*{box-sizing:border-box} 
-body{
+* { box-sizing:border-box } 
+body {
     margin:0;
+    padding: 40px 20px;
     font-family:system-ui,-apple-system,Segoe UI,Roboto; 
     color:var(--fg); 
+    background:var(--bg); /* Fundo cinza claro */
+    transition: all 0.3s;
+}
+
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding: 40px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+}
+
+h1{
+    margin:0 0 25px 0;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.8rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* ========================================================= */
+/* 3. LAYOUT E INPUTS                                        */
+/* ========================================================= */
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items: flex-start;
+}
+@media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+label{
+    display:block;
+    margin:15px 0 6px;
+    font-weight:600;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+label:first-child { margin-top: 0; }
+
+input,textarea,select{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px; 
     background:var(--card-bg);
-    transition: all 0.3s;
+    color:var(--fg);
+    transition: all 0.2s;
+    font-size: 1rem;
 }
+textarea { resize: vertical; }
 
-.container{max-width:1100px;margin:24px auto;padding:0 12px}
-h1{margin:0 0 16px}
-
-/* ========================================================= */
-/* 3. FORMULÁRIO E INPUTS                                    */
-/* ========================================================= */
-label{display:block;margin:12px 0 6px;font-weight:600}
-input,textarea{
-    width:100%;border:1px solid var(--border);border-radius:10px;
-    padding:10px; background:var(--card-bg);color:var(--fg);
-    transition: all 0.3s;
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
 }
-.dark-mode input, .dark-mode textarea {
-    background: #1F2937;
-    border-color: var(--border);
-}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 
 /* ========================================================= */
 /* 4. PRÉ-VISUALIZAÇÃO DE IMAGEM                             */
 /* ========================================================= */
-.preview{
-    border:1px dashed var(--border);border-radius:12px;height:260px;
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;background:#fafafa;
+.col {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.preview {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #fafafa;
     transition: all 0.3s;
 }
-.dark-mode .preview {
-    background: #374151;
-}
 
-.preview img{max-width:100%;max-height:100%}
-.placeholder{color:var(--muted);font-size:.95rem}
+.preview img { max-width:100%; max-height:100%; object-fit: contain; }
+.placeholder { color:var(--muted); font-size:1rem; }
+
+.gallery-actions { text-align: center; }
+
 
 /* ========================================================= */
-/* 5. BOTÕES DE AÇÃO (Efeito de Press)                       */
+/* 5. BOTÕES E AÇÕES                                         */
 /* ========================================================= */
-.btn{
-    border:1px solid var(--border);padding:8px 14px;border-radius:10px;
-    background:var(--card-bg);color:var(--fg);cursor:pointer;
-    transition:all .15s ease; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-.dark-mode .btn {
-    background: #1F2937;
-    border-color: var(--border);
+.btn {
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: var(--card-bg);
     color: var(--fg);
-    box-shadow: none;
+    cursor: pointer;
+    transition:all .15s ease; 
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-.btn:active { box-shadow: none; transform: translateY(1px); }
+.btn:active { transform: translateY(1px); box-shadow: none; }
 
-
-.btn.primary{
-    background:var(--primary);color:#fff;border-color:var(--primary);
-    box-shadow: 0 4px 8px rgba(95, 134, 95, 0.2);
+.btn.primary {
+    background:var(--primary);
+    color:#fff;
+    border-color:var(--primary);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
 }
-.dark-mode .btn.primary {
-    background: var(--primary);
-    color: #111827;
-    border-color: var(--primary);
+.btn.primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+.btn.ghost { background:transparent; border-color: var(--border); color: var(--muted); box-shadow: none;}
+.btn.ghost:hover { background: #f0f0f0; color: var(--fg); }
+
+
+.form-actions{
+    display:flex;
+    gap:15px;
+    justify-content:flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
 }
-
-.btn.ghost{background:transparent;box-shadow: none;}
-.dark-mode .btn.ghost { background:transparent; border-color: var(--border); }
-.btn.ghost:active { background: #E5E7EB; transform: translateY(1px); }
-.dark-mode .btn.ghost:active { background: #374151; transform: translateY(1px); }
-
-
-.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:16px}
 
 /* ========================================================= */
 /* 6. MODAL (GALERIA DE IMAGENS)                             */
 /* ========================================================= */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
-.modal-card{background:var(--card-bg);border-radius:12px;max-width:900px;width:95%;padding:12px 12px 18px; transition: all 0.3s}
-.dark-mode .modal-card { background: #2B3E42; }
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center}
+.modal-card{background:var(--card-bg);border-radius:12px;max-width:900px;width:95%;padding:20px; transition: all 0.3s}
 
-.modal-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:8px}
-.modal-body{padding-top:12px}
-.grid-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:12px}
-.card-img{border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:8px}
-.card-img .thumb{height:120px;display:flex;justify-content:center;align-items:center;background:#fafafa;overflow:hidden;border-radius:8px}
-.card-img img{max-width:100%;max-height:100%}
+.modal-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:12px}
+.modal-header h2 { font-size: 1.5rem; margin: 0; color: var(--fg); }
+.modal-body{padding-top:15px}
+
+.grid-imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:15px;margin-top:15px}
+
+.card-img{border:1px solid var(--border);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:10px; background: #fff;}
+.card-img .thumb{height:100px;display:flex;justify-content:center;align-items:center;background:#fafafa;overflow:hidden;border-radius:6px}
+.card-img img{max-width:100%;max-height:100%;object-fit:cover}
 .card-img .row{display:flex;justify-content:space-between;align-items:center}
-.star{cursor:pointer;font-size:18px}
-.star.on{color:var(--primary)} 
+.star{cursor:pointer;font-size:18px; color: var(--muted);}
+.star.on{color:var(--primary)} 
+.btn-remove {
+    background: #fff;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+.btn-remove:hover { background: #ffebeb; }
 
-/* garante que o atributo hidden realmente esconda o modal */
 .modal[hidden] { display: none !important; }
