@@ -36,8 +36,13 @@ $("#ok").addEventListener("click", async ()=> {
   }catch(e){ $("#msg").textContent = "Erro de rede"; }
 });
 
-$("#cancel").addEventListener("click", e=>{
-  e.preventDefault();
-  $("#email").value="";
-  $("#senha").value="";
-});
+// Remover evento de cancel se o botão não existir no HTML novo, 
+// mas deixo aqui caso você queira voltar com ele.
+const btnCancel = $("#cancel");
+if(btnCancel){
+    btnCancel.addEventListener("click", e=>{
+      e.preventDefault();
+      $("#email").value="";
+      $("#senha").value="";
+    });
+}

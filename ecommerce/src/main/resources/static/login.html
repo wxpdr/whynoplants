@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Login de Usuário</title>
+  <title>Login - WNPlants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Cache-Control" content="no-store" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -12,31 +12,36 @@
 <body>
   
   <div class="split-container">
+    
     <div class="card login-side">
-      <h1>Login de Usuário</h1>
+      <h1>Bem-vindo de volta!</h1>
+      <p class="subtitle">Insira seus dados para continuar.</p>
 
-      <label>E-mail</label>
-      <input id="email" type="email" placeholder="email@dominio.com.br" autofocus />
+      <label for="email">E-mail</label>
+      <input id="email" type="email" placeholder="seu@email.com" autofocus />
 
-      <label>Senha</label>
+      <label for="senha">Senha</label>
       <input id="senha" type="password" placeholder="••••••••" />
 
       <div class="actions">
         <button id="ok" class="btn primary">Entrar</button>
-        <button id="cancel" class="btn ghost">Cancelar</button> 
       </div>
 
       <p id="msg" class="msg"></p>
-      <p style="text-align:center;margin-top:12px">
-        Ainda não é cliente? <a href="cliente-cadastrar.html" id="link-register">Criar cadastro</a>
+      
+      <div class="register-link">
+        Ainda não tem conta? <a href="cliente-cadastrar.html">Cadastre-se aqui</a>
+      </div>
     </div>
 
     <div class="card welcome-side">
-      <h2>Whynoplants.com</h2>
+      <div class="brand-big">WNPlants</div>
+      <h2>Cultive seu espaço</h2>
       <p>
-        Acesso exclusivo para colaboradores. Gerencie produtos e pedidos com eficiência.
+        Do estoque à sua casa, levamos vida e natureza para transformar o seu ambiente.
       </p>
-      </div>
+    </div>
+
   </div>
 
   <script>window.API = "http://localhost:8080";</script>
