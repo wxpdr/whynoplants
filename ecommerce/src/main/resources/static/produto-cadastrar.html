@@ -16,8 +16,8 @@
     <form id="formProduto">
       <div class="grid">
         <div class="col">
-          <label>Código</label>
-          <input type="text" id="codigo" maxlength="32" required>
+          <label style="display:none;">Código</label> 
+          <input type="text" id="codigo" maxlength="32" readonly style="display:none;"> 
 
           <label>Nome do produto</label>
           <input type="text" id="nome" maxlength="150" required>
@@ -53,7 +53,6 @@
     </form>
   </div>
 
-  <!-- Modal Galeria -->
   <div class="modal" id="modalGaleria" hidden>
     <div class="modal-card">
       <header class="modal-header">
@@ -71,6 +70,7 @@
     </div>
   </div>
 
+  <script>window.API = "http://localhost:8080";</script>
   <script src="js/produto-cadastrar.js"></script>
 </body>
 </html>
