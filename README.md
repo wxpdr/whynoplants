@@ -225,24 +225,6 @@ Durante o desenvolvimento deste projeto, pratiquei:
 
 ---
 
-## 🔮 Possíveis melhorias futuras
-
-Algumas melhorias possíveis para versões futuras:
-
-* adicionar deploy do back-end e front-end;
-* melhorar a responsividade das telas;
-* adicionar autenticação de usuários;
-* melhorar a experiência visual do checkout;
-* criar filtros e busca por produtos;
-* adicionar testes automatizados;
-* documentar rotas da API;
-* melhorar mensagens de erro e validações;
-* revisar acessibilidade;
-* otimizar organização visual do catálogo;
-* criar painel administrativo mais completo.
-
----
-
 ## 👩‍💻 Desenvolvedora
 
 Projeto desenvolvido por **Wendy** 🌸
