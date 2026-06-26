@@ -1,56 +1,76 @@
-# 🌿 WNPlants
+<h1 align="center">🌱 WNPlants</h1>
 
-O **WNPlants** é um projeto acadêmico de e-commerce desenvolvido com foco na venda de plantas e produtos relacionados. A aplicação simula uma loja virtual completa, com funcionalidades de catálogo, carrinho, checkout, controle de estoque e backoffice administrativo.
+<p align="center">
+  E-commerce de plantas desenvolvido com Java, Spring Boot, MySQL, HTML, CSS e JavaScript.
+</p>
 
-Este projeto foi desenvolvido como parte dos estudos em Análise e Desenvolvimento de Sistemas, com o objetivo de aplicar conceitos de desenvolvimento web, arquitetura em camadas, integração entre front-end e back-end, persistência de dados e organização de um sistema com fluxo comercial.
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Finalizado-ff69b4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Back--End-Java%20%7C%20Spring%20Boot-ff69b4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Banco-MySQL-black?style=for-the-badge&logo=mysql" />
+</p>
 
 ---
 
 ## ✨ Sobre o projeto
 
-A proposta do WNPlants é representar uma loja online voltada para o universo de plantas, trazendo uma experiência simples e funcional para o usuário final, além de recursos administrativos para gerenciamento interno.
+O **WNPlants** é um projeto de e-commerce voltado para a venda de plantas e produtos relacionados.
 
-O sistema foi pensado para contemplar tanto a jornada do cliente quanto a rotina de controle da loja, incluindo visualização de produtos, montagem de carrinho, finalização de pedido e gerenciamento de informações pelo backoffice.
+A aplicação simula uma loja virtual completa, contemplando tanto a experiência do usuário final quanto a rotina administrativa do sistema. O projeto possui fluxo de catálogo, carrinho, checkout, controle de estoque e área administrativa para gerenciamento de informações.
+
+A proposta foi praticar a construção de uma aplicação web com separação entre front-end e back-end, persistência de dados em banco relacional e organização de um sistema com fluxo comercial.
 
 ---
 
-## 🧩 Funcionalidades principais
+## 🎯 Objetivo
 
-- Visualização de catálogo de produtos
-- Carrinho de compras
-- Fluxo de checkout
-- Controle de estoque
-- Área administrativa / backoffice
-- Cadastro e gerenciamento de dados do sistema
-- Integração entre front-end e back-end
-- Persistência de dados em banco relacional
+Criar um e-commerce funcional para simular a venda de plantas, aplicando conceitos de desenvolvimento web, arquitetura em camadas, integração entre interface e servidor, banco de dados e organização de funcionalidades comerciais.
+
+Além da parte técnica, o projeto também teve como objetivo estruturar uma experiência simples para o usuário, com navegação pelo catálogo, montagem de carrinho e finalização de pedido.
+
+---
+
+## 🧩 Funcionalidades
+
+* Visualização de catálogo de produtos
+* Carrinho de compras
+* Fluxo de checkout
+* Controle de estoque
+* Área administrativa / backoffice
+* Cadastro e gerenciamento de dados do sistema
+* Integração entre front-end e back-end
+* Persistência de dados em banco relacional
+* Separação entre interface, regras de negócio e banco de dados
 
 ---
 
 ## 🛠️ Tecnologias utilizadas
 
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=java,spring,mysql,html,css,js,maven,git,github,vscode" />
+</p>
+
 ### Back-end
 
-- Java
-- Spring Boot
-- Spring Web
-- Spring Data JPA
-- Maven
-- Banco de dados MySQL
-- Arquivo de configuração `application.yml`
+* **Java** — linguagem utilizada no back-end
+* **Spring Boot** — framework principal da aplicação
+* **Spring Web** — criação das rotas e recursos web
+* **Spring Data JPA** — persistência e comunicação com o banco
+* **Maven** — gerenciamento de dependências
+* **application.yml** — configuração da aplicação
 
 ### Front-end
 
-- HTML
-- CSS
-- JavaScript
-- Interface baseada em protótipo visual
-- Estrutura separada do back-end
+* **HTML5** — estrutura das páginas
+* **CSS3** — estilização da interface
+* **JavaScript** — interações e comunicação com o back-end
+* **Interface baseada em protótipo visual**
 
 ### Banco de dados
 
-- MySQL
-- Nome do banco utilizado:
+* **MySQL** — banco de dados relacional utilizado no projeto
+
+Banco utilizado:
 
 ```sql
 wnplants
@@ -60,11 +80,10 @@ wnplants
 
 ## 📁 Estrutura do projeto
 
-A organização principal do projeto ficou separada entre back-end e front-end:
+A organização principal foi separada entre back-end e front-end:
 
-```txt
+```text
 WNPlants/
-│
 ├── backend/
 │   └── ecommerce/
 │       ├── src/
@@ -81,18 +100,41 @@ WNPlants/
 
 ---
 
-## ⚙️ Como executar o projeto
+## 🔄 Fluxo geral da aplicação
 
-### 1. Clonar o repositório
-
-```bash
-git clone https://github.com/seu-usuario/wnplants.git
-cd WNPlants
+```text
+Usuário
+  ↓
+Interface front-end
+  ↓
+Requisições HTTP
+  ↓
+Back-end Spring Boot
+  ↓
+Regras de negócio
+  ↓
+Banco de dados MySQL
 ```
+
+Essa estrutura ajuda a separar responsabilidades e facilita a manutenção, o entendimento do fluxo e a evolução do projeto.
 
 ---
 
-### 2. Configurar o banco de dados
+## ⚙️ Como executar localmente
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/wxpdr/whynoplants.git
+```
+
+### 2. Acesse a pasta do projeto
+
+```bash
+cd whynoplants
+```
+
+### 3. Configure o banco de dados
 
 Crie um banco MySQL com o nome:
 
@@ -100,13 +142,13 @@ Crie um banco MySQL com o nome:
 CREATE DATABASE wnplants;
 ```
 
-Depois, ajuste as credenciais no arquivo:
+Depois, ajuste as credenciais no arquivo de configuração:
 
-```txt
+```text
 backend/ecommerce/src/main/resources/application.yml
 ```
 
-Exemplo de configuração:
+Exemplo:
 
 ```yml
 spring:
@@ -121,9 +163,7 @@ spring:
     show-sql: true
 ```
 
----
-
-### 3. Executar o back-end
+### 4. Execute o back-end
 
 Acesse a pasta do back-end:
 
@@ -139,9 +179,7 @@ mvn spring-boot:run
 
 O back-end será iniciado localmente pelo Spring Boot.
 
----
-
-### 4. Executar o front-end
+### 5. Execute o front-end
 
 Acesse a pasta do front-end:
 
@@ -153,67 +191,70 @@ Abra o arquivo `index.html` no navegador ou utilize uma extensão como **Live Se
 
 ---
 
-## 🖥️ Fluxo geral da aplicação
+## 🖥️ Demonstração
 
-O projeto foi pensado com uma separação clara entre as responsabilidades:
+O projeto foi desenvolvido para execução local e não possui deploy publicado no momento.
 
-```txt
-Usuário
-  ↓
-Interface Front-end
-  ↓
-Requisições HTTP
-  ↓
-Back-end Spring Boot
-  ↓
-Regras de negócio
-  ↓
-Banco de dados MySQL
-```
-
-Essa estrutura permite que o sistema mantenha uma organização mais limpa, facilitando a manutenção, os testes e a evolução do projeto.
+Para visualizar a aplicação, é necessário configurar o banco de dados, executar o back-end com Spring Boot e abrir o front-end localmente no navegador.
 
 ---
 
-## 🎯 Objetivo acadêmico
+## 💼 Tipo de projeto
 
-O WNPlants teve como objetivo consolidar conhecimentos importantes do desenvolvimento de software, como:
+Este é um projeto full stack desenvolvido com foco na simulação de um e-commerce.
 
-- Organização de um projeto full stack
-- Criação de uma aplicação com back-end em Java
-- Uso de banco de dados relacional
-- Integração entre interface e servidor
-- Estruturação de funcionalidades comerciais
-- Desenvolvimento de telas e fluxos de usuário
-- Prática de arquitetura em camadas
-- Simulação de um sistema real de e-commerce
+Ele representa uma prática mais completa de desenvolvimento web, envolvendo front-end, back-end, banco de dados, fluxo de compra, controle de estoque, backoffice e organização de camadas.
 
 ---
 
-## 📌 Status do projeto
+## 🧠 Aprendizados
 
-✅ **Projeto finalizado**
+Durante o desenvolvimento deste projeto, pratiquei:
 
-Este projeto foi concluído como entrega acadêmica e não possui previsão de novas alterações ou manutenções futuras.
-
-O repositório permanece disponível como registro de aprendizado, evolução técnica e documentação do desenvolvimento realizado.
+* organização de um projeto full stack;
+* criação de aplicação com back-end em Java;
+* uso de Spring Boot em um sistema web;
+* integração entre front-end e back-end;
+* persistência de dados com MySQL;
+* criação de funcionalidades comerciais;
+* desenvolvimento de catálogo, carrinho e checkout;
+* estruturação de área administrativa;
+* prática de arquitetura em camadas;
+* organização de fluxo de usuário em e-commerce;
+* documentação de um projeto mais complexo no GitHub.
 
 ---
 
-## 🌱 Considerações finais
+## 🔮 Possíveis melhorias futuras
 
-O WNPlants representa uma etapa importante no processo de aprendizado em desenvolvimento de sistemas. Mais do que apenas uma aplicação de e-commerce, ele serviu como prática para entender como diferentes partes de um sistema se conectam: interface, regras de negócio, banco de dados e organização estrutural.
+Algumas melhorias possíveis para versões futuras:
 
-Mesmo sendo um projeto acadêmico, ele ajudou a fortalecer a visão sobre desenvolvimento web, planejamento de funcionalidades e construção de aplicações com propósito.
+* adicionar deploy do back-end e front-end;
+* melhorar a responsividade das telas;
+* adicionar autenticação de usuários;
+* melhorar a experiência visual do checkout;
+* criar filtros e busca por produtos;
+* adicionar testes automatizados;
+* documentar rotas da API;
+* melhorar mensagens de erro e validações;
+* revisar acessibilidade;
+* otimizar organização visual do catálogo;
+* criar painel administrativo mais completo.
 
 ---
 
-## 👩‍💻 Desenvolvido por
+## 👩‍💻 Desenvolvedora
 
-Projeto desenvolvido por **Wendy** como parte dos estudos em **Análise e Desenvolvimento de Sistemas**.
+Projeto desenvolvido por **Wendy** 🌸
 
 ---
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins acadêmicos e educacionais.
+Este projeto está disponível sob a licença MIT.
+
+---
+
+<p align="center">
+  Projeto finalizado, feito com Java, Spring Boot, MySQL e uma boa dose de caos botânico organizado 🌱✨
+</p>
