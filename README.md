@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Finalizado-ff69b4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Em Andamento-ff69b4?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Back--End-Java%20%7C%20Spring%20Boot-ff69b4?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Banco-MySQL-black?style=for-the-badge&logo=mysql" />
 </p>
